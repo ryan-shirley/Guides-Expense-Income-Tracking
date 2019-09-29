@@ -1,6 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.main')
 
 @section('content')
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
@@ -91,7 +92,9 @@
                             <td>
                                 <div class="btn-group" role="group" aria-label="Basic example">
                                     <a class="btn btn-primary btn-sm" href="{{ route('admin.payment.show', $p->id) }}" role="button">View</a>
-                                    <a class="btn btn-warning btn-sm" href="{{ route('admin.payment.edit', $p->id) }}" role="button">Edit</a>
+                                    @if ($p->in_accounts !== 1)
+                                        <a class="btn btn-warning btn-sm" href="{{ route('admin.payment.edit', $p->id) }}" role="button">Edit</a>
+                                    @endif
                                     <form action="{{ action('Admin\PaymentController@changePaymentStatus', $p->id )}}" method="post">
                                         @csrf
                                         <button class="btn btn-secondary btn-sm" > Mark
@@ -108,11 +111,13 @@
                                             <button class="btn btn-success btn-sm" >Send to accounts</button>
                                         </form>
                                     @endif
-                                    <form action="{{ action('Admin\PaymentController@destroy', $p->id )}}" method="post" onSubmit="return confirm('Are you sure you wish to delete?')">
-                                        @csrf
-                                        <input name="_method" type="hidden" value="DELETE">
-                                        <button class="btn btn-danger btn-sm" >Delete</button>
-                                    </form>
+                                    @if ($p->in_accounts !== 1)
+                                        <form action="{{ action('Admin\PaymentController@destroy', $p->id )}}" method="post" onSubmit="return confirm('Are you sure you wish to delete?')">
+                                            @csrf
+                                            <input name="_method" type="hidden" value="DELETE">
+                                            <button class="btn btn-danger btn-sm" >Delete</button>
+                                        </form>
+                                    @endif
                                 </div>
                                 <!-- /.Action Buttons -->
                             </td>
@@ -135,4 +140,4 @@
         $('#payment_table').DataTable();
     } );
     </script>
-@stop
+@endsection

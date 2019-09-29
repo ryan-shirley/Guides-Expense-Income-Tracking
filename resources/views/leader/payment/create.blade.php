@@ -15,7 +15,7 @@
                         <div class="form-group">
                             <label for="title">Title</label>
                             <input type="text" class="form-control" name="title" placeholder="Enter title" value="{{ old( 'title') }}">
-                            <small class="form-text text-muted">Describe what this exense was for.</small>
+                            <small class="form-text text-muted">Describe what this expense was for.</small>
                             <div class="text-danger">{{ $errors->first('title') }}</div>
                         </div>
                         <!-- /.Title -->
