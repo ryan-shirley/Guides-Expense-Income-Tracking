@@ -44,5 +44,6 @@ Route::post('/admin/home/payment/{id}/accounts', 'Admin\PaymentController@change
 
 // Leader
 Route::get('/leader/home', 'Leader\HomeController@index')->name('leader.home');
-
-// Payments
+Route::resource('/leader/payment', 'Leader\PaymentController', [
+    'as' => 'leader'
+]);

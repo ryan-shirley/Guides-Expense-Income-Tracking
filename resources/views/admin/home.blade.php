@@ -12,6 +12,38 @@
 
             <h1 class="mt-5 mb-3 text-center">All Payments</h1>
 
+            <!-- Stats -->
+            <div class="row">
+                <div class="col-xl-4 col-md-6 mb-4">
+                    <div class="card shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">To pay back</div>
+                            <div class="h5 mb-0 font-weight-bold">€{{ $total_to_pay_back }}</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.Amount to be paid back -->
+                <div class="col-xl-4 col-md-6 mb-4">
+                    <div class="card shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Spent last 30 day</div>
+                            <div class="h5 mb-0 font-weight-bold">€{{ $total_30_days }}</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.Total last 30 days -->
+                <div class="col-xl-4 col-md-6 mb-4">
+                    <div class="card shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">All time spent</div>
+                            <div class="h5 mb-0 font-weight-bold">€{{ $total_all_time }}</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.All time spent -->
+            </div>
+            <!-- /.Stats -->
+
             <a class="btn btn-primary btn-sm mb-3" href="{{ route('admin.payment.create') }}" role="button">Add Payment</a>
 
             <!-- Payments List -->
@@ -76,7 +108,7 @@
                                             <button class="btn btn-success btn-sm" >Send to accounts</button>
                                         </form>
                                     @endif
-                                    <form action="{{ action('Admin\PaymentController@destroy', $p->id )}}" method="post">
+                                    <form action="{{ action('Admin\PaymentController@destroy', $p->id )}}" method="post" onSubmit="return confirm('Are you sure you wish to delete?')">
                                         @csrf
                                         <input name="_method" type="hidden" value="DELETE">
                                         <button class="btn btn-danger btn-sm" >Delete</button>
