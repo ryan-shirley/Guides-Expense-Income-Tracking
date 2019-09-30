@@ -92,65 +92,67 @@
                         <h2 class="mb-0">All Payments</h2>
                     </div>
                     <div class="col">
-                        <p class="text-right"><a class="btn btn-primary" href="{{ route('leader.payment.create') }}" role="button">Add Payment</a></p>
+                        <p class="text-right"><a class="btn btn-primary" href="{{ route('leader.payments.create') }}" role="button">Add Payment</a></p>
                     </div>
                 </div>
             </div>
             <!-- Payments List -->
-            <table class="table table-hover" id="payment_table">
-                <thead class="thead-light">
-                    <tr>
-                        <th scope="col">Title</th>
-                        <th scope="col">Amount</th>
-                        <th scope="col">Purchase Date</th>
-                        <th scope="col">Guide Money</th>
-                        <th scope="col">Paid Back</th>
-                        <th scope="col">Approved</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($payments as $p)
+            <div class="table-responsive">
+                <table class="table table-hover" id="payment_table">
+                    <thead class="thead-light">
                         <tr>
-                            <td scope="row">{{ $p->title }}</td>
-                            <td>€{{ $p->amount }}</td>
-                            <td>{{ date('d M Y', strtotime($p->purchase_date)) }}</td>
-                            <td>
-                                @if ($p->guide_money === 1)
-                                    Guide
-                                @else
-                                    Personal
-                                @endif
-                            </td>
-                            <td>
-                                @if ($p->paid_back === 1)
-                                    <i class="fas fa-check text-success"></i>
-                                @else
-                                    <i class="fas fa-times text-danger"></i>
-                                @endif
-                            </td>
-                            <td>
-                                @if ($p->approved === 1)
-                                    <i class="fas fa-check text-success"></i>
-                                @else
-                                    <i class="fas fa-times text-danger"></i>
-                                @endif
-                            </td>
-                            <td>
-                                @if ($p->in_accounts !== 1)
-                                    <a class="btn btn-warning btn-sm" href="{{ route('leader.payment.edit', $p->id) }}" role="button"><i class="far fa-edit"></i></a>
-                                    <form action="{{ action('Leader\PaymentController@destroy', $p->id )}}" method="post" onSubmit="return confirm('Are you sure you wish to delete?')" style="display: inline;">
-                                        @csrf
-                                        <input name="_method" type="hidden" value="DELETE">
-                                        
-                                        <button class="btn btn-danger btn-sm" ><i class="fas fa-times"></i></button>
-                                    </form>
-                                @endif
-                            </td>
+                            <th scope="col">Title</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Purchase Date</th>
+                            <th scope="col">Guide Money</th>
+                            <th scope="col">Paid Back</th>
+                            <th scope="col">Approved</th>
+                            <th scope="col">Action</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach ($payments as $p)
+                            <tr>
+                                <td scope="row">{{ $p->title }}</td>
+                                <td>€{{ $p->amount }}</td>
+                                <td>{{ date('d M Y', strtotime($p->purchase_date)) }}</td>
+                                <td>
+                                    @if ($p->guide_money === 1)
+                                        Guide
+                                    @else
+                                        Personal
+                                    @endif
+                                </td>
+                                <td>
+                                    @if ($p->paid_back === 1)
+                                        <i class="fas fa-check text-success"></i>
+                                    @else
+                                        <i class="fas fa-times text-danger"></i>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if ($p->approved === 1)
+                                        <i class="fas fa-check text-success"></i>
+                                    @else
+                                        <i class="fas fa-times text-danger"></i>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if ($p->in_accounts !== 1)
+                                        <a class="btn btn-warning btn-sm" href="{{ route('leader.payments.edit', $p->id) }}" role="button"><i class="far fa-edit"></i></a>
+                                        <form action="{{ action('Leader\PaymentController@destroy', $p->id )}}" method="post" onSubmit="return confirm('Are you sure you wish to delete?')" style="display: inline;">
+                                            @csrf
+                                            <input name="_method" type="hidden" value="DELETE">
+                                            
+                                            <button class="btn btn-danger btn-sm" ><i class="fas fa-times"></i></button>
+                                        </form>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
             <!-- /.Payments List -->
         </div>
         <!-- /.Card payments table -->

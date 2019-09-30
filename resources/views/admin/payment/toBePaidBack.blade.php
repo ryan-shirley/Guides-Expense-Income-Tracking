@@ -15,22 +15,24 @@
                 </div>
             </div>
             <!-- Leaders List -->
-            <table class="table table-hover" id="payment_table">
-                <thead class="thead-light">
-                    <tr>
-                        <th scope="col">Leader</th>
-                        <th scope="col">Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($leadersToPayBack as $id => $amount)
+            <div class="table-responsive">
+                <table class="table table-hover" id="payment_table">
+                    <thead class="thead-light">
                         <tr>
-                            <th scope="row">{{ \App\USer::find($id)->name }}</th>
-                            <td>€{{ $amount }}</td>
+                            <th scope="col">Leader</th>
+                            <th scope="col">Amount</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach ($leadersToPayBack as $id => $amount)
+                            <tr>
+                                <th scope="row">{{ \App\USer::find($id)->name }}</th>
+                                <td>€{{ $amount }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
             <!-- /.Leaders List -->
         </div>
         <!-- /.Card -->
