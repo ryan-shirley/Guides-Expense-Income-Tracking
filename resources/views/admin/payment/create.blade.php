@@ -9,7 +9,7 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
-                    <form method="POST" action="{{ route('admin.payment.store' )}}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('admin.payments.store' )}}">
                         @csrf
                         <div class="form-group">
                             <label for="user_id">Leader</label>
@@ -84,25 +84,6 @@
                             <div class="text-danger">{{ $errors->first('paid_back') }}</div>
                         </div>
                         <!-- /.Paid Back -->
-
-                        <div class="form-group">
-                            <label for="in_accounts">Send to accounts</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="in_accounts" id="in_accounts1" value="1" {{ (old('in_accounts') == '1') ? "checked" : "" }}>
-                                <label class="form-check-label" for="in_accounts1">
-                                Yes
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="in_accounts" id="in_accounts2" value="0" {{ (old('in_accounts') == '0') ? "checked" : "" }}>
-                                <label class="form-check-label" for="in_accounts2">
-                                No
-                                </label>
-                            </div>
-                            <small class="form-text text-muted">Please pick if you want to send this account to google sheets</small>
-                            <div class="text-danger">{{ $errors->first('in_accounts') }}</div>
-                        </div>
-                        <!-- /.Send to accounts -->
 
                         <button class="btn btn-primary" type="submit" value="Store">Submit</button>
                     </form>

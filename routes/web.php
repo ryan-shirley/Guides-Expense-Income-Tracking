@@ -39,15 +39,20 @@ Auth::routes();
 
 // Admin
 Route::get('/admin/home', 'Admin\HomeController@index')->name('admin.home');
-Route::get('/admin/home/user/{id}', 'Admin\UserController@show')->name('admin.user.show'); // User
-Route::resource('/admin/payment', 'Admin\PaymentController', [
+Route::resource('/admin/payments', 'Admin\PaymentController', [
     'as' => 'admin'
+])->except([
+    'show'
 ]);
-Route::post('/admin/home/payment/{id}', 'Admin\PaymentController@changePaymentStatus')->name('admin.payment.status.change');
-Route::post('/admin/home/payment/{id}/accounts', 'Admin\PaymentController@changeAccountStatus')->name('admin.payment.account.change');
+Route::get('/admin/payments/user/{id}', 'Admin\UserController@show')->name('admin.payments.user.show'); // User
+Route::post('/admin/payments/{id}', 'Admin\PaymentController@changePaymentStatus')->name('admin.payments.status.change');
+Route::post('/admin//payments/{id}/accounts', 'Admin\PaymentController@changeAccountStatus')->name('admin.payments.account.change');
+Route::get('/admin//payments/to-pay-back', 'Admin\PaymentController@toPayBack')->name('admin.payments.toPayBack');
 
 // Leader
 Route::get('/leader/home', 'Leader\HomeController@index')->name('leader.home');
-Route::resource('/leader/payment', 'Leader\PaymentController', [
+Route::resource('/leader/payments', 'Leader\PaymentController', [
     'as' => 'leader'
+])->except([
+    'index', 'show'
 ]);

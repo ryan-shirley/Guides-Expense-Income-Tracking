@@ -1,143 +1,122 @@
 @extends('layouts.main')
 
-@section('content')
+@section('page-title', 'Admin Dashboard')
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            @if (session('status'))
-                <div class="alert alert-success" role="alert">
-                    {{ session('status') }}
-                </div>
-            @endif
-
-            <h1 class="mt-5 mb-3 text-center">All Payments</h1>
-
-            <!-- Stats -->
-            <div class="row">
-                <div class="col-xl-4 col-md-6 mb-4">
-                    <div class="card shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">To pay back</div>
-                            <div class="h5 mb-0 font-weight-bold">€{{ $total_to_pay_back }}</div>
+@section('header')
+<!-- Expenses stats -->
+<div class="row justify-content-center">
+    <div class="col-xl-3 col-lg-6">
+        <div class="card card-stats mb-4 mb-xl-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <h5 class="card-title text-uppercase text-muted mb-0">Total spent - {{ date('Y') }}</h5>
+                        <span class="h2 font-weight-bold mb-0">€{{ $total_year }}</span>
+                    </div>
+                    <div class="col-auto">
+                        <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                            <i class="fas fa-chart-line"></i>
                         </div>
                     </div>
                 </div>
-                <!-- /.Amount to be paid back -->
-                <div class="col-xl-4 col-md-6 mb-4">
-                    <div class="card shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Spent last 30 day</div>
-                            <div class="h5 mb-0 font-weight-bold">€{{ $total_30_days }}</div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.Total last 30 days -->
-                <div class="col-xl-4 col-md-6 mb-4">
-                    <div class="card shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">All time spent</div>
-                            <div class="h5 mb-0 font-weight-bold">€{{ $total_all_time }}</div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.All time spent -->
             </div>
-            <!-- /.Stats -->
-
-            <a class="btn btn-primary btn-sm mb-3" href="{{ route('admin.payment.create') }}" role="button">Add Payment</a>
-
-            <!-- Payments List -->
-            <table class="table table-striped table-hover table-bordered" id="payment_table">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">Leader</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Amount</th>
-                        <th scope="col">Purchase Date</th>
-                        <th scope="col">Guide Money</th>
-                        <th scope="col">Paid Back</th>
-                        <th scope="col">In Accounts</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($payments as $p)
-                        <tr>
-                            <th scope="row"><a href="{{ route('admin.user.show', $p->user) }}">{{ $p->user->name }}</a></th>
-                            <td>{{ $p->title }}</td>
-                            <td>{{ $p->amount }}</td>
-                            <td>{{ date('d M Y', strtotime($p->purchase_date)) }}</td>
-                            <td>
-                                @if ($p->guide_money === 1)
-                                    Guide
-                                @else
-                                    Personal
-                                @endif
-                            </td>
-                            <td>
-                                @if ($p->paid_back === 1)
-                                    ✅
-                                @else
-                                    ❌
-                                @endif
-                            </td>
-                            <td>
-                                @if ($p->in_accounts === 1)
-                                    ✅
-                                @else
-                                    ❌
-                                @endif
-                            </td>
-                            <td>
-                                <div class="btn-group" role="group" aria-label="Basic example">
-                                    <a class="btn btn-primary btn-sm" href="{{ route('admin.payment.show', $p->id) }}" role="button">View</a>
-                                    @if ($p->in_accounts !== 1)
-                                        <a class="btn btn-warning btn-sm" href="{{ route('admin.payment.edit', $p->id) }}" role="button">Edit</a>
-                                    @endif
-                                    <form action="{{ action('Admin\PaymentController@changePaymentStatus', $p->id )}}" method="post">
-                                        @csrf
-                                        <button class="btn btn-secondary btn-sm" > Mark
-                                        @if ($p->paid_back === 1)
-                                            Not Paid
-                                        @else
-                                            Paid
-                                        @endif
-                                        </button>
-                                    </form>
-                                    @if ($p->in_accounts === 0)
-                                        <form action="{{ action('Admin\PaymentController@changeAccountStatus', $p->id )}}" method="post">
-                                            @csrf
-                                            <button class="btn btn-success btn-sm" >Send to accounts</button>
-                                        </form>
-                                    @endif
-                                    @if ($p->in_accounts !== 1)
-                                        <form action="{{ action('Admin\PaymentController@destroy', $p->id )}}" method="post" onSubmit="return confirm('Are you sure you wish to delete?')">
-                                            @csrf
-                                            <input name="_method" type="hidden" value="DELETE">
-                                            <button class="btn btn-danger btn-sm" >Delete</button>
-                                        </form>
-                                    @endif
-                                </div>
-                                <!-- /.Action Buttons -->
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            <!-- /.Payments List -->
         </div>
     </div>
+    <!-- /.Total spent current year -->
+    <div class="col-xl-3 col-lg-6">
+        <div class="card card-stats mb-4 mb-xl-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <h5 class="card-title text-uppercase text-muted mb-0">Income - {{ date('Y') }}</h5>
+                        <span class="h2 font-weight-bold mb-0">€0*</span>
+                    </div>
+                    <div class="col-auto">
+                        <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                            <i class="fas fa-receipt"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.Income current year -->
+    <div class="col-xl-3 col-lg-6">
+        <div class="card card-stats mb-4 mb-xl-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <h5 class="card-title text-uppercase text-muted mb-0">Bank Balance</h5>
+                        <span class="h2 font-weight-bold mb-0">€0*</span>
+                    </div>
+                    <div class="col-auto">
+                        <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.Bank Balance -->
+    <div class="col-xl-3 col-lg-6 ">
+        <div class="card card-stats mb-4 mb-xl-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <h5 class="card-title text-uppercase text-muted mb-0">Left to pay back</h5>
+                        <span class="h2 font-weight-bold mb-0">€{{ $total_to_pay_back }}</span>
+                    </div>
+                    <div class="col-auto">
+                        <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                            <i class="fas fa-piggy-bank"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.Left to pay back -->
+    <div class="col-xl-3 col-lg-6">
+        <div class="card card-stats mb-4 mb-xl-0 mt-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <h5 class="card-title text-uppercase text-muted mb-0">Waiting for approval</h5>
+                        <span class="h2 font-weight-bold mb-0">{{ $num_waiting_approval }}</span>
+                    </div>
+                    <div class="col-auto">
+                        <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                            <i class="fas fa-pause"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.Waiting on approval -->
 </div>
+<!-- /.Expenses Stats -->
 @endsection
 
-@section('scripts')
-    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript" >
-        // my custom script
-        $(document).ready( function () {
-            console.log('test')
-        $('#payment_table').DataTable();
-    } );
-    </script>
+@section('content')
+<div class="row justify-content-center">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header bg-transparent mb-4">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h6 class="text-uppercase text-muted ls-1 mb-1">Overview</h6>
+                        <h2 class="mb-0">Various Graphs</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <p>There will be some graphs here later...</p>
+            </div>
+        </div>
+        <!-- /.Card -->
+    </div>
+    <!-- /.Column -->
+</div>
 @endsection

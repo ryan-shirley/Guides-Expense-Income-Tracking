@@ -31,10 +31,12 @@ class HomeController extends Controller
         $user = Auth::user();
         $payments = $user->payments;
 
-        // Total all time
-        $total_all_time = 0;
+        // Total for year
+        $total_year = 0;
         foreach ($payments as $payment) {
-            $total_all_time += $payment->amount;
+            if(Carbon::now()->startOfYear() <= Carbon::parse($payment->purchase_date) && Carbon::now()->endOfYear() > Carbon::parse($payment->purchase_date)) {
+                $total_year += $payment->amount;
+            }
         }
 
         // Get last 30 days
@@ -54,10 +56,19 @@ class HomeController extends Controller
             }
         }
 
+        // Get number of expenses waiting on approval
+        $num_waiting_approval = 0;
+        foreach ($payments as $payment) {
+            if(!$payment->approved) {
+                $num_waiting_approval++;
+            }
+        }
+
         return view('leader.home')->with([
             'user' => $user,
             'payments' => $payments,
-            'total_all_time' => $total_all_time,
+            'total_year' => $total_year,
+            'num_waiting_approval' => $num_waiting_approval,
             'total_30_days' => $total_30_days,
             'total_to_be_paid' => $total_to_be_paid, 
         ]);

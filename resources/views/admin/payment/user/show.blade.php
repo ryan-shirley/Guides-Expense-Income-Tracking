@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <a href="{{ URL::previous() }}" class="btn btn-primary">Go Back</a>
-            I am {{ $user->name }}
+            Hello I am {{ $user->name }}. I still need to show all my payments in here.
         </div>
     </div>
 </div>

@@ -16023,27 +16023,33 @@ a.btn-icon-only {
   font-weight: 600;
 }
 
-.form-control {
+.form-control,
+.dataTables_filter input {
   font-size: 0.875rem;
 }
 
-.form-control:focus::-webkit-input-placeholder {
+.form-control:focus::-webkit-input-placeholder,
+.dataTables_filter input:focus::-webkit-input-placeholder {
   color: #adb5bd;
 }
 
-.form-control:focus::-moz-placeholder {
+.form-control:focus::-moz-placeholder,
+.dataTables_filter input:focus::-moz-placeholder {
   color: #adb5bd;
 }
 
-.form-control:focus:-ms-input-placeholder {
+.form-control:focus:-ms-input-placeholder,
+.dataTables_filter input:focus:-ms-input-placeholder {
   color: #adb5bd;
 }
 
-.form-control:focus::-ms-input-placeholder {
+.form-control:focus::-ms-input-placeholder,
+.dataTables_filter input:focus::-ms-input-placeholder {
   color: #adb5bd;
 }
 
-.form-control:focus::placeholder {
+.form-control:focus::placeholder,
+.dataTables_filter input:focus::placeholder {
   color: #adb5bd;
 }
 
@@ -18722,6 +18728,127 @@ textarea[resize=horizontal] {
 .card .table th {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
+}
+
+.dataTables_length,
+.dataTables_info {
+  padding-left: 1.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.875rem;
+  color: #525f7f !important;
+}
+
+.dataTables_filter label {
+  font-size: 0.875rem;
+  color: #525f7f !important;
+  padding-right: 1.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.dataTables_filter input {
+  height: 2rem;
+  padding: 0.625rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #8898aa;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #cad1d7;
+  border-radius: 0.375rem;
+  box-shadow: none;
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+  .dataTables_filter input {
+    transition: none;
+  }
+}
+
+.dataTables_filter input::-ms-expand {
+  background-color: transparent;
+  border: 0;
+}
+
+.dataTables_filter input:focus {
+  color: #8898aa;
+  background-color: #fff;
+  border-color: rgba(50, 151, 211, 0.25);
+  outline: 0;
+  box-shadow: none, none;
+}
+
+.dataTables_filter input::-webkit-input-placeholder {
+  color: #adb5bd;
+  opacity: 1;
+}
+
+.dataTables_filter input::-moz-placeholder {
+  color: #adb5bd;
+  opacity: 1;
+}
+
+.dataTables_filter input:-ms-input-placeholder {
+  color: #adb5bd;
+  opacity: 1;
+}
+
+.dataTables_filter input::-ms-input-placeholder {
+  color: #adb5bd;
+  opacity: 1;
+}
+
+.dataTables_filter input::placeholder {
+  color: #adb5bd;
+  opacity: 1;
+}
+
+.dataTables_filter input:disabled,
+.dataTables_filter input[readonly] {
+  background-color: #e9ecef;
+  opacity: 1;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+  padding: 0.5rem 1.5rem 1.5rem;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  border-color: #e9ecef;
+  color: #525f7f !important;
+  border-radius: 50% !important;
+  font-size: 0.875rem;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+  border-color: #e9ecef;
+  color: #525f7f !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover {
+  background-color: #fff;
+  cursor: not-allowed;
+  border-color: #e9ecef;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+  background: #825ee4;
+  border: none;
+  color: #fff !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+  background: #825ee4;
+  border: none;
+  color: #fff !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+  background-color: #e9ecef;
+}
+
+table.dataTable.no-footer {
+  border-bottom: 1px solid #e9ecef;
 }
 
 p {

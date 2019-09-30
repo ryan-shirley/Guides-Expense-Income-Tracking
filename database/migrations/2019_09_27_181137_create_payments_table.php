@@ -20,7 +20,7 @@ class CreatePaymentsTable extends Migration
             $table->date('purchase_date');
             $table->boolean('guide_money');
             $table->boolean('paid_back')->default(false);
-            $table->boolean('in_accounts')->default(false);
+            $table->boolean('approved')->default(false);
             $table->text('receipt_path')->nullable();
             
             $table->unsignedBigInteger('user_id');

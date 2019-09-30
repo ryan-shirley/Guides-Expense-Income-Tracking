@@ -9,7 +9,7 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
-                    <form method="POST" action="{{ route('leader.payment.update', $payment->id )}}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('leader.payment.update', $payment->id )}}">
                         @method('PATCH')
                         @csrf
 

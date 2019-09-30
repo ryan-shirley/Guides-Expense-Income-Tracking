@@ -28,7 +28,7 @@ class UserController extends Controller
     {
         $user  = User::findOrFail($id);
 
-        return view('admin.user.show')->with([
+        return view('admin.payment.user.show')->with([
             'user' => $user
         ]);
     }

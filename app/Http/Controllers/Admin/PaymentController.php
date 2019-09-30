@@ -23,17 +23,16 @@ class PaymentController extends Controller
     }
 
     /**
-     * Show the payment.
+     * Show the payments.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function index()
     {
-        $payment = Payment::findOrFail($id);
+        $payments  = Payment::all()->sortByDesc("id");
 
-        return view('admin.payment.show')->with([
-            'payment' => $payment
+        return view('admin.payment.index')->with([
+            'payments' => $payments
         ]);
     }
 
@@ -60,7 +59,6 @@ class PaymentController extends Controller
             'purchase_date' => 'required|date',
             'guide_money' => 'required|boolean',
             'paid_back' => 'required|boolean',
-            'in_accounts' => 'required|boolean',
             'user_id' => 'required|exists:users,id',
         ]);
 
@@ -71,11 +69,11 @@ class PaymentController extends Controller
         $p->purchase_date = $request->input('purchase_date');
         $p->guide_money = $request->input('guide_money');
         $p->paid_back = $request->input('paid_back');
-        $p->in_accounts = $request->input('in_accounts');
+        $p->approved = false;
         $p->user_id = $request->input('user_id');
         $p->save();
 
-        return redirect()->route('admin.home');
+        return redirect()->route('admin.payments.index');
     }
 
     /**
@@ -103,7 +101,6 @@ class PaymentController extends Controller
             'purchase_date' => 'required|date',
             'guide_money' => 'required|boolean',
             'paid_back' => 'required|boolean',
-            'in_accounts' => 'required|boolean',
             'user_id' => 'required|exists:users,id',
         ]);
 
@@ -114,11 +111,10 @@ class PaymentController extends Controller
         $p->purchase_date = $request->input('purchase_date');
         $p->guide_money = $request->input('guide_money');
         $p->paid_back = $request->input('paid_back');
-        $p->in_accounts = $request->input('in_accounts');
         $p->user_id = $request->input('user_id');
         $p->save();
 
-        return redirect()->route('admin.home');
+        return redirect()->route('admin.payments.index');
     }
 
     /**
@@ -132,7 +128,7 @@ class PaymentController extends Controller
         $p = Payment::find($id);
         $p->delete();
         $request->session()->flash('alert-success', $p->title . ' has been deleted');
-        return redirect()->route('admin.home');
+        return redirect()->route('admin.payments.index');
     }
 
     /**
@@ -151,7 +147,7 @@ class PaymentController extends Controller
         $payment->paid_back = !$payment->paid_back;
         $payment->save();
 
-        return redirect()->route('admin.home');
+        return redirect()->route('admin.payments.index');
     }
 
     /**
@@ -167,7 +163,6 @@ class PaymentController extends Controller
 
         // Create data and convert amount into negative as expense
         $payment = Payment::findOrFail($id);
-        $payment->amount = -1 * abs($payment->amount);
 
         $client = new \GuzzleHttp\Client();
         $response = $client->request('POST', 'https://hooks.zapier.com/hooks/catch/4854411/o25u35d/', [
@@ -181,11 +176,30 @@ class PaymentController extends Controller
         }
         
         // Save 
-        $payment->amount = abs($payment->amount);
-        $payment->in_accounts = !$payment->in_accounts;
+        $payment->approved = !$payment->approved;
         $payment->save();
 
-        return redirect()->route('admin.home');
+        return redirect()->route('admin.payments.index');
     }
         
+    /**
+     * List of people that need to be paid back
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function toPayBack()
+    {
+        // $payments = Payment::all()->sortByDesc("id");
+        // $leadersToPayBack = Payment::all()->groupBy('user_id');
+        // $leadersToPayBack = Payment::where('paid_back', 0)->get()->groupBy('user_id');
+        $leadersToPayBack = Payment::groupBy('user_id')
+            ->selectRaw('sum(amount) as sum, user_id')
+            ->pluck('sum','user_id');
+
+        return view('admin.payment.toBePaidBack')->with([
+            'leadersToPayBack' => $leadersToPayBack
+        ]);
+    }
+
+    
 }

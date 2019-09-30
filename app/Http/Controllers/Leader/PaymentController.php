@@ -22,28 +22,6 @@ class PaymentController extends Controller
     }
 
     /**
-     * Show the payment.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Request $request, $id)
-    {
-        $payment = Payment::findOrFail($id);
-        $user = Auth::user();
-
-        // Check if leader own this payment
-        if($payment->user->id !== $user->id) {
-            $request->session()->flash('alert-error', 'You do not own this payment! Please do not try this again.');
-            return back();
-        }
-
-        return view('leader.payment.show')->with([
-            'payment' => $payment
-        ]);
-    }
-
-    /**
      *  Return a view to create a payment
      */
     public function create()
@@ -78,7 +56,7 @@ class PaymentController extends Controller
             $p->paid_back = false;
         }
 
-        $p->in_accounts = false;
+        $p->approved = false;
         $p->user_id = Auth::user()->id;
         $p->save();
 

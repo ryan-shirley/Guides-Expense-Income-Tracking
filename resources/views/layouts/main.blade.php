@@ -62,11 +62,29 @@
                     </div>
                     <!-- Navigation -->
                     <ul class="navbar-nav">
-                        <li class="nav-item" class="ctive">
-                            <a class=" nav-link active" href="{{ url('/home') }}">
-                                <i class="ni ni-tv-2 text-primary"></i> Dashboard
-                            </a>
-                        </li>
+                        @if(Auth::user()->hasRole('admin'))
+                            <li class="nav-item">
+                                <a class="nav-link {{ Route::currentRouteName() == 'admin.home' ? 'active' : '' }}" href="{{ route('admin.home') }}">
+                                    <i class="ni ni-tv-2 text-primary"></i> Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ Route::currentRouteName() == 'admin.payments.index' ? 'active' : '' }}" href="{{ route('admin.payments.index') }}">
+                                    <i class="fas fa-receipt text-warning"></i> Payments
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ Route::currentRouteName() == 'admin.payments.toPayBack' ? 'active' : '' }}" href="{{ route('admin.payments.toPayBack') }}">
+                                <i class="fas fa-users text-primary"></i> To Pay Back
+                                </a>
+                            </li>
+                        @else
+                            <li class="nav-item">
+                                <a class="nav-link {{ Route::currentRouteName() == 'leader.home' ? 'active' : '' }}" href="{{ route('leader.home') }}">
+                                    <i class="ni ni-tv-2 text-primary"></i> Dashboard
+                                </a>
+                            </li>
+                        @endif
                     </ul>
                 </div>
             </div>
@@ -77,7 +95,7 @@
             <nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
                 <div class="container-fluid">
                     <!-- Brand -->
-                    <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="./index.html">Dashboard*</a>
+                    <p class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">@yield('page-title')</p>
                     <!-- User -->
                     <ul class="navbar-nav align-items-center d-none d-md-flex">
                         <li class="nav-item dropdown">
@@ -112,7 +130,23 @@
             </nav>
             <!-- End Navbar -->
 
-            @yield('content')
+            <!-- Header -->
+            <div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
+                <div class="container-fluid">
+                    <div class="header-body">
+                        @yield('header')
+                    </div>
+                    <!-- /.Header Body -->
+                </div>
+                <!-- /.Container Fluid -->
+            </div>
+            <!-- /.Header -->
+
+            <!-- Main Content -->
+            <div class="container-fluid mt--7">
+                @yield('content')
+            </div>
+            <!-- /.Main Content -->
         </main>
     </div>
     @yield('scripts')

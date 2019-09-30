@@ -29,18 +29,11 @@ class HomeController extends Controller
     {
         $payments  = Payment::all()->sortByDesc("id");
 
-        // Total all time
-        $total_all_time = 0;
+        // Total for year
+        $total_year = 0;
         foreach ($payments as $payment) {
-            $total_all_time += $payment->amount;
-        }
-
-        // Get last 30 days
-        $dateMonthAgo = Carbon::now()->subDays(30);
-        $total_30_days = 0;
-        foreach ($payments as $payment) {
-            if($dateMonthAgo <= Carbon::parse($payment->purchase_date)) {
-                $total_30_days += $payment->amount;
+            if(Carbon::now()->startOfYear() <= Carbon::parse($payment->purchase_date) && Carbon::now()->endOfYear() > Carbon::parse($payment->purchase_date)) {
+                $total_year += $payment->amount;
             }
         }
 
@@ -52,11 +45,18 @@ class HomeController extends Controller
             }
         }
 
+        // Get number of expenses waiting on approval
+        $num_waiting_approval = 0;
+        foreach ($payments as $payment) {
+            if(!$payment->approved) {
+                $num_waiting_approval++;
+            }
+        }
+
         return view('admin.home')->with([
-            'payments' => $payments,
-            'total_all_time' => $total_all_time,
-            'total_30_days' => $total_30_days,
+            'total_year' => $total_year,
             'total_to_pay_back' => $total_to_pay_back, 
+            'num_waiting_approval' => $num_waiting_approval,
         ]);
     }
 }

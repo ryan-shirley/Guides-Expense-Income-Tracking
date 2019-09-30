@@ -14,7 +14,7 @@
 
 // Text inputs
 
-.form-control {
+.form-control, .dataTables_filter input {
     font-size: $input-btn-font-size;
 
     &:focus {
