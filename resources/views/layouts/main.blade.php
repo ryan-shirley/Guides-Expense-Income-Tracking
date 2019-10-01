@@ -9,9 +9,6 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -75,7 +72,12 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ Route::currentRouteName() == 'admin.payments.toPayBack' ? 'active' : '' }}" href="{{ route('admin.payments.toPayBack') }}">
-                                <i class="fas fa-users text-primary"></i> To Pay Back
+                                    <i class="fas fa-users text-primary"></i> To Pay Back
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ Route::currentRouteName() == 'admin.incomes.index' ? 'active' : '' }}" href="{{ route('admin.incomes.index') }}">
+                                    <i class="fas fa-wallet text-warning"></i> Income
                                 </a>
                             </li>
                         @else
@@ -149,6 +151,8 @@
             <!-- /.Main Content -->
         </main>
     </div>
+    <!-- Scripts -->
+    <script src="{{ asset('js/app.js') }}"></script>
     @yield('scripts')
 </body>
 </html>

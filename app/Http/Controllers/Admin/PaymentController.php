@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Payment;
 use App\Role;
+use App\BankAccount;
 use Auth;
 use Guzzle\Http\Client;
 
@@ -156,7 +157,7 @@ class PaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function changeAccountStatus(Request $request, $id)
+    public function approve(Request $request, $id)
     {
         // Get User
         $user = Auth::user();
@@ -164,20 +165,25 @@ class PaymentController extends Controller
         // Create data and convert amount into negative as expense
         $payment = Payment::findOrFail($id);
 
-        $client = new \GuzzleHttp\Client();
-        $response = $client->request('POST', 'https://hooks.zapier.com/hooks/catch/4854411/o25u35d/', [
-            'json' => json_decode(json_encode($payment), true)
-        ]);
+        // $client = new \GuzzleHttp\Client();
+        // $response = $client->request('POST', 'https://hooks.zapier.com/hooks/catch/4854411/o25u35d/', [
+        //     'json' => json_decode(json_encode($payment), true)
+        // ]);
 
-        // Check if error saving to Google Drive
-        if($response->getStatusCode() !== 200) {
-            $request->session()->flash('alert-error', 'Oops something went wrong! Please try again later.');
-            return back();
-        }
+        // // Check if error saving to Google Drive
+        // if($response->getStatusCode() !== 200) {
+        //     $request->session()->flash('alert-error', 'Oops something went wrong! Please try again later.');
+        //     return back();
+        // }
         
         // Save 
         $payment->approved = !$payment->approved;
         $payment->save();
+
+        // Take out of bank account
+        $bankBalance = BankAccount::where('title', 'Main')->first();
+        $bankBalance->balance -= $payment->amount;
+        $bankBalance->save();
 
         return redirect()->route('admin.payments.index');
     }
@@ -189,10 +195,7 @@ class PaymentController extends Controller
      */
     public function toPayBack()
     {
-        // $payments = Payment::all()->sortByDesc("id");
-        // $leadersToPayBack = Payment::all()->groupBy('user_id');
-        // $leadersToPayBack = Payment::where('paid_back', 0)->get()->groupBy('user_id');
-        $leadersToPayBack = Payment::groupBy('user_id')
+        $leadersToPayBack = Payment::where('paid_back', '0')->groupBy('user_id')
             ->selectRaw('sum(amount) as sum, user_id')
             ->pluck('sum','user_id');
 

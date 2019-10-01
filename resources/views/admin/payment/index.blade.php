@@ -8,7 +8,7 @@
 
 @section('content')
 <div class="row justify-content-center">
-    <div class="col-md-8">
+    <div class="col-md-8 col-xl-12">
         <div class="card shadow">
             <div class="card-header bg-transparent mb-4">
                 <div class="row align-items-center">
@@ -72,7 +72,7 @@
                                             <input name="_method" type="hidden" value="DELETE">
                                             <button class="btn btn-danger btn-sm" ><i class="fas fa-times"></i></button>
                                         </form>
-                                        <form action="{{ action('Admin\PaymentController@changeAccountStatus', $p->id )}}" method="post" style="display: inline;">
+                                        <form action="{{ action('Admin\PaymentController@approve', $p->id )}}" method="post" style="display: inline;">
                                             @csrf
                                             <button class="btn btn-success btn-sm" >Approve</button>
                                         </form>
@@ -103,7 +103,7 @@
 
 @section('scripts')
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript" >
+    <script type="text/javascript">
         // my custom script
         $(document).ready( function () {
             console.log('test')

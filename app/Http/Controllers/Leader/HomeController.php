@@ -34,7 +34,7 @@ class HomeController extends Controller
         // Total for year
         $total_year = 0;
         foreach ($payments as $payment) {
-            if(Carbon::now()->startOfYear() <= Carbon::parse($payment->purchase_date) && Carbon::now()->endOfYear() > Carbon::parse($payment->purchase_date)) {
+            if(Carbon::now()->startOfYear() <= Carbon::parse($payment->purchase_date) && Carbon::now()->endOfYear() > Carbon::parse($payment->purchase_date) && $payment->approved === 1) {
                 $total_year += $payment->amount;
             }
         }
@@ -43,7 +43,7 @@ class HomeController extends Controller
         $dateMonthAgo = Carbon::now()->subDays(30);
         $total_30_days = 0;
         foreach ($payments as $payment) {
-            if($dateMonthAgo <= Carbon::parse($payment->purchase_date)) {
+            if($dateMonthAgo <= Carbon::parse($payment->purchase_date) && $payment->approved === 1) {
                 $total_30_days += $payment->amount;
             }
         }

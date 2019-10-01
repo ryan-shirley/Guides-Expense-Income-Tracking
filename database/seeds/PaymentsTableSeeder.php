@@ -16,7 +16,7 @@ class PaymentsTableSeeder extends Seeder
         $leader = User::where('name', 'Leader Name')->first();
 
         $payment = new Payment();
-        $payment->title = 'Test payment';
+        $payment->title = 'Juice';
         $payment->amount = 25.50;
         $payment->purchase_date = '2019/09/25';
         $payment->guide_money = false;
@@ -25,7 +25,7 @@ class PaymentsTableSeeder extends Seeder
         $payment->save();
 
         $payment2 = new Payment();
-        $payment2->title = 'Test payment 2';
+        $payment2->title = 'Kettle';
         $payment2->amount = 129.99;
         $payment2->purchase_date = '2019/09/27';
         $payment2->guide_money = true;
