@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>@yield('page-title') - IGG</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -24,6 +24,20 @@
     <!-- Icons -->
     <link href="{{ asset('css/plugins/nucleo/css/nucleo.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/plugins/@fortawesome/fontawesome-free/css/all.min.css') }}" rel="stylesheet" />
+
+    <!-- Favicon -->
+    <link type="image/png" rel="icon" sizes="32x32" href="{{ asset('favicon/favicon-32.png') }}">
+    <link type="image/png" rel="icon" sizes="57x57" href="{{ asset('favicon/favicon-57.png') }}">
+    <link type="image/png" rel="icon" sizes="76x76" href="{{ asset('favicon/favicon-76.png') }}">
+    <link type="image/png" rel="icon" sizes="120x120" href="{{ asset('favicon/favicon-120.png') }}">
+    <link type="image/png"rel="icon" sizes="128x128" href="{{ asset('favicon/favicon-128.png') }}">
+    <link type="image/png" rel="icon" sizes="152x152" href="{{ asset('favicon/favicon-152.png') }}">
+    <link type="image/png" rel="icon" sizes="167x167" href="{{ asset('favicon/favicon-167.png') }}">
+    <link type="image/png" rel="icon" sizes="180x180" href="{{ asset('favicon/favicon-180.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('favicon/favicon-180.png') }}">
+    <link type="image/png" rel="icon" sizes="192x192" href="{{ asset('favicon/favicon-192.png') }}">
+    <link type="image/png" rel="icon" sizes="196x196" href="{{ asset('favicon/favicon-196.png') }}">
+    <link type="image/png" rel="icon" sizes="228x228" href="{{ asset('favicon/favicon-228.png') }}">
 </head>
 <body>
     <div id="app">
@@ -34,9 +48,8 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <!-- Brand -->
-                <a class="navbar-brand pt-0" href="{{ url('/') }}">
-                    Guides
-                    <!-- <img src="./assets/img/brand/blue.png" class="navbar-brand-img" alt="..."> -->
+                <a class="navbar-brand pt-0" href="{{ url('/home') }}">
+                    <img src="{{ asset('images/igg-logo.png') }}" class="navbar-brand-img" alt="IGG Logo">
                 </a>
                 <!-- Collapse -->
                 <div class="collapse navbar-collapse" id="sidenav-collapse-main">
@@ -44,9 +57,8 @@
                     <div class="navbar-collapse-header d-md-none">
                         <div class="row">
                             <div class="col-6 collapse-brand">
-                                <a href="{{ url('/') }}">
-                                    <!-- <img src="./assets/img/brand/blue.png"> -->
-                                    Guides
+                                <a href="{{ url('/home') }}">
+                                    <img src="{{ asset('images/igg-logo.png') }}"alt="IGG Logo">
                                 </a>
                             </div>
                             <div class="col-6 collapse-close">
@@ -112,10 +124,10 @@
                                 </div>
                             </a>
                             <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right">
-                                <a href="./examples/profile.html" class="dropdown-item">
+                                <!-- <a href="./examples/profile.html" class="dropdown-item">
                                     <i class="ni ni-single-02"></i>
                                     <span>My profile*</span>
-                                </a>
+                                </a> -->
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -147,6 +159,20 @@
             <!-- Main Content -->
             <div class="container-fluid mt--7">
                 @yield('content')
+
+                <!-- Footer -->
+                <footer class="py-5 footer">
+                    <div class="container">
+                        <div class="row align-items-center justify-content">
+                            <div class="col">
+                                <div class="copyright text-center text-muted">
+                                    &copy; {{ now()->year }} - Built by <a href="https://ryanshirley.ie" class="font-weight-bold ml-1" target="_blank">Ryan Shirley</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+                <!-- /.Footer -->
             </div>
             <!-- /.Main Content -->
         </main>

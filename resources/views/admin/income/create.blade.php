@@ -9,7 +9,7 @@
             <div class="card-header bg-transparent mb-4">
                 <div class="row align-items-center">
                     <div class="col">
-                        <h2 class="mb-0">Add Incomming Money</h2>
+                        <h2 class="mb-0">Add Incoming Money</h2>
                     </div>
                 </div>
             </div>

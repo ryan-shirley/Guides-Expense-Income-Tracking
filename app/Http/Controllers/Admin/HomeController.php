@@ -64,7 +64,7 @@ class HomeController extends Controller
         // Bank balance
         $bankBalance = BankAccount::where('title', 'Main')->first()->balance;
 
-        // Bank Balance history for year
+        // Payment history for year
         $paymentTotalsPerMonth = Payment::where('approved', '1')->get()->groupBy(function($val) {
             return Carbon::parse($val->purchase_date)->format('M');
         });
@@ -98,13 +98,63 @@ class HomeController extends Controller
             'paymentValues' => json_encode($paymentValues, true),
         );
 
+
+        // Income history for year
+        $incomeTotalsPerMonth = Income::where('approved', '1')->get()->groupBy(function($val) {
+            return Carbon::parse($val->date)->format('M');
+        });
+
+        // Payment totals per month
+        $incomeHistory = array();
+        $prevMonthBal = $bankBalance;
+        foreach($incomeTotalsPerMonth as $month => $payments) {
+            $total = 0;
+            foreach($payments as $payment) {
+                $total += $payment->amount;
+            }
+            $incomeHistory[date_parse($month)['month']]['label'] = $month;
+            $incomeHistory[date_parse($month)['month']]['balance'] = $total;
+        }
+        // Sort months in order
+        ksort($incomeHistory);
+
+        // Store income for bank balance
+        $incomeHistoryBank = $incomeHistory;
+
+        // Seperate into months and values
+        $incomeMonths = array();
+        $incomeValues = array();
+        foreach($incomeHistory as $index => $value) {
+            array_push($incomeMonths ,$value['label']);
+            array_push($incomeValues ,$value['balance']);
+        }
+        $incomeHistory = array(
+            'incomeMonths' => json_encode($incomeMonths, true),
+            'incomeValues' => json_encode($incomeValues, true),
+        );
+
+
+
+
+
+
         // Bank Balance History
         $bankBalancePrevious = $bankBalance;
         $month = Carbon::now();
         $paymentsFromBank = array_reverse($paymentHistoryBank,true);
 
+        // Loop payments
         foreach($paymentsFromBank as $index => $value) {
             $found = false;
+
+            // Loop though income
+            foreach($incomeHistoryBank as $i => $val) {
+                // If months are the same subtract
+                if($value['label'] === $val['label']) {
+                    $value['balance'] -= $val['balance'];
+                }
+            }
+            
 
             // Loop until found month
             while($found === false) {
@@ -148,6 +198,7 @@ class HomeController extends Controller
             'total_to_pay_back' => number_format($total_to_pay_back, 2), 
             'num_waiting_approval' => $num_waiting_approval,
             'paymentHistory' => $paymentHistory,
+            'incomeHistory' => $incomeHistory,
             'bankHistory' => $paymentHistoryBank,
         ]);
     }

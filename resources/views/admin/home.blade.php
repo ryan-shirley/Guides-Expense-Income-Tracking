@@ -102,7 +102,7 @@
 @section('content')
 <div class="row justify-content-center">
     <div class="col-md-6">
-        <div class="card bg-gradient-default shadow">
+        <div class="card bg-gradient-default shadow mb-3">
             <div class="card-header bg-transparent">
                 <div class="row align-items-center">
                     <div class="col">
@@ -124,12 +124,34 @@
     </div>
     <!-- /.Column Payment History -->
     <div class="col-md-6">
-        <div class="card bg-gradient-default shadow">
+        <div class="card bg-gradient-default shadow mb-3">
             <div class="card-header bg-transparent">
                 <div class="row align-items-center">
                     <div class="col">
                         <h6 class="text-uppercase text-light ls-1 mb-1">Overview</h6>
-                        <h2 class="text-white mb-0">Bank History only payments needs income also</h2>
+                        <h2 class="text-white mb-0">Income History</h2>
+                    </div>
+                </div>
+            </div>
+            <!-- /.Card Header -->
+            <div class="card-body">
+                <!-- Chart -->
+                <div class="cart">
+                    <!-- Chart wrapper -->
+                    <canvas id="chart-income-history" class="chart-canvas"></canvas>
+                </div>
+            </div>
+            <!-- /.Card Body -->
+        </div>
+    </div>
+    <!-- /.Column Bank History -->
+    <div class="col-md-12">
+        <div class="card bg-gradient-default shadow mb-3">
+            <div class="card-header bg-transparent">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h6 class="text-uppercase text-light ls-1 mb-1">Overview</h6>
+                        <h2 class="text-white mb-0">Bank History</h2>
                     </div>
                 </div>
             </div>
@@ -502,7 +524,7 @@
     })();
 
     //
-    // Payment History chart
+    // Bank History chart
     //
     var BankChart = (function() {
         // Variables
@@ -551,6 +573,70 @@
                     datasets: [{
                         label: 'Performance',
                         data: {!! $bankHistory['bankValues'] !!}
+                    }]
+                }
+            });
+
+            // Save to jQuery object
+            $chart.data('chart', salesChart);
+        };
+
+        // Events
+        if ($chart.length) {
+            init($chart);
+        }
+    })();
+
+    //
+    // Income History chart
+    //
+    var IncomeChart = (function() {
+        // Variables
+        var $chart = $('#chart-income-history');
+
+        // Methods
+        function init($chart) {
+            var salesChart = new Chart($chart, {
+                type: 'line',
+                options: {
+                    scales: {
+                        yAxes: [{
+                            gridLines: {
+                                lineWidth: 0,
+                                color: Charts.colors.gray[900],
+                                zeroLineColor: Charts.colors.gray[900]
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    if (!(value % 10)) {
+                                        return '€' + value;
+                                    }
+                                }
+                            }
+                        }]
+                    },
+                    tooltips: {
+                        callbacks: {
+                            label: function(item, data) {
+                                var label = data.datasets[item.datasetIndex].label || '';
+                                var yLabel = item.yLabel;
+                                var content = '';
+
+                                if (data.datasets.length > 1) {
+                                content += '<span class="popover-body-label mr-auto">' + label + '</span>';
+                                }
+
+                                content += '<span class="popover-body-value">€' + yLabel + '</span>';
+                                return content;
+                            }
+                        }
+                    }
+                },
+                data: {
+                    labels: {!! $incomeHistory['incomeMonths'] !!},
+                    datasets: [{
+                        label: 'Performance',
+                        data: {!! $incomeHistory['incomeValues'] !!}
                     }]
                 }
             });
