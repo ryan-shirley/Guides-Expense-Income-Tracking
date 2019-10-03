@@ -21,6 +21,7 @@ class CreatePaymentsTable extends Migration
             $table->boolean('guide_money');
             $table->boolean('paid_back')->default(false);
             $table->boolean('approved')->default(false);
+            $table->boolean('receipt_received')->default(false);
             $table->text('receipt_path')->nullable();
             
             $table->unsignedBigInteger('user_id');

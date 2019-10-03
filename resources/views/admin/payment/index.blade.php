@@ -33,6 +33,7 @@
                         <th scope="col">Purchase Date</th>
                         <th scope="col">Guide Money</th>
                         <th scope="col">Paid Back</th>
+                        <th scope="col">Received Receipt</th>
                         <th scope="col">Approved</th>
                         <th scope="col">Action</th>
                         </tr>
@@ -59,6 +60,13 @@
                                     @endif
                                 </td>
                                 <td>
+                                    @if ($p->receipt_received === 1)
+                                        <i class="fas fa-check text-success"></i>
+                                    @else
+                                        <i class="fas fa-times text-danger"></i>
+                                    @endif
+                                </td>
+                                <td>
                                     @if ($p->approved === 1)
                                         <i class="fas fa-check text-success"></i>
                                     @else
@@ -79,9 +87,15 @@
                                         </form>
                                     @endif
                                     @if ($p->paid_back === 0)
-                                        <form action="{{ action('Admin\PaymentController@changePaymentStatus', $p->id )}}" class="payment-pay" method="post" style="display: inline;">
+                                        <form action="{{ action('Admin\PaymentController@paidBack', $p->id )}}" class="payment-pay" method="post" style="display: inline;">
                                             @csrf
                                             <button class="btn btn-info btn-sm" >Mark Paid</button>
+                                        </form>
+                                    @endif
+                                    @if ($p->receipt_received === 0)
+                                        <form action="{{ action('Admin\PaymentController@receivedReceipt', $p->id )}}" class="payment-received-receipt" method="post" style="display: inline;">
+                                            @csrf
+                                            <button class="btn btn-info btn-sm" >Received Receipt</button>
                                         </form>
                                     @endif
                                 </td>
@@ -203,6 +217,40 @@
                     Swal.fire({
                         title: 'Cancelled!',
                         text: "Your payment was not marked as paid.",
+                        type: 'error',
+                        buttonsStyling: false,
+                        confirmButtonText: 'Close',
+                        customClass: {
+                            confirmButton: 'btn btn-primary',
+                        },
+                    })
+                }
+            })
+        });
+
+        // Payment Received Receipt Confirmation
+        $('.payment-received-receipt').submit(function(event){
+            event.preventDefault()
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, mark as received receipt!',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-primary',
+                    cancelButton: 'btn btn-default',
+                },
+            }).then((result) => {
+                if (result.value) {
+                    $(this).unbind('submit').submit();
+                }
+                else if (result.dismiss === 'cancel') {
+                    Swal.fire({
+                        title: 'Cancelled!',
+                        text: "Your payment was not marked as received receipt.",
                         type: 'error',
                         buttonsStyling: false,
                         confirmButtonText: 'Close',

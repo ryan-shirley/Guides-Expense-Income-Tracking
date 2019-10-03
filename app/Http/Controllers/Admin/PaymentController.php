@@ -140,14 +140,14 @@ class PaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function changePaymentStatus(Request $request, $id)
+    public function paidBack(Request $request, $id)
     {
         // Get User
         $user = Auth::user();
 
         // Change paid back status
         $payment = Payment::findOrFail($id);
-        $payment->paid_back = !$payment->paid_back;
+        $payment->paid_back = true;
         $payment->save();
 
         $request->session()->flash('alert-success', $payment->title . ' payment has been marked as paid.');
@@ -180,7 +180,7 @@ class PaymentController extends Controller
         // }
         
         // Save 
-        $payment->approved = !$payment->approved;
+        $payment->approved = true;
         $payment->save();
 
         // Take out of bank account
@@ -191,6 +191,31 @@ class PaymentController extends Controller
         $request->session()->flash('alert-success', $payment->title . ' payment has been approved!');
         return redirect()->route('admin.payments.index');
     }
+
+    /**
+     * Mark payment as received receipt.
+     * 
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function receivedReceipt(Request $request, $id)
+    {
+        // Get User
+        $user = Auth::user();
+
+        // Create data and convert amount into negative as expense
+        $payment = Payment::findOrFail($id);
+        
+        // Save 
+        $payment->receipt_received = true;
+        $payment->save();
+
+        $request->session()->flash('alert-success', $payment->title . ' payment has been marked as received receipt.');
+        return redirect()->route('admin.payments.index');
+    }
+
+
+    
         
     /**
      * List of people that need to be paid back

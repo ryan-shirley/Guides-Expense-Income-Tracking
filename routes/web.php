@@ -73,9 +73,10 @@ Route::resource('/admin/payments', 'Admin\PaymentController', [
     'show'
 ]);
 Route::get('/admin/payments/user/{id}', 'Admin\UserController@show')->name('admin.payments.user.show'); // User
-Route::post('/admin/payments/{id}', 'Admin\PaymentController@changePaymentStatus')->name('admin.payments.status.change'); // Change wether paid or not
-Route::post('/admin/payments/{id}/accounts', 'Admin\PaymentController@approve')->name('admin.payments.account.approve'); // Approve payments
-Route::get('/admin/payments/to-pay-back', 'Admin\PaymentController@toPayBack')->name('admin.payments.toPayBack');
+Route::post('/admin/payments/{id}', 'Admin\PaymentController@paidBack')->name('admin.payments.status.change'); // Change wether paid or not
+Route::post('/admin/payments/{id}/accounts', 'Admin\PaymentController@approve')->name('admin.payments.account.approve'); // Approve payment
+Route::post('/admin/payments/{id}/received-receipt', 'Admin\PaymentController@receivedReceipt')->name('admin.payments.receivedReceipt'); // Mark as received receipt
+Route::get('/admin/payments/to-pay-back', 'Admin\PaymentController@toPayBack')->name('admin.payments.toPayBack'); // To Pay Back
 Route::resource('/admin/incomes', 'Admin\IncomeController', [
     'as' => 'admin'
 ])->except([

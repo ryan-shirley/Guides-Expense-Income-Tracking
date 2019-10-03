@@ -106,6 +106,7 @@
                             <th scope="col">Purchase Date</th>
                             <th scope="col">Guide Money</th>
                             <th scope="col">Paid Back</th>
+                            <th scope="col">Received Receipt</th>
                             <th scope="col">Approved</th>
                             <th scope="col">Action</th>
                         </tr>
@@ -131,6 +132,13 @@
                                     @endif
                                 </td>
                                 <td>
+                                    @if ($p->receipt_received === 1)
+                                        <i class="fas fa-check text-success"></i>
+                                    @else
+                                        <i class="fas fa-times text-danger"></i>
+                                    @endif
+                                </td>
+                                <td>
                                     @if ($p->approved === 1)
                                         <i class="fas fa-check text-success"></i>
                                     @else
@@ -138,7 +146,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if ($p->in_accounts !== 1)
+                                    @if ($p->approved !== 1)
                                         <a class="btn btn-warning btn-sm" href="{{ route('leader.payments.edit', $p->id) }}" role="button"><i class="far fa-edit"></i></a>
                                         <form action="{{ action('Leader\PaymentController@destroy', $p->id )}}" class="payment-delete" method="post" style="display: inline;">
                                             @csrf
