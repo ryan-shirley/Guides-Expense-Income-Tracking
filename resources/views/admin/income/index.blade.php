@@ -45,12 +45,12 @@
                                 <td>
                                     @if ($i->approved !== 1)
                                         <a class="btn btn-warning btn-sm" href="{{ route('admin.incomes.edit', $i->id) }}" role="button"><i class="far fa-edit"></i></a>
-                                        <form action="{{ action('Admin\IncomeController@destroy', $i->id )}}" class="income-delete" method="post" style="display: inline;">
+                                        <form action="{{ action('Admin\IncomeController@destroy', $i->id )}}" method="post" style="display: inline;">
                                             @csrf
                                             <input name="_method" type="hidden" value="DELETE">
                                             <button class="btn btn-danger btn-sm" ><i class="fas fa-times"></i></button>
                                         </form>
-                                        <form action="{{ action('Admin\IncomeController@approve', $i->id )}}" method="post" style="display: inline;">
+                                        <form action="{{ action('Admin\IncomeController@approve', $i->id )}}" class="income-approve" method="post" style="display: inline;">
                                             @csrf
                                             <button class="btn btn-success btn-sm">Approve</button>
                                         </form>
@@ -85,8 +85,8 @@
             });
         });
 
-        // Delete Income Confirmation
-        $('.income-delete').submit(function(event){
+        // approve Income Confirmation
+        $('.income-approve').submit(function(event){
             event.preventDefault()
 
             Swal.fire({
@@ -94,7 +94,7 @@
                 text: "You won't be able to revert this!",
                 type: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Yes, delete payment!',
+                confirmButtonText: 'Yes, approve income!',
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'btn btn-primary',
@@ -107,7 +107,7 @@
                 else if (result.dismiss === 'cancel') {
                     Swal.fire({
                         title: 'Cancelled!',
-                        text: "Your payment was not deleted",
+                        text: "Your income was not approved",
                         type: 'error',
                         buttonsStyling: false,
                         confirmButtonText: 'Close',
