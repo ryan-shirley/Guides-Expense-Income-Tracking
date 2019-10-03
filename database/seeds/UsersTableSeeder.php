@@ -23,6 +23,13 @@ class UsersTableSeeder extends Seeder
         $admin->save();
         $admin->roles()->attach($role_admin);
 
+        $admin2 = new User();
+        $admin2->name = 'Emily Darlington';
+        $admin2->email = 'emilyjane.darlington@gmail.com';
+        $admin2->password = bcrypt('secret');
+        $admin2->save();
+        $admin2->roles()->attach($role_admin);
+
         $leader = new User();
         $leader->name = 'Leader Name';
         $leader->email = 'leader@example.com';
