@@ -129,6 +129,7 @@
     <!-- /.App -->
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
     @yield('scripts')
 </body>
 </html>

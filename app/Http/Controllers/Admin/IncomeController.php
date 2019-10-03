@@ -60,6 +60,7 @@ class IncomeController extends Controller
         $i->date = $request->input('date');
         $i->save();
 
+        $request->session()->flash('alert-success', $i->title . ' income has been added.');
         return redirect()->route('admin.incomes.index');
     }
 
@@ -93,6 +94,7 @@ class IncomeController extends Controller
         $i->date = $request->input('date');
         $i->save();
 
+        $request->session()->flash('alert-success', $i->title . ' income has been updated.');
         return redirect()->route('admin.incomes.index');
     }
 
@@ -106,7 +108,7 @@ class IncomeController extends Controller
     {
         $i = Income::find($id);
         $i->delete();
-        $request->session()->flash('alert-success', $i->title . ' has been deleted');
+        $request->session()->flash('alert-success', $i->title . ' income has been deleted');
         return redirect()->route('admin.incomes.index');
     }
 
@@ -141,6 +143,7 @@ class IncomeController extends Controller
         $bankBalance->balance += $income->amount;
         $bankBalance->save();
 
+        $request->session()->flash('alert-success', $income->title . ' income has been approved.');
         return redirect()->route('admin.incomes.index');
     }
 

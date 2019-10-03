@@ -10,7 +10,7 @@
                 <div class="row align-items-center">
                     <div class="col">
                         <h6 class="text-uppercase text-muted ls-1 mb-1">Overview</h6>
-                        <h2 class="mb-0">Incomming Money</h2>
+                        <h2 class="mb-0">Incoming Money</h2>
                     </div>
                     <div class="col">
                         <p class="text-right"><a class="btn btn-primary" href="{{ route('admin.incomes.create') }}" role="button">Add Income</a></p>
@@ -45,7 +45,7 @@
                                 <td>
                                     @if ($i->approved !== 1)
                                         <a class="btn btn-warning btn-sm" href="{{ route('admin.incomes.edit', $i->id) }}" role="button"><i class="far fa-edit"></i></a>
-                                        <form action="{{ action('Admin\IncomeController@destroy', $i->id )}}" method="post" onSubmit="return confirm('Are you sure you wish to delete?')" style="display: inline;">
+                                        <form action="{{ action('Admin\IncomeController@destroy', $i->id )}}" class="income-delete" method="post" style="display: inline;">
                                             @csrf
                                             <input name="_method" type="hidden" value="DELETE">
                                             <button class="btn btn-danger btn-sm" ><i class="fas fa-times"></i></button>
@@ -83,6 +83,40 @@
                     }
                 }
             });
+        });
+
+        // Delete Income Confirmation
+        $('.income-delete').submit(function(event){
+            event.preventDefault()
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete payment!',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-primary',
+                    cancelButton: 'btn btn-default',
+                },
+            }).then((result) => {
+                if (result.value) {
+                    $(this).unbind('submit').submit();
+                }
+                else if (result.dismiss === 'cancel') {
+                    Swal.fire({
+                        title: 'Cancelled!',
+                        text: "Your payment was not deleted",
+                        type: 'error',
+                        buttonsStyling: false,
+                        confirmButtonText: 'Close',
+                        customClass: {
+                            confirmButton: 'btn btn-primary',
+                        },
+                    })
+                }
+            })
         });
     </script>
 @endsection

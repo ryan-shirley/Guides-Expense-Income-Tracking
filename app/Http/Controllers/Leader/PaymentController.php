@@ -60,6 +60,7 @@ class PaymentController extends Controller
         $p->user_id = Auth::user()->id;
         $p->save();
 
+        $request->session()->flash('alert-success', $p->title . ' payment has been added.');
         return redirect()->route('leader.home');
     }
 
@@ -100,12 +101,12 @@ class PaymentController extends Controller
 
         // Check if leader own this payment or is in accounts
         if($p->user->id !== $user->id) {
-            $request->session()->flash('alert-error', 'You do not own this payment! Please do not try this again.');
-            return back();
+            $request->session()->flash('alert-danger', 'You do not own this payment! Please do not try this again.');
+            return redirect()->route('leader.home');
         }
         else if($p->in_accounts === 1) {
-            $request->session()->flash('alert-error', 'You can not alter a payment after it has been added to accounts! Please do not try this again.');
-            return back();
+            $request->session()->flash('alert-danger', 'You can not alter a payment after it has been added to accounts! Please do not try this again.');
+            return redirect()->route('leader.home');
         }
         
         $p->title = $request->input('title');
@@ -123,6 +124,7 @@ class PaymentController extends Controller
 
         $p->save();
 
+        $request->session()->flash('alert-success', $p->title . ' payment has been updated.');
         return redirect()->route('leader.home');
     }
 
@@ -148,7 +150,8 @@ class PaymentController extends Controller
         }
 
         $p->delete();
-        $request->session()->flash('alert-success', $p->title . ' has been deleted');
+
+        $request->session()->flash('alert-success', $p->title . ' payment has been deleted');
         return redirect()->route('leader.home');
     }
         

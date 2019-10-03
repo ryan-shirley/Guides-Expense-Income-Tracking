@@ -12,7 +12,7 @@
             <div class="card">
                 <div class="card-body text-center">
                     
-                    <h2>Welcome to the IGG Stilorgan system.</h2>
+                    <h2>Welcome to the IGG Stillorgan system.</h2>
                     <p>Please login or register for an account if instructed to do so by an admin.</p>
                     <p>
                         <a class="btn btn-primary" href="{{ route('login') }}" role="button">Login</a>

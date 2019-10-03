@@ -74,6 +74,7 @@ class PaymentController extends Controller
         $p->user_id = $request->input('user_id');
         $p->save();
 
+        $request->session()->flash('alert-success', $p->title . ' payment has been added.');
         return redirect()->route('admin.payments.index');
     }
 
@@ -115,6 +116,7 @@ class PaymentController extends Controller
         $p->user_id = $request->input('user_id');
         $p->save();
 
+        $request->session()->flash('alert-success', $p->title . ' payment has been updated.');
         return redirect()->route('admin.payments.index');
     }
 
@@ -128,7 +130,7 @@ class PaymentController extends Controller
     {
         $p = Payment::find($id);
         $p->delete();
-        $request->session()->flash('alert-success', $p->title . ' has been deleted');
+        $request->session()->flash('alert-success', $p->title . ' payment has been deleted');
         return redirect()->route('admin.payments.index');
     }
 
@@ -138,7 +140,7 @@ class PaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function changePaymentStatus($id)
+    public function changePaymentStatus(Request $request, $id)
     {
         // Get User
         $user = Auth::user();
@@ -148,6 +150,7 @@ class PaymentController extends Controller
         $payment->paid_back = !$payment->paid_back;
         $payment->save();
 
+        $request->session()->flash('alert-success', $payment->title . ' payment has been marked as paid.');
         return redirect()->route('admin.payments.index');
     }
 
@@ -185,6 +188,7 @@ class PaymentController extends Controller
         $bankBalance->balance -= $payment->amount;
         $bankBalance->save();
 
+        $request->session()->flash('alert-success', $payment->title . ' payment has been approved!');
         return redirect()->route('admin.payments.index');
     }
         

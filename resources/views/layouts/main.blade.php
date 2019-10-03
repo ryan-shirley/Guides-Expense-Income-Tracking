@@ -79,17 +79,17 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ Route::currentRouteName() == 'admin.payments.index' ? 'active' : '' }}" href="{{ route('admin.payments.index') }}">
-                                    <i class="fas fa-receipt text-warning"></i> Payments
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link {{ Route::currentRouteName() == 'admin.payments.toPayBack' ? 'active' : '' }}" href="{{ route('admin.payments.toPayBack') }}">
-                                    <i class="fas fa-users text-primary"></i> To Pay Back
+                                    <i class="fas fa-receipt text-danger"></i> Payments
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ Route::currentRouteName() == 'admin.incomes.index' ? 'active' : '' }}" href="{{ route('admin.incomes.index') }}">
-                                    <i class="fas fa-wallet text-warning"></i> Income
+                                    <i class="fas fa-euro-sign text-success"></i> Income
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ Route::currentRouteName() == 'admin.payments.toPayBack' ? 'active' : '' }}" href="{{ route('admin.payments.toPayBack') }}">
+                                    <i class="fas fa-users text-warning"></i> To Pay Back
                                 </a>
                             </li>
                         @else
@@ -147,10 +147,28 @@
             <!-- Header -->
             <div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
                 <div class="container-fluid">
+                    @foreach (['danger', 'warning', 'success', 'info'] as $msg)
+                        @if(Session::has('alert-' . $msg))
+                            <!-- Notification -->
+                            <div class="row justify-content-center">
+                                <div class="col-md-6">
+                                    <div class="alert alert-{{ $msg }} alert-dismissible fade show" role="alert">
+                                        <span class="alert-text">{{ Session::get('alert-' . $msg) }}</span>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.Notification -->
+                        @endif
+                    @endforeach
+
                     <div class="header-body">
                         @yield('header')
                     </div>
                     <!-- /.Header Body -->
+
                 </div>
                 <!-- /.Container Fluid -->
             </div>
@@ -179,6 +197,7 @@
     </div>
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
     @yield('scripts')
 </body>
 </html>

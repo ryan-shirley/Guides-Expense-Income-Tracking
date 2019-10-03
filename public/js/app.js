@@ -81657,6 +81657,14 @@ var app = new Vue({
 
 var Chart = __webpack_require__(/*! chart.js */ "./node_modules/chart.js/dist/Chart.js");
 
+$(document).ready(function () {
+  window.setTimeout(function () {
+    $(".alert").fadeTo(1000, 0).slideUp(500, function () {
+      $(this).remove();
+    });
+  }, 3000);
+});
+
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":

@@ -10,11 +10,11 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                        <h5 class="card-title text-uppercase text-muted mb-0">To be paid back</h5>
+                        <h5 class="card-title text-uppercase text-muted mb-0">Total to be paid back</h5>
                         <span class="h2 font-weight-bold mb-0">€{{ $total_to_be_paid }}</span>
                     </div>
                     <div class="col-auto">
-                        <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                        <div class="icon icon-shape bg-success text-white rounded-circle shadow">
                             <i class="fas fa-piggy-bank"></i>
                         </div>
                     </div>
@@ -50,8 +50,8 @@
                         <span class="h2 font-weight-bold mb-0">€{{ $total_30_days }}</span>
                     </div>
                     <div class="col-auto">
-                        <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
-                            <i class="fas fa-receipt"></i>
+                        <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                            <i class="fas fa-euro-sign"></i>
                         </div>
                     </div>
                 </div>
@@ -68,7 +68,7 @@
                         <span class="h2 font-weight-bold mb-0">€{{ $total_year }}</span>
                     </div>
                     <div class="col-auto">
-                        <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                        <div class="icon icon-shape bg-default text-white rounded-circle shadow">
                             <i class="fas fa-chart-line"></i>
                         </div>
                     </div>
@@ -140,7 +140,7 @@
                                 <td>
                                     @if ($p->in_accounts !== 1)
                                         <a class="btn btn-warning btn-sm" href="{{ route('leader.payments.edit', $p->id) }}" role="button"><i class="far fa-edit"></i></a>
-                                        <form action="{{ action('Leader\PaymentController@destroy', $p->id )}}" method="post" onSubmit="return confirm('Are you sure you wish to delete?')" style="display: inline;">
+                                        <form action="{{ action('Leader\PaymentController@destroy', $p->id )}}" class="payment-delete" method="post" style="display: inline;">
                                             @csrf
                                             <input name="_method" type="hidden" value="DELETE">
                                             
@@ -176,6 +176,40 @@
                     }
                 }
             });
+        });
+
+        // Delete Payment Confirmation
+        $('.payment-delete').submit(function(event){
+            event.preventDefault()
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete payment!',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-primary',
+                    cancelButton: 'btn btn-default',
+                },
+            }).then((result) => {
+                if (result.value) {
+                    $(this).unbind('submit').submit();
+                }
+                else if (result.dismiss === 'cancel') {
+                    Swal.fire({
+                        title: 'Cancelled!',
+                        text: "Your payment was not deleted",
+                        type: 'error',
+                        buttonsStyling: false,
+                        confirmButtonText: 'Close',
+                        customClass: {
+                            confirmButton: 'btn btn-primary',
+                        },
+                    })
+                }
+            })
         });
     </script>
 @endsection

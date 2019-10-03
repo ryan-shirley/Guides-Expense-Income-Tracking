@@ -14,7 +14,7 @@
                         <span class="h2 font-weight-bold mb-0">€{{ $total_year }}</span>
                     </div>
                     <div class="col-auto">
-                        <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                        <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
                             <i class="fas fa-chart-line"></i>
                         </div>
                     </div>
@@ -32,8 +32,8 @@
                         <span class="h2 font-weight-bold mb-0">€{{ $incomeForYear }}</span>
                     </div>
                     <div class="col-auto">
-                        <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
-                            <i class="fas fa-receipt"></i>
+                        <div class="icon icon-shape bg-success text-white rounded-circle shadow">
+                            <i class="fas fa-euro-sign"></i>
                         </div>
                     </div>
                 </div>
@@ -50,8 +50,8 @@
                         <span class="h2 font-weight-bold mb-0">€{{ $bankBalance }}</span>
                     </div>
                     <div class="col-auto">
-                        <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
-                            <i class="fas fa-chart-line"></i>
+                        <div class="icon icon-shape bg-default text-white rounded-circle shadow">
+                            <i class="fas fa-piggy-bank"></i>
                         </div>
                     </div>
                 </div>
@@ -68,8 +68,8 @@
                         <span class="h2 font-weight-bold mb-0">€{{ $total_to_pay_back }}</span>
                     </div>
                     <div class="col-auto">
-                        <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
-                            <i class="fas fa-piggy-bank"></i>
+                        <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                            <i class="fas fa-users"></i>
                         </div>
                     </div>
                 </div>
