@@ -14,7 +14,7 @@ class BankAccountsTableSeeder extends Seeder
     {
         $payment = new BankAccount();
         $payment->title = 'Main';
-        $payment->balance = 2000;
+        $payment->balance = 0;
         $payment->save();
     }
 }

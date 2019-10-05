@@ -44,6 +44,8 @@ Route::get('/', function () {
     return view('welcome', compact('greetings')); 
 })->name('welcome');
 
+Route::get('/approval', 'HomeController@approval')->name('approval'); // Waiting on approval
+
 Route::get('/home', function () {
     if (Auth::check()) {
         $user = Auth::user();
@@ -83,11 +85,17 @@ Route::resource('/admin/incomes', 'Admin\IncomeController', [
     'show'
 ]);
 Route::post('/admin/incomes/{id}/approve', 'Admin\IncomeController@approve')->name('admin.incomes.account.approve'); // Approve income
+Route::get('/admin/users/', 'Admin\UsersController@index')->name('admin.users'); // Accounts that need approval
+Route::post('/admin/users/{id}', 'Admin\UsersController@approve')->name('admin.users.approve'); // Approve account
+Route::get('/admin/users/', 'Admin\UsersController@index')->name('admin.users'); // Accounts that need approval
+Route::delete('/admin/users/{id}', 'Admin\UsersController@destroy')->name('admin.users.delete'); // Delete pending approval account
 
 // Leader
-Route::get('/leader/home', 'Leader\HomeController@index')->name('leader.home');
-Route::resource('/leader/payments', 'Leader\PaymentController', [
-    'as' => 'leader'
-])->except([
-    'index', 'show'
-]);
+Route::middleware(['approved'])->group(function () {
+    Route::get('/leader/home', 'Leader\HomeController@index')->name('leader.home');
+    Route::resource('/leader/payments', 'Leader\PaymentController', [
+        'as' => 'leader'
+    ])->except([
+        'index', 'show'
+    ]);
+});

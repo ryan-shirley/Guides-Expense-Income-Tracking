@@ -25,4 +25,15 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
+    /**
+     * Show the approval waiting page.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function approval()
+    {
+        return view('approval');
+    }
+
 }
