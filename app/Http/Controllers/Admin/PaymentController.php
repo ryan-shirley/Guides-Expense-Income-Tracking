@@ -168,16 +168,16 @@ class PaymentController extends Controller
         // Create data and convert amount into negative as expense
         $payment = Payment::findOrFail($id);
 
-        // $client = new \GuzzleHttp\Client();
-        // $response = $client->request('POST', 'https://hooks.zapier.com/hooks/catch/4854411/o25u35d/', [
-        //     'json' => json_decode(json_encode($payment), true)
-        // ]);
+        $client = new \GuzzleHttp\Client();
+        $response = $client->request('POST', 'https://hooks.zapier.com/hooks/catch/4854411/o25u35d/', [
+            'json' => json_decode(json_encode($payment), true)
+        ]);
 
-        // // Check if error saving to Google Drive
-        // if($response->getStatusCode() !== 200) {
-        //     $request->session()->flash('alert-error', 'Oops something went wrong! Please try again later.');
-        //     return back();
-        // }
+        // Check if error saving to Google Drive
+        if($response->getStatusCode() !== 200) {
+            $request->session()->flash('alert-error', 'Oops something went wrong! ' . $request->getBody());
+            return redirect()->route('admin.payments.index');
+        }
         
         // Save 
         $payment->approved = true;
