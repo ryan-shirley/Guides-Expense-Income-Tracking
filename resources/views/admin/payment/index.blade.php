@@ -41,7 +41,7 @@
                     <tbody>
                         @foreach ($payments as $p)
                             <tr>
-                                <th scope="row"><a href="{{ route('admin.payments.user.show', $p->user) }}">{{ $p->user->name }}</a></th>
+                                <th scope="row">{{ $p->user->name }}</th>
                                 <td>{{ $p->title }}</td>
                                 <td>€{{ $p->amount }}</td>
                                 <td>{{ date('d M Y', strtotime($p->purchase_date)) }}</td>
