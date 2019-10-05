@@ -94,7 +94,7 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ Route::currentRouteName() == 'admin.users' ? 'active' : '' }}" href="{{ route('admin.users') }}">
-                                    <i class="fas fa-users text-warning"></i> Approve Accounts
+                                <i class="fas fa-user-plus text-primary"></i> Approve Accounts
                                 </a>
                             </li>
                         @else
