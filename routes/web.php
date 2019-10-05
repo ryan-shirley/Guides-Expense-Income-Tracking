@@ -42,23 +42,24 @@ Route::get('/', function () {
     }
 
     return view('welcome', compact('greetings')); 
-});
-
-Route::get('/test', function () {
-    return view('test');
-});
+})->name('welcome');
 
 Route::get('/home', function () {
-    $user = Auth::user();
+    if (Auth::check()) {
+        $user = Auth::user();
 
-    if($user->hasRole('admin')) {
-        return redirect()->route('admin.home');
-    }
-    else if($user->hasRole('leader')) {
-        return redirect()->route('leader.home');
+        if($user->hasRole('admin')) {
+            return redirect()->route('admin.home');
+        }
+        else if($user->hasRole('leader')) {
+            return redirect()->route('leader.home');
+        }
+        else {
+            throw Exception('Undefined user role');
+        }
     }
     else {
-        throw Exception('Undefined user role');
+        return redirect()->route('welcome');
     }
 });
 
