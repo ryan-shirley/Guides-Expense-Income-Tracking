@@ -14,26 +14,32 @@
                     </div>
                 </div>
             </div>
-            <!-- Leaders List -->
-            <div class="table-responsive">
-                <table class="table table-hover" id="payment_table">
-                    <thead class="thead-light">
-                        <tr>
-                            <th scope="col">Leader</th>
-                            <th scope="col">Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($leadersToPayBack as $id => $amount)
+            @if(count($leadersToPayBack) === 0) 
+                <div class="card-body">
+                    <p>Well done you have paid back everyone back!</p>
+                </div>
+            @else
+                <!-- Leaders List -->
+                <div class="table-responsive">
+                    <table class="table table-hover" id="payment_table">
+                        <thead class="thead-light">
                             <tr>
-                                <th scope="row">{{ \App\USer::find($id)->name }}</th>
-                                <td>€{{ $amount }}</td>
+                                <th scope="col">Leader</th>
+                                <th scope="col">Amount</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-            <!-- /.Leaders List -->
+                        </thead>
+                        <tbody>
+                            @foreach ($leadersToPayBack as $id => $amount)
+                                <tr>
+                                    <th scope="row">{{ \App\User::find($id)->name }}</th>
+                                    <td>€{{ $amount }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.Leaders List -->
+                @endif
         </div>
         <!-- /.Card -->
     </div>
