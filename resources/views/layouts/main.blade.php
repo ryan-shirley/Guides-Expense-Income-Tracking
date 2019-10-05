@@ -152,23 +152,6 @@
             <!-- Header -->
             <div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
                 <div class="container-fluid">
-                    @foreach (['danger', 'warning', 'success', 'info'] as $msg)
-                        @if(Session::has('alert-' . $msg))
-                            <!-- Notification -->
-                            <div class="row justify-content-center">
-                                <div class="col-md-6">
-                                    <div class="alert alert-{{ $msg }} alert-dismissible fade show" role="alert">
-                                        <span class="alert-text">{{ Session::get('alert-' . $msg) }}</span>
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /.Notification -->
-                        @endif
-                    @endforeach
-
                     <div class="header-body">
                         @yield('header')
                     </div>
@@ -204,5 +187,26 @@
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
     @yield('scripts')
+
+    @foreach (['danger', 'warning', 'success', 'info'] as $msg)
+        @if(Session::has('alert-' . $msg))
+
+            <!-- Notification -->
+            <script type="text/javascript">
+                Swal.fire({
+                    title: "{{ Session::get('alert-' . $msg) }}",
+                    type: "{{ $msg }}",
+                    showButton: true,
+                    confirmButtonText: 'close',
+                    buttonsStyling: false,
+                    customClass: {
+                        confirmButton: 'btn btn-default',
+                    },
+                    timer: 3000
+                })
+            </script>
+            <!-- /.Notification -->
+        @endif
+    @endforeach
 </body>
 </html>
