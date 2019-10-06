@@ -224,7 +224,7 @@ class PaymentController extends Controller
      */
     public function toPayBack()
     {
-        $leadersToPayBack = Payment::where('paid_back', '0')->where('approved', '1')->groupBy('user_id')
+        $leadersToPayBack = Payment::where('paid_back', '0')->groupBy('user_id')
             ->selectRaw('sum(amount) as sum, user_id')
             ->pluck('sum','user_id');
 
