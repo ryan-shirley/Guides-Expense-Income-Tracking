@@ -1,0 +1,37 @@
+# Guides Expense & Income Consolidation
+
+The aim of this project was to organise and keep track of expenses and incoming money within an small organisation.
+
+## How it works
+Payments are added by leaders but require approval by an admin. This allows admins to keep track of individual leader expenses and total organisation expenses. Admins are also able to input incoming money.
+
+Graphs are provided for current year totals on a monthly grouping. With the addition of a bank balance value a history of balance is also available.
+
+Both expenses and incoming money can be sent to Google Sheets through Zapier for accounting purposes.
+
+## Install Laravel & Database Config
+
+In the project directory, you can run:
+
+### `composer install`
+Installs laravel packages into project directory.
+
+Create .env file from the .env.example and input correct database information. Zapier webhook endpoints will need to be created for the below for approvals to be sent successfully.
+
+##### `ZAPIER_WEBHOOK_PAYMENT`
+##### `ZAPIER_WEBHOOK_INCOME`
+
+## Migrate and seed database
+
+### `php artisan migrate --seed`
+Creates the database and seeds it with test data.
+
+## Run Project
+
+### `php artisan serve`
+
+Runs the app in the development mode.<br />
+Open [http://localhost:8000](http://localhost:8000) to view it in the browser.
+
+### `npm run watch`
+Complies any changes to sass files.
