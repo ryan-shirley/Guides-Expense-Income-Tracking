@@ -169,7 +169,7 @@ class PaymentController extends Controller
         $payment = Payment::findOrFail($id);
 
         $client = new \GuzzleHttp\Client();
-        $response = $client->request('POST', 'https://hooks.zapier.com/hooks/catch/4854411/o25u35d/', [
+        $response = $client->request('POST', env("ZAPIER_WEBHOOK_PAYMENT"), [
             'json' => json_decode(json_encode($payment), true)
         ]);
 

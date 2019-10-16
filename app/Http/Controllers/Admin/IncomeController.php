@@ -124,7 +124,7 @@ class IncomeController extends Controller
         $income = Income::findOrFail($id);
 
         $client = new \GuzzleHttp\Client();
-        $response = $client->request('POST', 'https://hooks.zapier.com/hooks/catch/4854411/o2qq1em/', [
+        $response = $client->request('POST', env("ZAPIER_WEBHOOK_INCOME"), [
             'json' => json_decode(json_encode($income), true)
         ]);
 
