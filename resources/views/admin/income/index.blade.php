@@ -34,7 +34,7 @@
                             <tr>
                                 <td>{{ $i->title }}</td>
                                 <td>€{{ $i->amount }}</td>
-                                <td>{{ date('d M Y', strtotime($i->date)) }}</td>
+                                <td>{{ date('Y-m-d', strtotime($i->date)) }}</td>
                                 <td>
                                     @if ($i->approved === 1)
                                         <i class="fas fa-check text-success"></i>

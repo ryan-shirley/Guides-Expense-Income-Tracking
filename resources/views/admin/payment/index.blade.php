@@ -44,7 +44,7 @@
                                 <th scope="row">{{ $p->user->name }}</th>
                                 <td>{{ $p->title }}</td>
                                 <td>€{{ $p->amount }}</td>
-                                <td>{{ date('d M Y', strtotime($p->purchase_date)) }}</td>
+                                <td>{{ date('Y-m-d', strtotime($p->purchase_date)) }}</td>
                                 <td>
                                     @if ($p->guide_money === 1)
                                         Guide
