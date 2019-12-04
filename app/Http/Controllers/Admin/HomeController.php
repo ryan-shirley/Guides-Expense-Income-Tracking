@@ -8,6 +8,7 @@ use App\Payment;
 use App\Income;
 use App\BankAccount;
 use Carbon\Carbon;
+use DB;
 
 class HomeController extends Controller
 {
@@ -30,6 +31,25 @@ class HomeController extends Controller
     public function index()
     {
         $payments  = Payment::where('purchase_date', 'LIKE', '%'. date("Y") .'%')->get()->sortByDesc("id");
+
+        // Payments by month for current year
+        $paymentsByMonth = DB::table('payments')
+            ->select(DB::raw('SUM(`amount`) AS TotalSpent, MONTH(`purchase_date`) AS Month, YEAR(`purchase_date`) AS Year'))
+            ->whereYear('purchase_date', '=', date('Y'))
+            ->groupby('year','month')
+            ->get();
+
+        $paymentMonths = array();
+        $paymentTotals = array();
+        foreach($paymentsByMonth as $month) {
+            array_push($paymentMonths, date("M", mktime(0, 0, 0, $month->Month, 10)));
+            array_push($paymentTotals, $month->TotalSpent);
+        }
+
+        $paymentDetailsForYear = array(
+            'paymentMonths' => json_encode($paymentMonths, true),
+            'paymentValues' => json_encode($paymentTotals, true),
+        );
 
         // Total for year
         $total_year = 0;
@@ -190,7 +210,7 @@ class HomeController extends Controller
             'bankBalance' => number_format($bankBalance, 2),
             'total_to_pay_back' => number_format($total_to_pay_back, 2), 
             'num_waiting_approval' => $num_waiting_approval,
-            'paymentHistory' => $paymentHistory,
+            'paymentHistory' => $paymentDetailsForYear,
             'incomeHistory' => $incomeHistory,
             'bankHistory' => $paymentHistoryBank,
         ]);
