@@ -98,4 +98,5 @@ Route::middleware(['approved'])->group(function () {
     ])->except([
         'index', 'show'
     ]);
+    Route::get('/leader/chatbot', 'Leader\ChatbotController@index')->name('leader.chatbot');
 });

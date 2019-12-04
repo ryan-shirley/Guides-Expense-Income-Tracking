@@ -103,6 +103,11 @@
                                     <i class="ni ni-tv-2 text-primary"></i> Dashboard
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ Route::currentRouteName() == 'leader.chatbot' ? 'active' : '' }}" href="{{ route('leader.chatbot') }}">
+                                    <i class="fas fa-receipt text-success"></i> Beta Chatbot
+                                </a>
+                            </li>
                         @endif
                     </ul>
                 </div>
