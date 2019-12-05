@@ -10,18 +10,28 @@
             </figure>
         </div>
         <div class="messages">
-            <div class="messages-content"></div>
-            <pre>{{ message_history }}</pre>
+            <div class="messages-content" v-if="messages.length > 0">
+                <div v-for="(msg, index) in messages" :key="index">
+                    <span v-if="msg.fromBot" class="badge badge-pill badge-secondary float-left">{{ msg.message }}</span>
+                    <span v-if="msg.fromBot" class="badge badge-pill badge-primary float-right">{{ msg.message }}</span>
+                </div>
+            </div>
         </div>
         <div class="message-box">
-            <input 
+            <input
                 type="text"
                 class="message-input"
                 placeholder="Type message..."
                 v-model="input"
                 @keyup.enter="messageSubmit"
             />
-            <button type="submit" class="message-submit" v-on:click="messageSubmit">Send</button>
+            <button
+                type="submit"
+                class="message-submit"
+                v-on:click="messageSubmit"
+            >
+                Send
+            </button>
         </div>
     </div>
 </template>
@@ -29,55 +39,71 @@
 <script>
 export default {
     mounted() {
-        console.log("Component mounted.");
-        this.message_history.push(this.bot_messages[0])
+        console.log("Chatbot mounted.");
+        
+        this.initBot()
     },
     methods: {
+        initBot() {
+            this.botMessage(`Hello ${this.$props.user_name}, I am the Guides bot.`)
+            this.botMessage('I am here to ask you what purchase you made for guides. Then I will notify Emily about it.')
+            this.botMessage('Lets get started.')
+            this.botMessage('What did you purchase?')
+        },
         messageSubmit() {
-            let app = this
-            let input = this.input
+            let app = this;
+            let input = this.input;
 
-            if(input === '') {
-                this.message_history.push('You must provide a value')
-                return
+            // Ensure value has been passed
+            if (input === "") {
+                this.userMessage("You must provide a value");
+
+                return;
             }
 
-            // Save values
-            switch(this.stage) {
-                case 0: // Title
-                    this.purchase.title = input
+            // Add user message to screen and reset inpiut
+            this.userMessage(input);
+            this.input = "";
 
+            // Switch for each stage of adding expense
+            switch (this.stage) {
+                case 0: // Title
+                    // TODO: Add any validation here
+                    this.purchase.title = input;
+
+                    this.botMessage(`How much did the ${input} cost?`)
                     break;
                 case 1: // Amount
-                    this.purchase.amount = input
+                    // TODO: Add any validation here
+                    this.purchase.amount = input;
 
+                    this.botMessage(`When did you purchase it?`)
                     break;
                 case 2: // Purchase Date
-                this.purchase.purchase_date = input
+                    // TODO: Add any validation here
+                    this.purchase.purchase_date = input;
 
+                    this.botMessage('Whos money did you use?')
                     break;
                 case 3: // Whoes money
-                    this.purchase.guide_money = input
+                    // TODO: Add any validation here
+                    this.purchase.guide_money = input;
 
-                    // At this point sent request
-                    axios.post('/api/payment?api_token=' + app.$props.api_token, {
-                        title: app.purchase.title,
-                        amount: app.purchase.amount,
-                        purchase_date: app.purchase.purchase_date,
-                        guide_money: app.purchase.guide_money === 'guide' ? true : false
-                    })
-                        .then(response => {
-                        console.log(response.data);
-                        
-                    });
+                    // Save expense in the database
+                    this.saveExpense()
 
                     break;
-                case 4: // Add another or not
-                    if(input == 'yes') {
+                case 4: // Add another purchase or not
+                    // TODO: Add any validation here
+
+                    if (input == "yes") {
                         this.stage = 0;
-                        this.message_history.push(this.input)
-                        this.input = ''
-                        this.botMessage()
+                        this.botMessage('What did you purchase?');
+
+                        return;
+                    }
+                    else {
+                        this.botMessage('Ok bye! :)')
 
                         return
                     }
@@ -85,47 +111,63 @@ export default {
                     break;
             }
 
-
-            // Add message to history, reset and move onto next stage
-            this.message_history.push(this.input)
-            this.input = ''
-            this.stage++
-            this.botMessage()
+            // Next stage
+            this.stage++;
         },
-        botMessage() {
-            let app = this
+        botMessage(msg) {
+            let app = this;
             setTimeout(() => {
-                app.message_history.push(this.bot_messages[this.stage])
-            }, 1000 + (Math.random() * 5));
+                app.messages.push({
+                    fromBot: true,
+                    message: msg
+                });
+            }, 1000 + Math.random() * 5);
+        },
+        userMessage(msg) {
+            this.messages.push({
+                fromBot: false,
+                message: msg
+            });
+        },
+        saveExpense() {
+            let app = this
+            axios
+                .post(
+                    "/api/payment?api_token=" + app.$props.api_token,
+                    {
+                        title: app.purchase.title,
+                        amount: app.purchase.amount,
+                        purchase_date: app.purchase.purchase_date,
+                        guide_money:
+                            app.purchase.guide_money === true
+                                ? true
+                                : false
+                    }
+                )
+                .then(response => {
+                    console.log(response.data);
+
+                    this.botMessage('Thank you! Your payment has been sent to Emily for approval.')
+                    this.botMessage('Would you like to add another?')
+                }).catch(err => {
+                    this.botMessage('Oops looks like there was an error adding your expense.')
+                    this.botMessage(err)
+                });
         }
     },
-    props: ['api_token'],
+    props: ["api_token", "user_name"],
     data() {
         return {
-            bot_messages: [
-                "Hello Emily, what did you purchase?",
-                "How much did that cost?",
-                "When did you purchase this?",
-                "Whos money did you use?",
-                "Thank you! That has been sent to an admin for approval. Would you like to add another?",
-                "Ok bye!"
-            ],
             stage: 0,
-            message_history: [],
-            input: '',
+            messages: [],
+            input: "",
             purchase: {
-                title: '',
-                amount: '',
-                purchase_date: '',
-                guide_money: ''
+                title: "",
+                amount: "",
+                purchase_date: "",
+                guide_money: ""
             }
         };
     }
 };
 </script>
-
-<style scoped>
-
-
-
-</style>
