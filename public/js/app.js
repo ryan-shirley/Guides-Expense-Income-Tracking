@@ -1893,6 +1893,40 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log("Chatbot mounted.");
@@ -1906,7 +1940,7 @@ __webpack_require__.r(__webpack_exports__);
         app.botMessage("I am here to ask you what purchase you made for guides. Then I will notify Emily about it.");
       }, 1500);
       setTimeout(function () {
-        app.botMessage("Lets get started");
+        app.botMessage("Let's get started");
       }, 4000);
       setTimeout(function () {
         app.botMessage("What did you purchase?");
@@ -1917,7 +1951,7 @@ __webpack_require__.r(__webpack_exports__);
       var input = this.input; // Ensure value has been passed
 
       if (input === "") {
-        this.userMessage("You must provide a value");
+        this.botMessage("You must provide a value");
         return;
       } // Add user message to screen and reset inpiut
 
@@ -1941,32 +1975,11 @@ __webpack_require__.r(__webpack_exports__);
           break;
 
         case 2:
-          // Purchase Date
+          // Date
           // TODO: Add any validation here
           this.purchase.purchase_date = input;
+          this.diableWriting = true;
           this.botMessage("Whos money did you use?");
-          break;
-
-        case 3:
-          // Whoes money
-          // TODO: Add any validation here
-          this.purchase.guide_money = input; // Save expense in the database
-
-          this.saveExpense();
-          break;
-
-        case 4:
-          // Add another purchase or not
-          // TODO: Add any validation here
-          if (input == "yes") {
-            this.stage = 0;
-            this.botMessage("What did you purchase?");
-            return;
-          } else {
-            this.botMessage("Ok bye! :)");
-            return;
-          }
-
           break;
       } // Next stage
 
@@ -1974,24 +1987,16 @@ __webpack_require__.r(__webpack_exports__);
       this.stage++;
     },
     botMessage: function botMessage(msg) {
-      var _this = this;
-
       var app = this;
       app.bot_writing = true;
-      Vue.nextTick(function () {
-        var messageDisplay = _this.$refs.chatArea;
-        messageDisplay.scrollTop = messageDisplay.scrollHeight;
-      });
+      app.scrollToBottom();
       setTimeout(function () {
         app.bot_writing = false;
         app.messages.push({
           fromBot: true,
           message: msg
         });
-        Vue.nextTick(function () {
-          var messageDisplay = _this.$refs.chatArea;
-          messageDisplay.scrollTop = messageDisplay.scrollHeight;
-        });
+        app.scrollToBottom();
       }, 1000 + Math.random() * 5);
     },
     userMessage: function userMessage(msg) {
@@ -1999,9 +2004,10 @@ __webpack_require__.r(__webpack_exports__);
         fromBot: false,
         message: msg
       });
+      this.scrollToBottom();
     },
     saveExpense: function saveExpense() {
-      var _this2 = this;
+      var _this = this;
 
       var app = this;
       axios.post("/api/payment?api_token=" + app.$props.api_token, {
@@ -2012,14 +2018,40 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         console.log(response.data);
 
-        _this2.botMessage("Thank you! Your payment has been sent to Emily for approval.");
+        _this.botMessage("Thank you! Your payment has been sent to Emily for approval.");
 
-        _this2.botMessage("Would you like to add another?");
+        setTimeout(function () {
+          app.botMessage("Would you like to add another?");
+        }, 1000 + Math.random() * 5);
       })["catch"](function (err) {
-        _this2.botMessage("Oops looks like there was an error adding your expense.");
+        _this.botMessage("Oops looks like there was an error adding your expense.");
 
-        _this2.botMessage(err);
+        _this.botMessage(err);
       });
+    },
+    scrollToBottom: function scrollToBottom() {
+      var _this2 = this;
+
+      Vue.nextTick(function () {
+        var messageDisplay = _this2.$refs.chatArea;
+        messageDisplay.scrollTop = messageDisplay.scrollHeight;
+      });
+    },
+    setMoney: function setMoney(isGuide_money) {
+      this.purchase.guide_money = isGuide_money;
+      this.userMessage(isGuide_money === true ? "Guides" : "Personal");
+      this.stage++;
+      this.saveExpense();
+    },
+    addAnotherPayment: function addAnotherPayment(contin) {
+      if (contin) {
+        this.stage = 0;
+        this.diableWriting = false;
+        this.botMessage("What did you purchase?");
+      } else {
+        this.stage++;
+        this.botMessage("Ok bye! :)");
+      }
     }
   },
   props: ["api_token", "user_name"],
@@ -2034,7 +2066,8 @@ __webpack_require__.r(__webpack_exports__);
         purchase_date: "",
         guide_money: ""
       },
-      bot_writing: true
+      bot_writing: true,
+      diableWriting: false
     };
   }
 });
@@ -69644,9 +69677,9 @@ var render = function() {
                   [
                     _vm._m(0, true),
                     _vm._v(
-                      "\n                    " +
+                      "\n                " +
                         _vm._s(msg.message) +
-                        "\n                "
+                        "\n            "
                     )
                   ]
                 )
@@ -69655,9 +69688,9 @@ var render = function() {
             msg.fromBot == false
               ? _c("div", { staticClass: "message message-personal" }, [
                   _vm._v(
-                    "\n                    " +
+                    "\n                " +
                       _vm._s(msg.message) +
-                      "\n                "
+                      "\n            "
                   )
                 ])
               : _vm._e()
@@ -69676,44 +69709,190 @@ var render = function() {
     ),
     _vm._v(" "),
     _c("div", { staticClass: "message-box" }, [
+      this.stage === 3
+        ? _c("p", { staticClass: "text-center" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-primary rounded-pill",
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    return _vm.setMoney(true)
+                  }
+                }
+              },
+              [_vm._v("\n                Guides\n            ")]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-primary rounded-pill",
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    return _vm.setMoney(false)
+                  }
+                }
+              },
+              [_vm._v("\n                Personal\n            ")]
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      this.stage === 4
+        ? _c("p", { staticClass: "text-center" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-primary rounded-pill",
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    return _vm.addAnotherPayment(true)
+                  }
+                }
+              },
+              [_vm._v("\n                Yes\n            ")]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-primary rounded-pill",
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    return _vm.addAnotherPayment(false)
+                  }
+                }
+              },
+              [_vm._v("\n                No\n            ")]
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
       _c("div", { staticClass: "input-group" }, [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.input,
-              expression: "input"
-            }
-          ],
-          staticClass: "form-control",
-          attrs: { type: "text" },
-          domProps: { value: _vm.input },
-          on: {
-            keyup: function($event) {
-              if (
-                !$event.type.indexOf("key") &&
-                _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
-              ) {
-                return null
+        (_vm.stage === 2 ? "date" : _vm.stage === 1 ? "number" : "text") ===
+        "checkbox"
+          ? _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.input,
+                  expression: "input"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { disabled: _vm.diableWriting == true, type: "checkbox" },
+              domProps: {
+                checked: Array.isArray(_vm.input)
+                  ? _vm._i(_vm.input, null) > -1
+                  : _vm.input
+              },
+              on: {
+                keyup: function($event) {
+                  if (
+                    !$event.type.indexOf("key") &&
+                    _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                  ) {
+                    return null
+                  }
+                  return _vm.messageSubmit($event)
+                },
+                change: function($event) {
+                  var $$a = _vm.input,
+                    $$el = $event.target,
+                    $$c = $$el.checked ? true : false
+                  if (Array.isArray($$a)) {
+                    var $$v = null,
+                      $$i = _vm._i($$a, $$v)
+                    if ($$el.checked) {
+                      $$i < 0 && (_vm.input = $$a.concat([$$v]))
+                    } else {
+                      $$i > -1 &&
+                        (_vm.input = $$a
+                          .slice(0, $$i)
+                          .concat($$a.slice($$i + 1)))
+                    }
+                  } else {
+                    _vm.input = $$c
+                  }
+                }
               }
-              return _vm.messageSubmit($event)
-            },
-            input: function($event) {
-              if ($event.target.composing) {
-                return
+            })
+          : (_vm.stage === 2 ? "date" : _vm.stage === 1 ? "number" : "text") ===
+            "radio"
+          ? _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.input,
+                  expression: "input"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { disabled: _vm.diableWriting == true, type: "radio" },
+              domProps: { checked: _vm._q(_vm.input, null) },
+              on: {
+                keyup: function($event) {
+                  if (
+                    !$event.type.indexOf("key") &&
+                    _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                  ) {
+                    return null
+                  }
+                  return _vm.messageSubmit($event)
+                },
+                change: function($event) {
+                  _vm.input = null
+                }
               }
-              _vm.input = $event.target.value
-            }
-          }
-        }),
+            })
+          : _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.input,
+                  expression: "input"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: {
+                disabled: _vm.diableWriting == true,
+                type:
+                  _vm.stage === 2 ? "date" : _vm.stage === 1 ? "number" : "text"
+              },
+              domProps: { value: _vm.input },
+              on: {
+                keyup: function($event) {
+                  if (
+                    !$event.type.indexOf("key") &&
+                    _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                  ) {
+                    return null
+                  }
+                  return _vm.messageSubmit($event)
+                },
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.input = $event.target.value
+                }
+              }
+            }),
         _vm._v(" "),
         _c("div", { staticClass: "input-group-append" }, [
           _c(
             "button",
             {
               staticClass: "btn btn-primary",
-              attrs: { type: "button" },
+              attrs: { type: "button", disabled: _vm.diableWriting == true },
               on: { click: _vm.messageSubmit }
             },
             [_vm._v("\n                    Send\n                ")]

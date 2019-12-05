@@ -1,26 +1,22 @@
 <template>
     <div class="chat">
         <section ref="chatArea" class="messages">
-                <span v-for="(msg, index) in messages" :key="index">
-                    <div
-                        class="message new"
-                        v-if="msg.fromBot == true"
-                        ref="msg"
-                    >
-                        <figure class="avatar">
-                            <img
-                                src="https://guides.ryanshirley.ie/favicon/favicon-228.png"
-                            />
-                        </figure>
-                        {{ msg.message }}
-                    </div>
-                    <div
-                        class="message message-personal"
-                        v-if="msg.fromBot == false"
-                    >
-                        {{ msg.message }}
-                    </div>
-                </span>
+            <span v-for="(msg, index) in messages" :key="index">
+                <div class="message new" v-if="msg.fromBot == true" ref="msg">
+                    <figure class="avatar">
+                        <img
+                            src="https://guides.ryanshirley.ie/favicon/favicon-228.png"
+                        />
+                    </figure>
+                    {{ msg.message }}
+                </div>
+                <div
+                    class="message message-personal"
+                    v-if="msg.fromBot == false"
+                >
+                    {{ msg.message }}
+                </div>
+            </span>
 
             <div v-if="bot_writing" class="message loading new">
                 <figure class="avatar">
@@ -32,18 +28,56 @@
             </div>
         </section>
         <div class="message-box">
+            <p v-if="this.stage === 3" class="text-center">
+                <button
+                    type="button"
+                    class="btn btn-primary rounded-pill"
+                    v-on:click="setMoney(true)"
+                >
+                    Guides
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-primary rounded-pill"
+                    v-on:click="setMoney(false)"
+                >
+                    Personal
+                </button>
+            </p>
+
+            <p v-if="this.stage === 4" class="text-center">
+                <button
+                    type="button"
+                    class="btn btn-primary rounded-pill"
+                    v-on:click="addAnotherPayment(true)"
+                >
+                    Yes
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-primary rounded-pill"
+                    v-on:click="addAnotherPayment(false)"
+                >
+                    No
+                </button>
+            </p>
+
             <div class="input-group">
                 <input
-                    type="text"
+                    :type="
+                        stage === 2 ? 'date' : stage === 1 ? 'number' : 'text'
+                    "
                     class="form-control"
                     v-model="input"
                     @keyup.enter="messageSubmit"
+                    :disabled="diableWriting == true"
                 />
                 <div class="input-group-append">
                     <button
                         class="btn btn-primary"
                         type="button"
                         v-on:click="messageSubmit"
+                        :disabled="diableWriting == true"
                     >
                         Send
                     </button>
@@ -73,7 +107,7 @@ export default {
                 );
             }, 1500);
             setTimeout(() => {
-                app.botMessage("Lets get started");
+                app.botMessage("Let's get started");
             }, 4000);
             setTimeout(() => {
                 app.botMessage("What did you purchase?");
@@ -85,7 +119,7 @@ export default {
 
             // Ensure value has been passed
             if (input === "") {
-                this.userMessage("You must provide a value");
+                this.botMessage("You must provide a value");
 
                 return;
             }
@@ -108,34 +142,12 @@ export default {
 
                     this.botMessage(`When did you purchase it?`);
                     break;
-                case 2: // Purchase Date
+                case 2: // Date
                     // TODO: Add any validation here
                     this.purchase.purchase_date = input;
+                    this.diableWriting = true;
 
-                    this.botMessage("Whos money did you use?");
-                    break;
-                case 3: // Whoes money
-                    // TODO: Add any validation here
-                    this.purchase.guide_money = input;
-
-                    // Save expense in the database
-                    this.saveExpense();
-
-                    break;
-                case 4: // Add another purchase or not
-                    // TODO: Add any validation here
-
-                    if (input == "yes") {
-                        this.stage = 0;
-                        this.botMessage("What did you purchase?");
-
-                        return;
-                    } else {
-                        this.botMessage("Ok bye! :)");
-
-                        return;
-                    }
-
+                    this.botMessage(`Whos money did you use?`);
                     break;
             }
 
@@ -145,11 +157,7 @@ export default {
         botMessage(msg) {
             let app = this;
             app.bot_writing = true;
-
-            Vue.nextTick(() => {
-                let messageDisplay = this.$refs.chatArea;
-                messageDisplay.scrollTop = messageDisplay.scrollHeight;
-            });
+            app.scrollToBottom();
 
             setTimeout(() => {
                 app.bot_writing = false;
@@ -159,10 +167,7 @@ export default {
                     message: msg
                 });
 
-                Vue.nextTick(() => {
-                    let messageDisplay = this.$refs.chatArea;
-                    messageDisplay.scrollTop = messageDisplay.scrollHeight;
-                });
+                app.scrollToBottom();
             }, 1000 + Math.random() * 5);
         },
         userMessage(msg) {
@@ -170,6 +175,8 @@ export default {
                 fromBot: false,
                 message: msg
             });
+
+            this.scrollToBottom();
         },
         saveExpense() {
             let app = this;
@@ -187,7 +194,10 @@ export default {
                     this.botMessage(
                         "Thank you! Your payment has been sent to Emily for approval."
                     );
-                    this.botMessage("Would you like to add another?");
+
+                    setTimeout(() => {
+                        app.botMessage("Would you like to add another?");
+                    }, 1000 + Math.random() * 5);
                 })
                 .catch(err => {
                     this.botMessage(
@@ -195,6 +205,30 @@ export default {
                     );
                     this.botMessage(err);
                 });
+        },
+        scrollToBottom() {
+            Vue.nextTick(() => {
+                let messageDisplay = this.$refs.chatArea;
+                messageDisplay.scrollTop = messageDisplay.scrollHeight;
+            });
+        },
+        setMoney(isGuide_money) {
+            this.purchase.guide_money = isGuide_money;
+            this.userMessage(isGuide_money === true ? "Guides" : "Personal");
+
+            this.stage++;
+
+            this.saveExpense();
+        },
+        addAnotherPayment(contin) {
+            if (contin) {
+                this.stage = 0;
+                this.diableWriting = false
+                this.botMessage("What did you purchase?");
+            } else {
+                this.stage++;
+                this.botMessage("Ok bye! :)");
+            }
         }
     },
     props: ["api_token", "user_name"],
@@ -209,7 +243,8 @@ export default {
                 purchase_date: "",
                 guide_money: ""
             },
-            bot_writing: true
+            bot_writing: true,
+            diableWriting: false
         };
     }
 };
