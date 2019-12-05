@@ -99,7 +99,7 @@ export default {
             let app = this;
 
             this.botMessage(
-                `Hello ${this.$props.user_name}, I am the Guides bot.`
+                `Hello ${this.$props.user_name}, I am the Guides Chat bot.`
             );
             setTimeout(() => {
                 app.botMessage(
@@ -221,13 +221,22 @@ export default {
             this.saveExpense();
         },
         addAnotherPayment(contin) {
+            this.userMessage(contin ? 'Yes' : 'No');
+
             if (contin) {
                 this.stage = 0;
                 this.diableWriting = false
-                this.botMessage("What did you purchase?");
+
+                setTimeout(() => {
+                    this.botMessage("What did you purchase?");
+                }, 1000 + Math.random() * 5);
+                
             } else {
                 this.stage++;
-                this.botMessage("Ok bye! :)");
+
+                setTimeout(() => {
+                    this.botMessage("Ok bye! :)");
+                }, 1000 + Math.random() * 5);
             }
         }
     },

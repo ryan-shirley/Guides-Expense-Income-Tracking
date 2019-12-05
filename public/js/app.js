@@ -1935,7 +1935,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     initBot: function initBot() {
       var app = this;
-      this.botMessage("Hello ".concat(this.$props.user_name, ", I am the Guides bot."));
+      this.botMessage("Hello ".concat(this.$props.user_name, ", I am the Guides Chat bot."));
       setTimeout(function () {
         app.botMessage("I am here to ask you what purchase you made for guides. Then I will notify Emily about it.");
       }, 1500);
@@ -2044,13 +2044,21 @@ __webpack_require__.r(__webpack_exports__);
       this.saveExpense();
     },
     addAnotherPayment: function addAnotherPayment(contin) {
+      var _this3 = this;
+
+      this.userMessage(contin ? 'Yes' : 'No');
+
       if (contin) {
         this.stage = 0;
         this.diableWriting = false;
-        this.botMessage("What did you purchase?");
+        setTimeout(function () {
+          _this3.botMessage("What did you purchase?");
+        }, 1000 + Math.random() * 5);
       } else {
         this.stage++;
-        this.botMessage("Ok bye! :)");
+        setTimeout(function () {
+          _this3.botMessage("Ok bye! :)");
+        }, 1000 + Math.random() * 5);
       }
     }
   },
