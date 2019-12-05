@@ -1866,93 +1866,175 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
-    console.log("Component mounted.");
-    this.message_history.push(this.bot_messages[0]);
+    console.log("Chatbot mounted.");
+    this.initBot();
   },
   methods: {
+    initBot: function initBot() {
+      var app = this;
+      this.botMessage("Hello ".concat(this.$props.user_name, ", I am the Guides bot."));
+      setTimeout(function () {
+        app.botMessage("I am here to ask you what purchase you made for guides. Then I will notify Emily about it.");
+      }, 1500);
+      setTimeout(function () {
+        app.botMessage("Lets get started");
+      }, 4000);
+      setTimeout(function () {
+        app.botMessage("What did you purchase?");
+      }, 5500);
+    },
     messageSubmit: function messageSubmit() {
       var app = this;
-      var input = this.input;
+      var input = this.input; // Ensure value has been passed
 
-      if (input === '') {
-        this.message_history.push('You must provide a value');
+      if (input === "") {
+        this.userMessage("You must provide a value");
         return;
-      } // Save values
+      } // Add user message to screen and reset inpiut
 
+
+      this.userMessage(input);
+      this.input = ""; // Switch for each stage of adding expense
 
       switch (this.stage) {
         case 0:
           // Title
+          // TODO: Add any validation here
           this.purchase.title = input;
+          this.botMessage("How much did the ".concat(input, " cost?"));
           break;
 
         case 1:
           // Amount
+          // TODO: Add any validation here
           this.purchase.amount = input;
+          this.botMessage("When did you purchase it?");
           break;
 
         case 2:
           // Purchase Date
+          // TODO: Add any validation here
           this.purchase.purchase_date = input;
+          this.botMessage("Whos money did you use?");
           break;
 
         case 3:
           // Whoes money
-          this.purchase.guide_money = input; // At this point sent request
+          // TODO: Add any validation here
+          this.purchase.guide_money = input; // Save expense in the database
 
-          axios.post('/api/payment?api_token=' + app.$props.api_token, {
-            title: app.purchase.title,
-            amount: app.purchase.amount,
-            purchase_date: app.purchase.purchase_date,
-            guide_money: app.purchase.guide_money === 'guide' ? true : false
-          }).then(function (response) {
-            console.log(response.data);
-          });
+          this.saveExpense();
           break;
 
         case 4:
-          // Add another or not
-          if (input == 'yes') {
+          // Add another purchase or not
+          // TODO: Add any validation here
+          if (input == "yes") {
             this.stage = 0;
-            this.message_history.push(this.input);
-            this.input = '';
-            this.botMessage();
+            this.botMessage("What did you purchase?");
+            return;
+          } else {
+            this.botMessage("Ok bye! :)");
             return;
           }
 
           break;
-      } // Add message to history, reset and move onto next stage
+      } // Next stage
 
 
-      this.message_history.push(this.input);
-      this.input = '';
       this.stage++;
-      this.botMessage();
     },
-    botMessage: function botMessage() {
+    botMessage: function botMessage(msg) {
       var _this = this;
 
       var app = this;
+      app.bot_writing = true;
+      Vue.nextTick(function () {
+        var messageDisplay = _this.$refs.chatArea;
+        messageDisplay.scrollTop = messageDisplay.scrollHeight;
+      });
       setTimeout(function () {
-        app.message_history.push(_this.bot_messages[_this.stage]);
+        app.bot_writing = false;
+        app.messages.push({
+          fromBot: true,
+          message: msg
+        });
+        Vue.nextTick(function () {
+          var messageDisplay = _this.$refs.chatArea;
+          messageDisplay.scrollTop = messageDisplay.scrollHeight;
+        });
       }, 1000 + Math.random() * 5);
+    },
+    userMessage: function userMessage(msg) {
+      this.messages.push({
+        fromBot: false,
+        message: msg
+      });
+    },
+    saveExpense: function saveExpense() {
+      var _this2 = this;
+
+      var app = this;
+      axios.post("/api/payment?api_token=" + app.$props.api_token, {
+        title: app.purchase.title,
+        amount: app.purchase.amount,
+        purchase_date: app.purchase.purchase_date,
+        guide_money: app.purchase.guide_money === true ? true : false
+      }).then(function (response) {
+        console.log(response.data);
+
+        _this2.botMessage("Thank you! Your payment has been sent to Emily for approval.");
+
+        _this2.botMessage("Would you like to add another?");
+      })["catch"](function (err) {
+        _this2.botMessage("Oops looks like there was an error adding your expense.");
+
+        _this2.botMessage(err);
+      });
     }
   },
-  props: ['api_token'],
+  props: ["api_token", "user_name"],
   data: function data() {
     return {
-      bot_messages: ["Hello Emily, what did you purchase?", "How much did that cost?", "When did you purchase this?", "Whos money did you use?", "Thank you! That has been sent to an admin for approval. Would you like to add another?", "Ok bye!"],
       stage: 0,
-      message_history: [],
-      input: '',
+      messages: [],
+      input: "",
       purchase: {
-        title: '',
-        amount: '',
-        purchase_date: '',
-        guide_money: ''
-      }
+        title: "",
+        amount: "",
+        purchase_date: "",
+        guide_money: ""
+      },
+      bot_writing: true
     };
   }
 });
@@ -69533,10 +69615,10 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ChatbotComponent.vue?vue&type=template&id=b01f4c8e&scoped=true&":
-/*!*******************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ChatbotComponent.vue?vue&type=template&id=b01f4c8e&scoped=true& ***!
-  \*******************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ChatbotComponent.vue?vue&type=template&id=b01f4c8e&":
+/*!*******************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ChatbotComponent.vue?vue&type=template&id=b01f4c8e& ***!
+  \*******************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -69549,55 +69631,95 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "chat" }, [
-    _vm._m(0),
-    _vm._v(" "),
-    _c("div", { staticClass: "messages" }, [
-      _c("div", { staticClass: "messages-content" }),
-      _vm._v(" "),
-      _c("pre", [_vm._v(_vm._s(_vm.message_history))])
-    ]),
+    _c(
+      "section",
+      { ref: "chatArea", staticClass: "messages" },
+      [
+        _vm._l(_vm.messages, function(msg, index) {
+          return _c("span", { key: index }, [
+            msg.fromBot == true
+              ? _c(
+                  "div",
+                  { ref: "msg", refInFor: true, staticClass: "message new" },
+                  [
+                    _vm._m(0, true),
+                    _vm._v(
+                      "\n                    " +
+                        _vm._s(msg.message) +
+                        "\n                "
+                    )
+                  ]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            msg.fromBot == false
+              ? _c("div", { staticClass: "message message-personal" }, [
+                  _vm._v(
+                    "\n                    " +
+                      _vm._s(msg.message) +
+                      "\n                "
+                  )
+                ])
+              : _vm._e()
+          ])
+        }),
+        _vm._v(" "),
+        _vm.bot_writing
+          ? _c("div", { staticClass: "message loading new" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c("span")
+            ])
+          : _vm._e()
+      ],
+      2
+    ),
     _vm._v(" "),
     _c("div", { staticClass: "message-box" }, [
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.input,
-            expression: "input"
-          }
-        ],
-        staticClass: "message-input",
-        attrs: { type: "text", placeholder: "Type message..." },
-        domProps: { value: _vm.input },
-        on: {
-          keyup: function($event) {
-            if (
-              !$event.type.indexOf("key") &&
-              _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
-            ) {
-              return null
+      _c("div", { staticClass: "input-group" }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.input,
+              expression: "input"
             }
-            return _vm.messageSubmit($event)
-          },
-          input: function($event) {
-            if ($event.target.composing) {
-              return
+          ],
+          staticClass: "form-control",
+          attrs: { type: "text" },
+          domProps: { value: _vm.input },
+          on: {
+            keyup: function($event) {
+              if (
+                !$event.type.indexOf("key") &&
+                _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+              ) {
+                return null
+              }
+              return _vm.messageSubmit($event)
+            },
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.input = $event.target.value
             }
-            _vm.input = $event.target.value
           }
-        }
-      }),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "message-submit",
-          attrs: { type: "submit" },
-          on: { click: _vm.messageSubmit }
-        },
-        [_vm._v("Send")]
-      )
+        }),
+        _vm._v(" "),
+        _c("div", { staticClass: "input-group-append" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary",
+              attrs: { type: "button" },
+              on: { click: _vm.messageSubmit }
+            },
+            [_vm._v("\n                    Send\n                ")]
+          )
+        ])
+      ])
     ])
   ])
 }
@@ -69606,18 +69728,20 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "chat-title" }, [
-      _c("h1", [_vm._v("Guides Chatbot")]),
-      _vm._v(" "),
-      _c("h2", [_vm._v("Stillorgan")]),
-      _vm._v(" "),
-      _c("figure", { staticClass: "avatar" }, [
-        _c("img", {
-          attrs: {
-            src: "https://guides.ryanshirley.ie/favicon/favicon-228.png"
-          }
-        })
-      ])
+    return _c("figure", { staticClass: "avatar" }, [
+      _c("img", {
+        attrs: { src: "https://guides.ryanshirley.ie/favicon/favicon-228.png" }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("figure", { staticClass: "avatar" }, [
+      _c("img", {
+        attrs: { src: "https://guides.ryanshirley.ie/favicon/favicon-228.png" }
+      })
     ])
   }
 ]
@@ -81886,7 +82010,7 @@ if (token) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _ChatbotComponent_vue_vue_type_template_id_b01f4c8e_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ChatbotComponent.vue?vue&type=template&id=b01f4c8e&scoped=true& */ "./resources/js/components/ChatbotComponent.vue?vue&type=template&id=b01f4c8e&scoped=true&");
+/* harmony import */ var _ChatbotComponent_vue_vue_type_template_id_b01f4c8e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ChatbotComponent.vue?vue&type=template&id=b01f4c8e& */ "./resources/js/components/ChatbotComponent.vue?vue&type=template&id=b01f4c8e&");
 /* harmony import */ var _ChatbotComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ChatbotComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/ChatbotComponent.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
@@ -81898,11 +82022,11 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
   _ChatbotComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _ChatbotComponent_vue_vue_type_template_id_b01f4c8e_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _ChatbotComponent_vue_vue_type_template_id_b01f4c8e_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _ChatbotComponent_vue_vue_type_template_id_b01f4c8e___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ChatbotComponent_vue_vue_type_template_id_b01f4c8e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
-  "b01f4c8e",
+  null,
   null
   
 )
@@ -81928,19 +82052,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/ChatbotComponent.vue?vue&type=template&id=b01f4c8e&scoped=true&":
-/*!*************************************************************************************************!*\
-  !*** ./resources/js/components/ChatbotComponent.vue?vue&type=template&id=b01f4c8e&scoped=true& ***!
-  \*************************************************************************************************/
+/***/ "./resources/js/components/ChatbotComponent.vue?vue&type=template&id=b01f4c8e&":
+/*!*************************************************************************************!*\
+  !*** ./resources/js/components/ChatbotComponent.vue?vue&type=template&id=b01f4c8e& ***!
+  \*************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChatbotComponent_vue_vue_type_template_id_b01f4c8e_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./ChatbotComponent.vue?vue&type=template&id=b01f4c8e&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ChatbotComponent.vue?vue&type=template&id=b01f4c8e&scoped=true&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChatbotComponent_vue_vue_type_template_id_b01f4c8e_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChatbotComponent_vue_vue_type_template_id_b01f4c8e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./ChatbotComponent.vue?vue&type=template&id=b01f4c8e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ChatbotComponent.vue?vue&type=template&id=b01f4c8e&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChatbotComponent_vue_vue_type_template_id_b01f4c8e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChatbotComponent_vue_vue_type_template_id_b01f4c8e_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChatbotComponent_vue_vue_type_template_id_b01f4c8e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
