@@ -2,6 +2,17 @@
 
 The aim of this project was to organise and keep track of expenses and incoming money within an small organisation.
 
+### Admin Dashbaord
+![Admin Dashboard](https://raw.githubusercontent.com/ryan-shirley/Guides-Expense-Income-Tracking/master/screenshots/Guides%20Admin%20Dashboard.png)
+
+### Leader Dashbaord
+![Leader Dashboard](https://raw.githubusercontent.com/ryan-shirley/Guides-Expense-Income-Tracking/master/screenshots/Guides%20Leader%20Dashboard.png)
+
+### Chatbot
+Chatbot for leaders to be able to add payments with a conversational experience
+
+![Chatbot for adding expenses](https://raw.githubusercontent.com/ryan-shirley/Guides-Expense-Income-Tracking/master/screenshots/Chatbot-Screenshot.png)
+
 ## How it works
 Payments are added by leaders but require approval by an admin. This allows admins to keep track of individual leader expenses and total organisation expenses. Admins are also able to input incoming money.
 
