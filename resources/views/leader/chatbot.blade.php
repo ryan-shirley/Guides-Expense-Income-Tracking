@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="row justify-content-center">
-    <div class="col-md-3">
+    <div class="col-lg-12 col-xl-6">
         <div class="card shadow">
             <div class="card-header">
                 <figure class="avatar float-left mr-3">
