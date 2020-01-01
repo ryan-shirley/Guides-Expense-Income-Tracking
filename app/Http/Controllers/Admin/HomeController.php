@@ -60,16 +60,18 @@ class HomeController extends Controller
         }
 
         // Get total to pay back
+        $paymentsToPayBack  = Payment::where('paid_back', '=', '0')->get();
         $total_to_pay_back = 0;
-        foreach ($payments as $payment) {
+        foreach ($paymentsToPayBack as $payment) {
             if(!$payment->paid_back) {
                 $total_to_pay_back += $payment->amount;
             }
         }
 
         // Get number of expenses waiting on approval
+        $paymentsToApprove  = Payment::where('approved', '=', '0')->get();
         $num_waiting_approval = 0;
-        foreach ($payments as $payment) {
+        foreach ($paymentsToApprove as $payment) {
             if(!$payment->approved) {
                 $num_waiting_approval++;
             }
