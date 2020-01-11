@@ -84,7 +84,7 @@ class HomeController extends Controller
         $bankBalance = BankAccount::where('title', 'Main')->first()->balance;
 
         // Payment history for year
-        $paymentTotalsPerMonth = Payment::whereDate('purchase_date', '>=', Carbon::now()->startOfMonth()->subMonths(12))->where('approved', '1')->get()->groupBy(function($val) {
+        $paymentTotalsPerMonth = Payment::whereDate('purchase_date', '>=', Carbon::now()->startOfMonth()->subMonths(12))->get()->groupBy(function($val) {
             return Carbon::parse($val->purchase_date)->format('M');
         });
 
