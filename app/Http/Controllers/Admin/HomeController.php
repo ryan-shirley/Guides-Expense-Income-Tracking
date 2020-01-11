@@ -30,12 +30,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $payments  = Payment::where('purchase_date', 'LIKE', '%'. date("Y") .'%')->get()->sortByDesc("id");
+        $payments = Payment::where('purchase_date', 'LIKE', '%'. date("Y") .'%')->get()->sortByDesc("id");
 
         // Payments by month for current year
         $paymentsByMonth = DB::table('payments')
             ->select(DB::raw('SUM(`amount`) AS TotalSpent, MONTH(`purchase_date`) AS Month, YEAR(`purchase_date`) AS Year'))
-            ->whereYear('purchase_date', '=', date('Y'))
+            ->whereDate('purchase_date', '>', Carbon::now()->subDays(365))
             ->groupby('year','month')
             ->get();
 
@@ -84,7 +84,7 @@ class HomeController extends Controller
         $bankBalance = BankAccount::where('title', 'Main')->first()->balance;
 
         // Payment history for year
-        $paymentTotalsPerMonth = Payment::where('purchase_date', 'LIKE', '%'. date("Y") .'%')->where('approved', '1')->get()->groupBy(function($val) {
+        $paymentTotalsPerMonth = Payment::whereDate('purchase_date', '>', Carbon::now()->subDays(365))->where('approved', '1')->get()->groupBy(function($val) {
             return Carbon::parse($val->purchase_date)->format('M');
         });
 
@@ -119,7 +119,7 @@ class HomeController extends Controller
 
 
         // Income history for year
-        $incomeTotalsPerMonth = Income::where('date', 'LIKE', '%'. date("Y") .'%')->where('approved', '1')->get()->groupBy(function($val) {
+        $incomeTotalsPerMonth = Income::whereDate('date', '>', Carbon::now()->subDays(365))->where('approved', '1')->get()->groupBy(function($val) {
             return Carbon::parse($val->date)->format('M');
         });
 
