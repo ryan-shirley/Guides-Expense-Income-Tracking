@@ -119,7 +119,7 @@ class HomeController extends Controller
 
 
         // Income history for year
-        $incomeTotalsPerMonth = Income::whereDate('date', '>=', Carbon::now()->startOfMonth()->subMonths(12))->where('approved', '1')->get()->groupBy(function($val) {
+        $incomeTotalsPerMonth = Income::whereDate('date', '>=', Carbon::now()->startOfMonth()->subMonths(12))->get()->groupBy(function($val) {
             return Carbon::parse($val->date)->format('M');
         });
 
