@@ -2,7 +2,7 @@
 
 The aim of this project was to organise and keep track of expenses and incoming money within an small organisation.
 
-### Admin Dashbaord
+### Admin Dashboard
 ![Admin Dashboard](https://raw.githubusercontent.com/ryan-shirley/Guides-Expense-Income-Tracking/master/screenshots/Guides%20Admin%20Dashboard.png)
 
 ### Leader Dashbaord
