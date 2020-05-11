@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Income;
 use App\BankAccount;
+use Auth;
 
 class IncomeController extends Controller
 {
@@ -147,5 +148,16 @@ class IncomeController extends Controller
         return redirect()->route('admin.incomes.index');
     }
 
+    /**
+     * Show incomes exporter.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function export()
+    {
+        return view('admin.income.export')->with([
+            'user' => Auth::user()
+        ]);
+    }
     
 }

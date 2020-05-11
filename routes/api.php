@@ -18,3 +18,5 @@ use Illuminate\Http\Request;
 // });
 
 Route::middleware('auth:api')->post('payment', 'API\Leader\PaymentController@store');
+Route::middleware('auth:api')->get('payments', 'API\Admin\PaymentController@index');
+Route::middleware('auth:api')->get('incomes', 'API\Admin\IncomeController@index');

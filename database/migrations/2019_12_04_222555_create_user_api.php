@@ -28,6 +28,10 @@ class CreateUserApi extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_api');
+        if (Schema::hasColumn('user_api'))  {
+            Schema::table('users', function (Blueprint $table) {
+                $table->dropColumn('user_api');
+            });
+        }
     }
 }

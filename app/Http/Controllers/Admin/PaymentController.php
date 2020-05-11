@@ -213,9 +213,6 @@ class PaymentController extends Controller
         $request->session()->flash('alert-success', $payment->title . ' payment has been marked as received receipt.');
         return redirect()->route('admin.payments.index');
     }
-
-
-    
         
     /**
      * List of people that need to be paid back
@@ -230,6 +227,18 @@ class PaymentController extends Controller
 
         return view('admin.payment.toBePaidBack')->with([
             'leadersToPayBack' => $leadersToPayBack
+        ]);
+    }
+
+    /**
+     * Show payments exporter.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function export()
+    {
+        return view('admin.payment.export')->with([
+            'user' => Auth::user()
         ]);
     }
 

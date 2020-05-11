@@ -13,7 +13,8 @@
                         <h2 class="mb-0">Incoming Money</h2>
                     </div>
                     <div class="col">
-                        <p class="text-right"><a class="btn btn-primary" href="{{ route('admin.incomes.create') }}" role="button">Add Income</a></p>
+                        <p class="text-right float-right"><a class="btn btn-primary" href="{{ route('admin.incomes.create') }}" role="button">Add Income</a></p>
+                        <p class="text-right float-right mr-3"><a class="btn btn-light" href="{{ route('admin.incomes.export') }}" role="button">Export</a></p>
                     </div>
                 </div>
             </div>
