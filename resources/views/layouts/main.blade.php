@@ -89,6 +89,11 @@
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link {{ Route::currentRouteName() == 'admin.bank-transactions.index' ? 'active' : '' }}" href="{{ route('admin.bank-transactions.index') }}">
+                                    <i class="fas fa-piggy-bank text-info"></i> Bank Transactions
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link {{ Route::currentRouteName() == 'admin.payments.toPayBack' ? 'active' : '' }}" href="{{ route('admin.payments.toPayBack') }}">
                                     <i class="fas fa-users text-warning"></i> To Pay Back
                                 </a>

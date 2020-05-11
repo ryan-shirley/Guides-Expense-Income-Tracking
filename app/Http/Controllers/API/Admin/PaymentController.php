@@ -52,7 +52,7 @@ class PaymentController extends Controller
         }
 
         return [
-            'payments' => $payments,
+            'data' => $payments,
             'endDate' => $endDate,
             'startDate' => $startDate
         ];

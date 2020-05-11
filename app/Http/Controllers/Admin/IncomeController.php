@@ -175,8 +175,40 @@ class IncomeController extends Controller
      */
     public function export()
     {
+        $columns = array(
+            array(
+                'data' => 'date',
+                'title' => 'Date'
+            ),
+            array(
+                'data' => 'title',
+                'title' => 'Details'
+            ),
+            array(
+                'data' => 'title',
+                'title' => 'Details'
+            ),
+            array(
+                'data' => 'keyID',
+                'title' => 'Ref'
+            ),
+            array(
+                'data' => 'cash_and_cheque',
+                'title' => 'Cash & Cheque'
+            ),
+            array(
+                'data' => 'online',
+                'title' => 'Online Payments'
+            ),
+            array(
+                'data' => 'code',
+                'title' => 'Code'
+            ),
+       );
+
         return view('admin.income.export')->with([
-            'user' => Auth::user()
+            'user' => Auth::user(),
+            'columns' => json_encode($columns)
         ]);
     }
     

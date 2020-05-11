@@ -91,6 +91,12 @@ Route::get('/admin/users/', 'Admin\UsersController@index')->name('admin.users');
 Route::post('/admin/users/{id}', 'Admin\UsersController@approve')->name('admin.users.approve'); // Approve account
 Route::get('/admin/users/', 'Admin\UsersController@index')->name('admin.users'); // Accounts that need approval
 Route::delete('/admin/users/{id}', 'Admin\UsersController@destroy')->name('admin.users.delete'); // Delete pending approval account
+Route::resource('/admin/bank-transactions', 'Admin\BankTransactionsController', [
+    'as' => 'admin'
+])->except([
+    'show'
+]);
+Route::get('/admin/bank-transactions/export', 'Admin\BankTransactionsController@export')->name('admin.bank-transactions.export'); // Export payments data in correct format for accounts
 
 // Leader
 Route::middleware(['approved'])->group(function () {

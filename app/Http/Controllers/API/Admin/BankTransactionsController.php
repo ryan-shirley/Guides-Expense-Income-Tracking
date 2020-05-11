@@ -4,9 +4,9 @@ namespace App\Http\Controllers\API\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Income;
+use App\BankTransaction;
 
-class IncomeController extends Controller
+class BankTransactionsController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -19,40 +19,39 @@ class IncomeController extends Controller
     }
 
     /**
-     *  Loads incomes from date range
+     *  Loads payments from date range
      */
     public function index(Request $request)
     {
         $startDate = $request->query('startDate');
         $endDate = $request->query('endDate');
 
-        // Get Incomes
+        // Get Transactions
         if(!is_null($startDate) && !is_null($endDate)) {
             $from = date($startDate);
             $to = date($endDate);
 
-            $incomes = Income::whereBetween('date', [$from, $to])->orderBy('date', 'ASC')->get();
+            $transactions = BankTransaction::whereBetween('date', [$from, $to])->orderBy('date', 'ASC')->get();
         } else {
-            $incomes = null;
+            $transactions = null;
         }
 
-        // Format Incomes ID
-        if($incomes) {
-            foreach ($incomes as $index => $income) {
-                $incomes[$index]->keyID = "i_" . $income->id;
+        // Format Transactions
+        if($transactions) {
+            foreach ($transactions as $index => $transaction) {
 
-                if($income->is_cash) {
-                    $incomes[$index]->cash_and_cheque = $income->amount;
-                    $incomes[$index]->online = 0;
+                if($transaction->is_logement) {
+                    $transactions[$index]->logements = $transaction->amount;
+                    $transactions[$index]->withdrawals = 0;
                 } else {
-                    $incomes[$index]->cash_and_cheque = 0;
-                    $incomes[$index]->online = $income->amount;
+                    $transactions[$index]->logements = 0;
+                    $transactions[$index]->withdrawals = $transaction->amount;
                 }
             }
         }
 
         return [
-            'data' => $incomes,
+            'data' => $transactions,
             'endDate' => $endDate,
             'startDate' => $startDate
         ];

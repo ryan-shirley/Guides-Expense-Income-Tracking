@@ -259,8 +259,36 @@ class PaymentController extends Controller
      */
     public function export()
     {
+        $columns = array(
+            array(
+                'data' => 'purchase_date',
+                'title' => 'Date'
+            ),
+            array(
+                'data' => 'title',
+                'title' => 'Details'
+            ),
+            array(
+                'data' => 'keyID',
+                'title' => 'Ref'
+            ),
+            array(
+                'data' => 'cash_only',
+                'title' => 'Cash Only'
+            ),
+            array(
+                'data' => 'other',
+                'title' => 'Other'
+            ),
+            array(
+                'data' => 'code',
+                'title' => 'Code'
+            ),
+       );
+
         return view('admin.payment.export')->with([
-            'user' => Auth::user()
+            'user' => Auth::user(),
+            'columns' => json_encode($columns)
         ]);
     }
 

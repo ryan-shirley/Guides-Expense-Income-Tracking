@@ -23,8 +23,7 @@ window.Vue = Vue;
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('chat-bot', require('./components/ChatbotComponent.vue').default);
-Vue.component('data-export-payments', require('./components/DataExportPaymentsComponent.vue').default);
-Vue.component('data-export-incomes', require('./components/DataExportIncomesComponent.vue').default);
+Vue.component('data-export', require('./components/DataExportComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

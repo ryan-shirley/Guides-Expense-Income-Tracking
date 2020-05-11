@@ -28,7 +28,6 @@
             </div>
         </div>
         <table
-            v-if="viewing === 'payments'"
             class="table table-hover"
             id="export_table"
         >
@@ -36,7 +35,7 @@
                 <tr>
                     <th
                         scope="col"
-                        v-for="(column, index) in payments.columns"
+                        v-for="(column, index) in tableColumns"
                         :key="index"
                     >
                         {{ column }}
@@ -44,7 +43,7 @@
                 </tr>
             </thead>
         </table>
-        <!-- /.Payments Table -->
+        <!-- /.Incomes Table -->
     </div>
     <!-- /.Data List -->
 </template>
@@ -61,6 +60,9 @@ export default {
         this.endDate = yyyy + "-" + mm + "-" + dd;
         this.startDate = yyyy + "-01-01";
 
+        // Get Columns
+        this.tableColumns = JSON.parse(this.$props.columns);
+
         // Init Datatable
         this.initTable();
     },
@@ -74,7 +76,7 @@ export default {
                 $(`#export_table`)
                     .DataTable()
                     .ajax.url(
-                        `/api/${app.viewing}?startDate=${
+                        `${app.$attrs.url}?startDate=${
                             app.startDate
                         }&endDate=${app.endDate}&api_token=${
                             app.$props.api_token
@@ -114,41 +116,27 @@ export default {
                             }
                         ]
                     },
-                    columns: app[app.viewing].columns,
+                    columns: app.tableColumns,
                     ajax: {
-                        url: `/api/${app.viewing}?startDate=${
+                        url: `${app.$attrs.url}?startDate=${
                             app.startDate
                         }&endDate=${app.endDate}&api_token=${
                             app.$props.api_token
                         }`,
                         method: "GET",
-                        dataSrc: function(json) {
-                            let data = json[app.viewing];
-
-                            return data;
-                        }
+                        dataSrc: json => json.data
                     }
                 });
             });
         }
     },
-    props: ["api_token"],
+    props: ["api_token", "columns"],
     data() {
         return {
-            viewing: "payments",
             startDate: "",
             endDate: "",
-            payments: {
-                columns: [
-                    { data: "purchase_date", title: "Date" },
-                    { data: "title", title: "Details" },
-                    { data: "keyID", title: "Ref" },
-                    { data: "cash_only", title: "Cash Only" },
-                    { data: "other", title: "Other" },
-                    { data: "code", title: "Code" }
-                ],
-                rows: []
-            }
+            rows: [],
+            tableColumns: []
         };
     }
 };

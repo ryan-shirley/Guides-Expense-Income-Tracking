@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('page-title', 'Export Incomes')
+@section('page-title', 'Export Bank Transactions')
 
 @section('content')
 <div class="row justify-content-center">
@@ -10,11 +10,11 @@
                 <div class="row align-items-center">
                     <div class="col">
                         <h6 class="text-uppercase text-muted ls-1 mb-1">Exporter</h6>
-                        <h2 class="mb-0">Export Incomes</h2>
+                        <h2 class="mb-0">Export Bank Transactions</h2>
                     </div>
                 </div>
             </div>
-           <data-export api_token="{{ $user->api_token }}" columns="{{ $columns }}" url="/api/incomes" />
+           <data-export api_token="{{ $user->api_token }}" columns="{{ $columns }}" url="/api/bank-transactions" />
         </div>
         <!-- /.Card -->
     </div>
