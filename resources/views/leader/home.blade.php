@@ -101,6 +101,7 @@
                 <table class="table table-hover" id="payment_table">
                     <thead class="thead-light">
                         <tr>
+                            <th scope="col">Ref</th>
                             <th scope="col">Title</th>
                             <th scope="col">Amount</th>
                             <th scope="col">Purchase Date</th>
@@ -114,7 +115,8 @@
                     <tbody>
                         @foreach ($payments as $p)
                             <tr>
-                                <td scope="row">{{ $p->title }}</td>
+                                <td scope="row">{{ $p->keyID }}</td>
+                                <td>{{ $p->title }}</td>
                                 <td>€{{ $p->amount }}</td>
                                 <td>{{ date('Y-m-d', strtotime($p->purchase_date)) }}</td>
                                 <td>
@@ -182,7 +184,8 @@
                         next: '<i class="fas fa-chevron-right"></i>', 
                         previous: '<i class="fas fa-chevron-left"></i>'
                     }
-                }
+                },
+                "order": [[ 3, "desc" ]]
             });
         });
 

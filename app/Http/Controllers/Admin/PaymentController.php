@@ -30,7 +30,20 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        $payments  = Payment::all()->sortByDesc("id");
+        $payments  = Payment::all();
+
+        // Format Payments ID
+        foreach ($payments as $index => $payment) {
+            $payments[$index]->keyID = "p_" . $payment->id;
+            
+            if($payment->is_cash) {
+                $payments[$index]->cash_only = $payment->amount;
+                $payments[$index]->other = 0;
+            } else {
+                $payments[$index]->cash_only = 0;
+                $payments[$index]->other = $payment->amount;
+            }
+        }
 
         return view('admin.payment.index')->with([
             'payments' => $payments
@@ -61,6 +74,8 @@ class PaymentController extends Controller
             'guide_money' => 'required|boolean',
             'paid_back' => 'required|boolean',
             'user_id' => 'required|exists:users,id',
+            'code' => 'string|max:65535',
+            'is_cash' => 'boolean',
         ]);
 
         // Create Payment
@@ -72,6 +87,8 @@ class PaymentController extends Controller
         $p->paid_back = $request->input('paid_back');
         $p->approved = false;
         $p->user_id = $request->input('user_id');
+        $p->code = $request->input('code');
+        $p->is_cash = $request->input('is_cash');
         $p->save();
 
         $request->session()->flash('alert-success', $p->title . ' payment has been added.');
@@ -104,6 +121,9 @@ class PaymentController extends Controller
             'guide_money' => 'required|boolean',
             'paid_back' => 'required|boolean',
             'user_id' => 'required|exists:users,id',
+            'title' => 'required|string|max:65535',
+            'code' => 'string|max:65535',
+            'is_cash' => 'boolean',
         ]);
 
         // Create Payment
@@ -114,6 +134,8 @@ class PaymentController extends Controller
         $p->guide_money = $request->input('guide_money');
         $p->paid_back = $request->input('paid_back');
         $p->user_id = $request->input('user_id');
+        $p->code = $request->input('code');
+        $p->is_cash = $request->input('is_cash');
         $p->save();
 
         $request->session()->flash('alert-success', $p->title . ' payment has been updated.');

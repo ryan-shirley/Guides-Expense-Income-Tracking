@@ -15,14 +15,14 @@ class UpdateInformation extends Migration
     {
         // Update Payments
         Schema::table('payments', function ($table) {
-            $table->tinyInteger('code');
-            $table->boolean('is_cash');
+            $table->string('code')->nullable($value = true);
+            $table->boolean('is_cash')->nullable($value = true);
         });
 
         // Update Incomes
         Schema::table('incomes', function ($table) {
-            $table->tinyInteger('code');
-            $table->boolean('is_cash');
+            $table->string('code')->nullable($value = true);
+            $table->boolean('is_cash')->nullable($value = true);
         });
     }
 

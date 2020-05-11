@@ -90,6 +90,47 @@
                     </div>
                     <!-- /.Paid Back -->
 
+                    <div class="form-group">
+                        <label for="is_cash">Payment Type</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="is_cash" id="is_cash1" value="1" {{ (old('is_cash') == '1') ? "checked" : "" }}>
+                            <label class="form-check-label" for="is_cash1">
+                                Cash or Cheque 
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="is_cash" id="is_cash2" value="0" {{ (old('is_cash') == '0') ? "checked" : "" }}>
+                            <label class="form-check-label" for="is_cash2">
+                                Bank payment 
+                            </label>
+                        </div>
+                        <small class="form-text text-muted">Please pick the type of payment that was used.</small>
+                        <div class="text-danger">{{ $errors->first('is_cash') }}</div>
+                    </div>
+                    <!-- /.Is Cash -->
+
+                    <div class="form-group">
+                        <label for="user_id">Analysis Code</label>
+                        <select class="form-control" name="code" id="codes">
+                                <option value="1" {{ (old('code') == 1) ? "selected" : "" }}>Programme Material</option>
+                                <option value="2" {{ (old('code') == 2) ? "selected" : "" }}>Uniform & Badges</option>
+                                <option value="3" {{ (old('code') == 3) ? "selected" : "" }}>Camps / Outings / Events</option>
+                                <option value="4" {{ (old('code') == 4) ? "selected" : "" }}>IGG Membership Fees</option>
+                                <option value="5" {{ (old('code') == 5) ? "selected" : "" }}>Equipment</option>
+                                <option value="6" {{ (old('code') == 6) ? "selected" : "" }}>Unit Administration</option>
+                                <option value="7" {{ (old('code') == 7) ? "selected" : "" }}>Rent</option>
+                                <option value="8" {{ (old('code') == 8) ? "selected" : "" }}>Adult Training</option>
+                                <option value="9" {{ (old('code') == 9) ? "selected" : "" }}>Thinking Day</option>
+                                <option value="10" {{ (old('code') == 10) ? "selected" : "" }}>Banking Fees</option>
+                                <option value="11" {{ (old('code') == 11) ? "selected" : "" }}>Miscellaneous</option>
+                                <option value="12" {{ (old('code') == 12) ? "selected" : "" }}>Fundraising</option>
+                                <option value="cc" {{ (old('code') == 'cc') ? "selected" : "" }}>If drawing cash from bank or float (petty cash)</option>
+                        </select>
+                        <small class="form-text text-muted">Code for accounts.</small>
+                        <div class="text-danger">{{ $errors->first('code') }}</div>
+                    </div>
+                    <!-- /.Code -->
+
                     <button class="btn btn-primary" type="submit" value="Store">Submit</button>
                 </form>
                 <!-- /.Form -->

@@ -31,6 +31,19 @@ class HomeController extends Controller
         $user = Auth::user();
         $payments = $user->payments;
 
+        // Format Payments ID
+        foreach ($payments as $index => $payment) {
+            $payments[$index]->keyID = "p_" . $payment->id;
+            
+            if($payment->is_cash) {
+                $payments[$index]->cash_only = $payment->amount;
+                $payments[$index]->other = 0;
+            } else {
+                $payments[$index]->cash_only = 0;
+                $payments[$index]->other = $payment->amount;
+            }
+        }
+
         // Total for year
         $total_year = 0;
         foreach ($payments as $payment) {

@@ -23,9 +23,12 @@
                 <table class="table table-hover" id="payment_table">
                     <thead class="thead-light">
                         <tr>
+                            <th scope="col">Ref</th>
                             <th scope="col">Title</th>
                             <th scope="col">Amount</th>
                             <th scope="col">Date</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Code</th>
                             <th scope="col">Approved</th>
                             <th scope="col">Action</th>
                         </tr>
@@ -33,9 +36,17 @@
                     <tbody>
                         @foreach ($incomes as $i)
                             <tr>
+                                <td>{{ $i->keyID }}</td>
                                 <td>{{ $i->title }}</td>
                                 <td>€{{ $i->amount }}</td>
                                 <td>{{ date('Y-m-d', strtotime($i->date)) }}</td>
+                                <td>
+                                    @if ($i->is_cash === 1)
+                                        Cash or Cheque
+                                    @else
+                                        Online
+                                    @endif</td>
+                                <td>{{ $i->code }}</td>
                                 <td>
                                     @if ($i->approved === 1)
                                         <i class="fas fa-check text-success"></i>
@@ -75,14 +86,14 @@
     <script type="text/javascript" >
         // my custom script
         $(document).ready( function () {
-            console.log('test')
             $('#payment_table').DataTable({
                 language: {
                     paginate: {
                         next: '<i class="fas fa-chevron-right"></i>', 
                         previous: '<i class="fas fa-chevron-left"></i>'
                     }
-                }
+                },
+                "order": [[ 3, "desc" ]]
             });
         });
 

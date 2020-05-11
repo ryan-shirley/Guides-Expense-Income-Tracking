@@ -28,6 +28,7 @@
                 <table class="table table-hover" id="payment_table">
                     <thead class="thead-light">
                         <tr>
+                        <th scope="col">Ref</th>
                         <th scope="col">Leader</th>
                         <th scope="col">Title</th>
                         <th scope="col">Amount</th>
@@ -35,6 +36,8 @@
                         <th scope="col">Guide Money</th>
                         <th scope="col">Paid Back</th>
                         <th scope="col">Received Receipt</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Code</th>
                         <th scope="col">Approved</th>
                         <th scope="col">Action</th>
                         </tr>
@@ -42,7 +45,8 @@
                     <tbody>
                         @foreach ($payments as $p)
                             <tr>
-                                <th scope="row">{{ $p->user->name }}</th>
+                                <td scope="row">{{ $p->keyID }}</td>
+                                <th>{{ $p->user->name }}</th>
                                 <td>{{ $p->title }}</td>
                                 <td>€{{ $p->amount }}</td>
                                 <td>{{ date('Y-m-d', strtotime($p->purchase_date)) }}</td>
@@ -66,6 +70,16 @@
                                     @else
                                         <i class="fas fa-times text-danger"></i>
                                     @endif
+                                </td>
+                                <td>
+                                    @if ($p->is_cash === 1)
+                                        Cash
+                                    @else
+                                        Other
+                                    @endif
+                                </td>
+                                <td>
+                                   {{ $p->code }}
                                 </td>
                                 <td>
                                     @if ($p->approved === 1)
@@ -123,7 +137,8 @@
                         next: '<i class="fas fa-chevron-right"></i>', 
                         previous: '<i class="fas fa-chevron-left"></i>'
                     }
-                }
+                },
+                "order": [[ 4, "desc" ]]
             });
         });
 
