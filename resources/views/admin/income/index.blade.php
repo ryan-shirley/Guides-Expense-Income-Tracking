@@ -29,6 +29,7 @@
                             <th scope="col">Date</th>
                             <th scope="col">Type</th>
                             <th scope="col">Code</th>
+                            <th scope="col">Camp</th>
                             <th scope="col">Approved</th>
                             <th scope="col">Action</th>
                         </tr>
@@ -47,6 +48,13 @@
                                         Online
                                     @endif</td>
                                 <td>{{ $i->code }}</td>
+                                <td>
+                                    @if ($i->event_id)
+                                        {{ App\Event::find($i->event_id)->title }}
+                                    @else
+                                        -
+                                    @endif
+                                </td>
                                 <td>
                                     @if ($i->approved === 1)
                                         <i class="fas fa-check text-success"></i>

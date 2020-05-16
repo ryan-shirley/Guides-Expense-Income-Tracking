@@ -18,6 +18,19 @@
                     @csrf
 
                     <div class="form-group">
+                        <label for="user_id">Event</label>
+                        <select class="form-control" name="event_id" id="eventsList">
+                            <option value="0"></option>
+                            @foreach ($events as $e)
+                                <option value="{{ $e->id }}" {{ (old('event_id') == $e->id) ? "selected" : "" }}>{{ $e->title }}</option>
+                            @endforeach
+                        </select>
+                        <small class="form-text text-muted">Event where this income took place</small>
+                        <div class="text-danger">{{ $errors->first('event_id') }}</div>
+                    </div>
+                    <!-- /.Event -->
+
+                    <div class="form-group">
                         <label for="title">Title</label>
                         <input type="text" class="form-control" name="title" placeholder="Enter title" value="{{ old( 'title') }}">
                         <small class="form-text text-muted">Describe where the income came from.</small>

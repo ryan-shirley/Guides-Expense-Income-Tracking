@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Income;
 use App\BankAccount;
+use App\Event;
 use Auth;
 
 class IncomeController extends Controller
@@ -52,7 +53,11 @@ class IncomeController extends Controller
      */
     public function create()
     {
-        return view('admin.income.create');
+        $events = Event::all();
+
+        return view('admin.income.create')->with([
+            'events' => $events
+        ]);
     }
 
     /**
@@ -66,6 +71,7 @@ class IncomeController extends Controller
             'date' => 'required|date',
             'code' => 'string|max:65535',
             'is_cash' => 'boolean',
+            'event_id' => 'exclude_if:event_id,0|exists:events,id'
         ]);
 
         // Create Income
@@ -75,6 +81,13 @@ class IncomeController extends Controller
         $i->date = $request->input('date');
         $i->code = $request->input('code');
         $i->is_cash = $request->input('is_cash');
+
+        if($request->input('event_id') !== '0') {
+            $i->event_id = $request->input('event_id');
+        } else {
+            $i->event_id = null;
+        }
+        
         $i->save();
 
         $request->session()->flash('alert-success', $i->title . ' income has been added.');
@@ -87,9 +100,11 @@ class IncomeController extends Controller
     public function edit($id)
     {
         $income = Income::findOrFail($id);
+        $events = Event::all();
 
         return view('admin.income.edit')->with([
             'income' => $income,
+            'events' => $events
         ]);
     }
 
@@ -104,6 +119,7 @@ class IncomeController extends Controller
             'date' => 'required|date',
             'code' => 'string|max:65535',
             'is_cash' => 'boolean',
+            'event_id' => 'exclude_if:event_id,0|exists:events,id'
         ]);
 
         // Update Income
@@ -113,6 +129,13 @@ class IncomeController extends Controller
         $i->date = $request->input('date');
         $i->code = $request->input('code');
         $i->is_cash = $request->input('is_cash');
+
+        if($request->input('event_id') !== '0') {
+            $i->event_id = $request->input('event_id');
+        } else {
+            $i->event_id = null;
+        }
+
         $i->save();
 
         $request->session()->flash('alert-success', $i->title . ' income has been updated.');

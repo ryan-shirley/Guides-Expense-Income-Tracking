@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Payment;
 use App\Role;
 use App\BankAccount;
+use App\Event;
 use Auth;
 use Guzzle\Http\Client;
 
@@ -56,9 +57,11 @@ class PaymentController extends Controller
     public function create()
     {
         $role_leader = Role::where('name', 'leader')->first();
+        $events = Event::all();
 
         return view('admin.payment.create')->with([
-            'leaders' => $role_leader->users
+            'leaders' => $role_leader->users,
+            'events' => $events
         ]);
     }
 
@@ -76,6 +79,7 @@ class PaymentController extends Controller
             'user_id' => 'required|exists:users,id',
             'code' => 'string|max:65535',
             'is_cash' => 'boolean',
+            'event_id' => 'exclude_if:event_id,0|exists:events,id'
         ]);
 
         // Create Payment
@@ -89,6 +93,13 @@ class PaymentController extends Controller
         $p->user_id = $request->input('user_id');
         $p->code = $request->input('code');
         $p->is_cash = $request->input('is_cash');
+        
+        if($request->input('event_id') !== '0') {
+            $p->event_id = $request->input('event_id');
+        } else {
+            $p->event_id = null;
+        }
+
         $p->save();
 
         $request->session()->flash('alert-success', $p->title . ' payment has been added.');
@@ -102,10 +113,12 @@ class PaymentController extends Controller
     {
         $role_leader = Role::where('name', 'leader')->first();
         $payment = Payment::findOrFail($id);
+        $events = Event::all();
 
         return view('admin.payment.edit')->with([
             'payment' => $payment,
-            'leaders' => $role_leader->users
+            'leaders' => $role_leader->users,
+            'events' => $events
         ]);
     }
 
@@ -124,9 +137,10 @@ class PaymentController extends Controller
             'title' => 'required|string|max:65535',
             'code' => 'string|max:65535',
             'is_cash' => 'boolean',
+            'event_id' => 'exclude_if:event_id,0|exists:events,id',
         ]);
 
-        // Create Payment
+        // Update Payment
         $p = Payment::findOrFail($id);
         $p->title = $request->input('title');
         $p->amount = $request->input('amount');
@@ -136,6 +150,13 @@ class PaymentController extends Controller
         $p->user_id = $request->input('user_id');
         $p->code = $request->input('code');
         $p->is_cash = $request->input('is_cash');
+
+        if($request->input('event_id') !== '0') {
+            $p->event_id = $request->input('event_id');
+        } else {
+            $p->event_id = null;
+        }
+
         $p->save();
 
         $request->session()->flash('alert-success', $p->title . ' payment has been updated.');

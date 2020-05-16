@@ -38,6 +38,7 @@
                         <th scope="col">Received Receipt</th>
                         <th scope="col">Type</th>
                         <th scope="col">Code</th>
+                        <th scope="col">Event</th>
                         <th scope="col">Approved</th>
                         <th scope="col">Action</th>
                         </tr>
@@ -80,6 +81,13 @@
                                 </td>
                                 <td>
                                    {{ $p->code }}
+                                </td>
+                                <td>
+                                    @if ($p->event_id)
+                                        {{ App\Event::find($p->event_id)->title }}
+                                    @else
+                                        -
+                                    @endif
                                 </td>
                                 <td>
                                     @if ($p->approved === 1)
