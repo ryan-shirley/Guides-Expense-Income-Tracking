@@ -13,4 +13,12 @@ class Payment extends Model
     {
         return $this->belongsTo('App\User');
     }
+
+    /**
+     * Get the event associated with the payment.
+     */
+    public function event()
+    {
+        return $this->belongsTo('App\Event');
+    }
 }

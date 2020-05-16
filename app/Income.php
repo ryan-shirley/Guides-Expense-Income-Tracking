@@ -13,4 +13,12 @@ class Income extends Model
     {
         return $this->belongsTo('App\User');
     }
+
+    /**
+     * Get the event associated with the income.
+     */
+    public function event()
+    {
+        return $this->belongsTo('App\Event');
+    }
 }

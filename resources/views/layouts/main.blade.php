@@ -94,6 +94,11 @@
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link {{ Route::currentRouteName() == 'admin.events.index' ? 'active' : '' }}" href="{{ route('admin.events.index') }}">
+                                    <i class="fas fa-map-signs text-default"></i> Events
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link {{ Route::currentRouteName() == 'admin.payments.toPayBack' ? 'active' : '' }}" href="{{ route('admin.payments.toPayBack') }}">
                                     <i class="fas fa-users text-warning"></i> To Pay Back
                                 </a>

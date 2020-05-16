@@ -97,6 +97,9 @@ Route::resource('/admin/bank-transactions', 'Admin\BankTransactionsController', 
     'show'
 ]);
 Route::get('/admin/bank-transactions/export', 'Admin\BankTransactionsController@export')->name('admin.bank-transactions.export'); // Export payments data in correct format for accounts
+Route::resource('/admin/events', 'Admin\EventController', [
+    'as' => 'admin'
+]);
 
 // Leader
 Route::middleware(['approved'])->group(function () {
