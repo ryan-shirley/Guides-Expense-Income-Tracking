@@ -111,3 +111,8 @@ Route::middleware(['approved'])->group(function () {
     ]);
     Route::get('/leader/chatbot', 'Leader\ChatbotController@index')->name('leader.chatbot');
 });
+
+// Sentry Debug
+Route::get('/debug-sentry', function () {
+    throw new Exception('My first Sentry error!');
+});
