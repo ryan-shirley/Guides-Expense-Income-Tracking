@@ -164,21 +164,8 @@ class IncomeController extends Controller
      */
     public function approve(Request $request, $id)
     {
-        // Get income
+        // Mark income approved
         $income = Income::findOrFail($id);
-
-        $client = new \GuzzleHttp\Client();
-        $response = $client->request('POST', env("ZAPIER_WEBHOOK_INCOME"), [
-            'json' => json_decode(json_encode($income), true)
-        ]);
-
-       // Check if error saving to Google Drive
-       if($response->getStatusCode() !== 200) {
-            $request->session()->flash('alert-error', 'Oops something went wrong! ' . $request->getBody());
-            return redirect()->route('admin.incomes.index');
-        }
-        
-        // Save 
         $income->approved = !$income->approved;
         $income->save();
 
