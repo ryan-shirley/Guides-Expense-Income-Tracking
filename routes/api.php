@@ -17,7 +17,9 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // });
 
-Route::middleware('auth:api')->post('payment', 'API\Leader\PaymentController@store');
-Route::middleware('auth:api')->get('payments', 'API\Admin\PaymentController@index');
-Route::middleware('auth:api')->get('incomes', 'API\Admin\IncomeController@index');
-Route::middleware('auth:api')->get('bank-transactions', 'API\Admin\BankTransactionsController@index');
+Route::middleware(['sentry.context'])->group(function () {
+    Route::middleware('auth:api')->post('payment', 'API\Leader\PaymentController@store');
+    Route::middleware('auth:api')->get('payments', 'API\Admin\PaymentController@index');
+    Route::middleware('auth:api')->get('incomes', 'API\Admin\IncomeController@index');
+    Route::middleware('auth:api')->get('bank-transactions', 'API\Admin\BankTransactionsController@index');
+});

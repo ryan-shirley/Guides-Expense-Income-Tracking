@@ -44,75 +44,79 @@ Route::get('/', function () {
     return view('welcome', compact('greetings')); 
 })->name('welcome');
 
-Route::get('/approval', 'HomeController@approval')->name('approval'); // Waiting on approval
+// Add Sentry Context
+Route::middleware(['sentry.context'])->group(function () {
+    Route::get('/approval', 'HomeController@approval')->name('approval'); // Waiting on approval
 
-Route::get('/home', function () {
-    if (Auth::check()) {
-        $user = Auth::user();
+    Route::get('/home', function () {
+        if (Auth::check()) {
+            $user = Auth::user();
 
-        if($user->hasRole('admin')) {
-            return redirect()->route('admin.home');
-        }
-        else if($user->hasRole('leader')) {
-            return redirect()->route('leader.home');
+            if($user->hasRole('admin')) {
+                return redirect()->route('admin.home');
+            }
+            else if($user->hasRole('leader')) {
+                return redirect()->route('leader.home');
+            }
+            else {
+                throw Exception('Undefined user role');
+            }
         }
         else {
-            throw Exception('Undefined user role');
+            return redirect()->route('welcome');
         }
-    }
-    else {
-        return redirect()->route('welcome');
-    }
-});
+    });
 
-// Auth
-Auth::routes();
+    // Auth
+    Auth::routes();
 
-// Admin
-Route::get('/admin/home', 'Admin\HomeController@index')->name('admin.home');
-Route::resource('/admin/payments', 'Admin\PaymentController', [
-    'as' => 'admin'
-])->except([
-    'show'
-]);
-Route::post('/admin/payments/{id}', 'Admin\PaymentController@paidBack')->name('admin.payments.status.change'); // Change wether paid or not
-Route::post('/admin/payments/{id}/accounts', 'Admin\PaymentController@approve')->name('admin.payments.account.approve'); // Approve payment
-Route::post('/admin/payments/{id}/received-receipt', 'Admin\PaymentController@receivedReceipt')->name('admin.payments.receivedReceipt'); // Mark as received receipt
-Route::get('/admin/payments/to-pay-back', 'Admin\PaymentController@toPayBack')->name('admin.payments.toPayBack'); // To Pay Back
-Route::get('/admin/payments/export', 'Admin\PaymentController@export')->name('admin.payments.export'); // Export payments data in correct format for accounts
-Route::resource('/admin/incomes', 'Admin\IncomeController', [
-    'as' => 'admin'
-])->except([
-    'show'
-]);
-Route::post('/admin/incomes/{id}/approve', 'Admin\IncomeController@approve')->name('admin.incomes.account.approve'); // Approve income
-Route::get('/admin/incomes/export', 'Admin\IncomeController@export')->name('admin.incomes.export'); // Export incomes data in correct format for accounts
-Route::get('/admin/users/', 'Admin\UsersController@index')->name('admin.users'); // Accounts that need approval
-Route::post('/admin/users/{id}', 'Admin\UsersController@approve')->name('admin.users.approve'); // Approve account
-Route::get('/admin/users/', 'Admin\UsersController@index')->name('admin.users'); // Accounts that need approval
-Route::delete('/admin/users/{id}', 'Admin\UsersController@destroy')->name('admin.users.delete'); // Delete pending approval account
-Route::resource('/admin/bank-transactions', 'Admin\BankTransactionsController', [
-    'as' => 'admin'
-])->except([
-    'show'
-]);
-Route::get('/admin/bank-transactions/export', 'Admin\BankTransactionsController@export')->name('admin.bank-transactions.export'); // Export payments data in correct format for accounts
-Route::resource('/admin/events', 'Admin\EventController', [
-    'as' => 'admin'
-]);
-
-// Leader
-Route::middleware(['approved'])->group(function () {
-    Route::get('/leader/home', 'Leader\HomeController@index')->name('leader.home');
-    Route::resource('/leader/payments', 'Leader\PaymentController', [
-        'as' => 'leader'
+    // Admin
+    Route::get('/admin/home', 'Admin\HomeController@index')->name('admin.home');
+    Route::resource('/admin/payments', 'Admin\PaymentController', [
+        'as' => 'admin'
     ])->except([
-        'index', 'show'
+        'show'
     ]);
-    Route::get('/leader/chatbot', 'Leader\ChatbotController@index')->name('leader.chatbot');
-});
+    Route::post('/admin/payments/{id}', 'Admin\PaymentController@paidBack')->name('admin.payments.status.change'); // Change wether paid or not
+    Route::post('/admin/payments/{id}/accounts', 'Admin\PaymentController@approve')->name('admin.payments.account.approve'); // Approve payment
+    Route::post('/admin/payments/{id}/received-receipt', 'Admin\PaymentController@receivedReceipt')->name('admin.payments.receivedReceipt'); // Mark as received receipt
+    Route::get('/admin/payments/to-pay-back', 'Admin\PaymentController@toPayBack')->name('admin.payments.toPayBack'); // To Pay Back
+    Route::get('/admin/payments/export', 'Admin\PaymentController@export')->name('admin.payments.export'); // Export payments data in correct format for accounts
+    Route::resource('/admin/incomes', 'Admin\IncomeController', [
+        'as' => 'admin'
+    ])->except([
+        'show'
+    ]);
+    Route::post('/admin/incomes/{id}/approve', 'Admin\IncomeController@approve')->name('admin.incomes.account.approve'); // Approve income
+    Route::get('/admin/incomes/export', 'Admin\IncomeController@export')->name('admin.incomes.export'); // Export incomes data in correct format for accounts
+    Route::get('/admin/users/', 'Admin\UsersController@index')->name('admin.users'); // Accounts that need approval
+    Route::post('/admin/users/{id}', 'Admin\UsersController@approve')->name('admin.users.approve'); // Approve account
+    Route::get('/admin/users/', 'Admin\UsersController@index')->name('admin.users'); // Accounts that need approval
+    Route::delete('/admin/users/{id}', 'Admin\UsersController@destroy')->name('admin.users.delete'); // Delete pending approval account
+    Route::resource('/admin/bank-transactions', 'Admin\BankTransactionsController', [
+        'as' => 'admin'
+    ])->except([
+        'show'
+    ]);
+    Route::get('/admin/bank-transactions/export', 'Admin\BankTransactionsController@export')->name('admin.bank-transactions.export'); // Export payments data in correct format for accounts
+    Route::resource('/admin/events', 'Admin\EventController', [
+        'as' => 'admin'
+    ]);
 
-// Sentry Debug
-Route::get('/debug-sentry', function () {
-    throw new Exception('My first Sentry error!');
+    // Leader
+    Route::middleware(['approved'])->group(function () {
+        Route::get('/leader/home', 'Leader\HomeController@index')->name('leader.home');
+        Route::resource('/leader/payments', 'Leader\PaymentController', [
+            'as' => 'leader'
+        ])->except([
+            'index', 'show'
+        ]);
+        Route::get('/leader/chatbot', 'Leader\ChatbotController@index')->name('leader.chatbot');
+    });
+
+    // Sentry Debug
+    Route::get('/debug-sentry', function () {
+        throw new Exception('My first Sentry error!');
+    });
+
 });

@@ -9,7 +9,6 @@ use App\Role;
 use App\BankAccount;
 use App\Event;
 use Auth;
-use Guzzle\Http\Client;
 
 class PaymentController extends Controller
 {
@@ -205,24 +204,8 @@ class PaymentController extends Controller
      */
     public function approve(Request $request, $id)
     {
-        // Get User
-        $user = Auth::user();
-
-        // Create data and convert amount into negative as expense
+        // Mark Approved 
         $payment = Payment::findOrFail($id);
-
-        $client = new \GuzzleHttp\Client();
-        $response = $client->request('POST', env("ZAPIER_WEBHOOK_PAYMENT"), [
-            'json' => json_decode(json_encode($payment), true)
-        ]);
-
-        // Check if error saving to Google Drive
-        if($response->getStatusCode() !== 200) {
-            $request->session()->flash('alert-error', 'Oops something went wrong! ' . $request->getBody());
-            return redirect()->route('admin.payments.index');
-        }
-        
-        // Save 
         $payment->approved = true;
         $payment->save();
 

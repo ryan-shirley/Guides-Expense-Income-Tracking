@@ -117,7 +117,7 @@
                     <div class="row align-items-center justify-content">
                         <div class="col">
                             <div class="copyright text-center text-muted">
-                                &copy; {{ now()->year }} - Built by <a href="https://ryanshirley.ie" class="font-weight-bold ml-1" target="_blank">Ryan Shirley</a>
+                                &copy; {{ now()->year }} - Built by <a href="https://ryanshirley.ie" class="font-weight-bold" target="_blank">Ryan Shirley</a>
                             </div>
                         </div>
                     </div>

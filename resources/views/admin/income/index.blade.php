@@ -36,47 +36,47 @@
                     </thead>
                     <tbody>
                         @foreach ($incomes as $i)
-                            <tr>
-                                <td>{{ $i->keyID }}</td>
-                                <td>{{ $i->title }}</td>
-                                <td>€{{ $i->amount }}</td>
-                                <td>{{ date('Y-m-d', strtotime($i->date)) }}</td>
-                                <td>
-                                    @if ($i->is_cash === 1)
-                                        Cash or Cheque
-                                    @else
-                                        Online
-                                    @endif</td>
-                                <td>{{ $i->code }}</td>
-                                <td>
-                                    @if ($i->event_id)
-                                        {{ App\Event::find($i->event_id)->title }}
-                                    @else
-                                        -
-                                    @endif
-                                </td>
-                                <td>
-                                    @if ($i->approved === 1)
-                                        <i class="fas fa-check text-success"></i>
-                                    @else
-                                        <i class="fas fa-times text-danger"></i>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if ($i->approved !== 1)
-                                        <a class="btn btn-warning btn-sm" href="{{ route('admin.incomes.edit', $i->id) }}" role="button"><i class="far fa-edit"></i></a>
-                                        <form action="{{ action('Admin\IncomeController@destroy', $i->id )}}" method="post" style="display: inline;">
-                                            @csrf
-                                            <input name="_method" type="hidden" value="DELETE">
-                                            <button class="btn btn-danger btn-sm" ><i class="fas fa-times"></i></button>
-                                        </form>
-                                        <form action="{{ action('Admin\IncomeController@approve', $i->id )}}" class="income-approve" method="post" style="display: inline;">
-                                            @csrf
-                                            <button class="btn btn-success btn-sm">Approve</button>
-                                        </form>
-                                    @endif
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>{{ $i->keyID }}</td>
+                            <td>{{ $i->title }}</td>
+                            <td>€{{ $i->amount }}</td>
+                            <td>{{ date('Y-m-d', strtotime($i->date)) }}</td>
+                            <td>
+                                @if ($i->is_cash === 1)
+                                Cash or Cheque
+                                @else
+                                Online
+                                @endif</td>
+                            <td>{{ $i->code }}</td>
+                            <td>
+                                @if ($i->event_id)
+                                {{ App\Event::find($i->event_id)->title }}
+                                @else
+                                -
+                                @endif
+                            </td>
+                            <td>
+                                @if ($i->approved === 1)
+                                <i class="fas fa-check text-success"></i>
+                                @else
+                                <i class="fas fa-times text-danger"></i>
+                                @endif
+                            </td>
+                            <td>
+                                <a class="btn btn-warning btn-sm" href="{{ route('admin.incomes.edit', $i->id) }}" role="button"><i class="far fa-edit"></i></a>
+                                <form action="{{ action('Admin\IncomeController@destroy', $i->id )}}" method="post" style="display: inline;">
+                                    @csrf
+                                    <input name="_method" type="hidden" value="DELETE">
+                                    <button class="btn btn-danger btn-sm"><i class="fas fa-times"></i></button>
+                                </form>
+                                @if ($i->approved !== 1)
+                                <form action="{{ action('Admin\IncomeController@approve', $i->id )}}" class="income-approve" method="post" style="display: inline;">
+                                    @csrf
+                                    <button class="btn btn-success btn-sm">Approve</button>
+                                </form>
+                                @endif
+                            </td>
+                        </tr>
                         @endforeach
                     </tbody>
                 </table>
@@ -90,53 +90,54 @@
 @endsection
 
 @section('scripts')
-    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript" >
-        // my custom script
-        $(document).ready( function () {
-            $('#payment_table').DataTable({
-                language: {
-                    paginate: {
-                        next: '<i class="fas fa-chevron-right"></i>', 
-                        previous: '<i class="fas fa-chevron-left"></i>'
-                    }
-                },
-                "order": [[ 3, "desc" ]]
-            });
-        });
-
-        // approve Income Confirmation
-        $('.income-approve').submit(function(event){
-            event.preventDefault()
-
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, approve income!',
-                buttonsStyling: false,
-                customClass: {
-                    confirmButton: 'btn btn-primary',
-                    cancelButton: 'btn btn-default',
-                },
-            }).then((result) => {
-                if (result.value) {
-                    $(this).unbind('submit').submit();
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+    // my custom script
+    $(document).ready(function() {
+        $('#payment_table').DataTable({
+            language: {
+                paginate: {
+                    next: '<i class="fas fa-chevron-right"></i>',
+                    previous: '<i class="fas fa-chevron-left"></i>'
                 }
-                else if (result.dismiss === 'cancel') {
-                    Swal.fire({
-                        title: 'Cancelled!',
-                        text: "Your income was not approved",
-                        type: 'error',
-                        buttonsStyling: false,
-                        confirmButtonText: 'Close',
-                        customClass: {
-                            confirmButton: 'btn btn-primary',
-                        },
-                    })
-                }
-            })
+            },
+            "order": [
+                [3, "desc"]
+            ]
         });
-    </script>
+    });
+
+    // approve Income Confirmation
+    $('.income-approve').submit(function(event) {
+        event.preventDefault()
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, approve income!',
+            buttonsStyling: false,
+            customClass: {
+                confirmButton: 'btn btn-primary',
+                cancelButton: 'btn btn-default',
+            },
+        }).then((result) => {
+            if (result.value) {
+                $(this).unbind('submit').submit();
+            } else if (result.dismiss === 'cancel') {
+                Swal.fire({
+                    title: 'Cancelled!',
+                    text: "Your income was not approved",
+                    type: 'error',
+                    buttonsStyling: false,
+                    confirmButtonText: 'Close',
+                    customClass: {
+                        confirmButton: 'btn btn-primary',
+                    },
+                })
+            }
+        })
+    });
+</script>
 @endsection

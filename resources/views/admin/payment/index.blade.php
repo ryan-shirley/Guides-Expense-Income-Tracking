@@ -15,7 +15,7 @@
                     <div class="col">
                         <h6 class="text-uppercase text-muted ls-1 mb-1">Overview</h6>
                         <h2 class="mb-0">All Payments</h2>
-                        
+
                     </div>
                     <div class="col">
                         <p class="text-right float-right"><a class="btn btn-primary" href="{{ route('admin.payments.create') }}" role="button">Add Payment</a></p>
@@ -28,101 +28,101 @@
                 <table class="table table-hover" id="payment_table">
                     <thead class="thead-light">
                         <tr>
-                        <th scope="col">Ref</th>
-                        <th scope="col">Leader</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Amount</th>
-                        <th scope="col">Purchase Date</th>
-                        <th scope="col">Guide Money</th>
-                        <th scope="col">Paid Back</th>
-                        <th scope="col">Received Receipt</th>
-                        <th scope="col">Type</th>
-                        <th scope="col">Code</th>
-                        <th scope="col">Event</th>
-                        <th scope="col">Approved</th>
-                        <th scope="col">Action</th>
+                            <th scope="col">Ref</th>
+                            <th scope="col">Leader</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Purchase Date</th>
+                            <th scope="col">Guide Money</th>
+                            <th scope="col">Paid Back</th>
+                            <th scope="col">Received Receipt</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Code</th>
+                            <th scope="col">Event</th>
+                            <th scope="col">Approved</th>
+                            <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($payments as $p)
-                            <tr>
-                                <td scope="row">{{ $p->keyID }}</td>
-                                <th>{{ $p->user->name }}</th>
-                                <td>{{ $p->title }}</td>
-                                <td>€{{ $p->amount }}</td>
-                                <td>{{ date('Y-m-d', strtotime($p->purchase_date)) }}</td>
-                                <td>
-                                    @if ($p->guide_money === 1)
-                                        Guide
-                                    @else
-                                        Personal
-                                    @endif
-                                </td>
-                                <td>
-                                    @if ($p->paid_back === 1)
-                                        <i class="fas fa-check text-success"></i>
-                                    @else
-                                        <i class="fas fa-times text-danger"></i>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if ($p->receipt_received === 1)
-                                        <i class="fas fa-check text-success"></i>
-                                    @else
-                                        <i class="fas fa-times text-danger"></i>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if ($p->is_cash === 1)
-                                        Cash
-                                    @else
-                                        Other
-                                    @endif
-                                </td>
-                                <td>
-                                   {{ $p->code }}
-                                </td>
-                                <td>
-                                    @if ($p->event_id)
-                                        {{ App\Event::find($p->event_id)->title }}
-                                    @else
-                                        -
-                                    @endif
-                                </td>
-                                <td>
-                                    @if ($p->approved === 1)
-                                        <i class="fas fa-check text-success"></i>
-                                    @else
-                                        <i class="fas fa-times text-danger"></i>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if ($p->approved !== 1)
-                                        <a class="btn btn-warning btn-sm" href="{{ route('admin.payments.edit', $p->id) }}" role="button"><i class="far fa-edit"></i></a>
-                                        <form action="{{ action('Admin\PaymentController@destroy', $p->id )}}" class="payment-delete" method="post" style="display: inline;">
-                                            @csrf
-                                            <input name="_method" type="hidden" value="DELETE">
-                                            <button class="btn btn-danger btn-sm" ><i class="fas fa-times"></i></button>
-                                        </form>
-                                        <form action="{{ action('Admin\PaymentController@approve', $p->id )}}" class="payment-approve" method="post" style="display: inline;">
-                                            @csrf
-                                            <button class="btn btn-success btn-sm" >Approve</button>
-                                        </form>
-                                    @endif
-                                    @if ($p->paid_back === 0)
-                                        <form action="{{ action('Admin\PaymentController@paidBack', $p->id )}}" class="payment-pay" method="post" style="display: inline;">
-                                            @csrf
-                                            <button class="btn btn-info btn-sm" >Mark Paid</button>
-                                        </form>
-                                    @endif
-                                    @if ($p->receipt_received === 0)
-                                        <form action="{{ action('Admin\PaymentController@receivedReceipt', $p->id )}}" class="payment-received-receipt" method="post" style="display: inline;">
-                                            @csrf
-                                            <button class="btn btn-info btn-sm" >Received Receipt</button>
-                                        </form>
-                                    @endif
-                                </td>
-                            </tr>
+                        <tr>
+                            <td scope="row">{{ $p->keyID }}</td>
+                            <th>{{ $p->user->name }}</th>
+                            <td>{{ $p->title }}</td>
+                            <td>€{{ $p->amount }}</td>
+                            <td>{{ date('Y-m-d', strtotime($p->purchase_date)) }}</td>
+                            <td>
+                                @if ($p->guide_money === 1)
+                                Guide
+                                @else
+                                Personal
+                                @endif
+                            </td>
+                            <td>
+                                @if ($p->paid_back === 1)
+                                <i class="fas fa-check text-success"></i>
+                                @else
+                                <i class="fas fa-times text-danger"></i>
+                                @endif
+                            </td>
+                            <td>
+                                @if ($p->receipt_received === 1)
+                                <i class="fas fa-check text-success"></i>
+                                @else
+                                <i class="fas fa-times text-danger"></i>
+                                @endif
+                            </td>
+                            <td>
+                                @if ($p->is_cash === 1)
+                                Cash
+                                @else
+                                Other
+                                @endif
+                            </td>
+                            <td>
+                                {{ $p->code }}
+                            </td>
+                            <td>
+                                @if ($p->event_id)
+                                {{ App\Event::find($p->event_id)->title }}
+                                @else
+                                -
+                                @endif
+                            </td>
+                            <td>
+                                @if ($p->approved === 1)
+                                <i class="fas fa-check text-success"></i>
+                                @else
+                                <i class="fas fa-times text-danger"></i>
+                                @endif
+                            </td>
+                            <td>
+                                <a class="btn btn-warning btn-sm" href="{{ route('admin.payments.edit', $p->id) }}" role="button"><i class="far fa-edit"></i></a>
+                                <form action="{{ action('Admin\PaymentController@destroy', $p->id )}}" class="payment-delete" method="post" style="display: inline;">
+                                    @csrf
+                                    <input name="_method" type="hidden" value="DELETE">
+                                    <button class="btn btn-danger btn-sm"><i class="fas fa-times"></i></button>
+                                </form>
+                                @if ($p->approved !== 1)
+                                <form action="{{ action('Admin\PaymentController@approve', $p->id )}}" class="payment-approve" method="post" style="display: inline;">
+                                    @csrf
+                                    <button class="btn btn-success btn-sm">Approve</button>
+                                </form>
+                                @endif
+                                @if ($p->paid_back === 0)
+                                <form action="{{ action('Admin\PaymentController@paidBack', $p->id )}}" class="payment-pay" method="post" style="display: inline;">
+                                    @csrf
+                                    <button class="btn btn-info btn-sm">Mark Paid</button>
+                                </form>
+                                @endif
+                                @if ($p->receipt_received === 0)
+                                <form action="{{ action('Admin\PaymentController@receivedReceipt', $p->id )}}" class="payment-received-receipt" method="post" style="display: inline;">
+                                    @csrf
+                                    <button class="btn btn-info btn-sm">Received Receipt</button>
+                                </form>
+                                @endif
+                            </td>
+                        </tr>
                         @endforeach
                     </tbody>
                 </table>
@@ -132,26 +132,28 @@
         <!-- /.Card -->
     </div>
     <!-- /.Column -->
-@endsection
+    @endsection
 
-@section('scripts')
+    @section('scripts')
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
     <script type="text/javascript">
         // my custom script
-        $(document).ready( function () {
+        $(document).ready(function() {
             $('#payment_table').DataTable({
                 language: {
                     paginate: {
-                        next: '<i class="fas fa-chevron-right"></i>', 
+                        next: '<i class="fas fa-chevron-right"></i>',
                         previous: '<i class="fas fa-chevron-left"></i>'
                     }
                 },
-                "order": [[ 4, "desc" ]]
+                "order": [
+                    [4, "desc"]
+                ]
             });
         });
 
         // Delete Payment Confirmation
-        $('.payment-delete').submit(function(event){
+        $('.payment-delete').submit(function(event) {
             event.preventDefault()
 
             Swal.fire({
@@ -168,8 +170,7 @@
             }).then((result) => {
                 if (result.value) {
                     $(this).unbind('submit').submit();
-                }
-                else if (result.dismiss === 'cancel') {
+                } else if (result.dismiss === 'cancel') {
                     Swal.fire({
                         title: 'Cancelled!',
                         text: "Your payment was not deleted",
@@ -185,7 +186,7 @@
         });
 
         // Approve Payment Confirmation
-        $('.payment-approve').submit(function(event){
+        $('.payment-approve').submit(function(event) {
             event.preventDefault()
 
             Swal.fire({
@@ -202,8 +203,7 @@
             }).then((result) => {
                 if (result.value) {
                     $(this).unbind('submit').submit();
-                }
-                else if (result.dismiss === 'cancel') {
+                } else if (result.dismiss === 'cancel') {
                     Swal.fire({
                         title: 'Cancelled!',
                         text: "Your payment was not approved",
@@ -219,7 +219,7 @@
         });
 
         // Pay Payment Confirmation
-        $('.payment-pay').submit(function(event){
+        $('.payment-pay').submit(function(event) {
             event.preventDefault()
 
             Swal.fire({
@@ -236,8 +236,7 @@
             }).then((result) => {
                 if (result.value) {
                     $(this).unbind('submit').submit();
-                }
-                else if (result.dismiss === 'cancel') {
+                } else if (result.dismiss === 'cancel') {
                     Swal.fire({
                         title: 'Cancelled!',
                         text: "Your payment was not marked as paid.",
@@ -253,7 +252,7 @@
         });
 
         // Payment Received Receipt Confirmation
-        $('.payment-received-receipt').submit(function(event){
+        $('.payment-received-receipt').submit(function(event) {
             event.preventDefault()
 
             Swal.fire({
@@ -270,8 +269,7 @@
             }).then((result) => {
                 if (result.value) {
                     $(this).unbind('submit').submit();
-                }
-                else if (result.dismiss === 'cancel') {
+                } else if (result.dismiss === 'cancel') {
                     Swal.fire({
                         title: 'Cancelled!',
                         text: "Your payment was not marked as received receipt.",
@@ -285,6 +283,5 @@
                 }
             })
         });
-
     </script>
-@endsection
+    @endsection
