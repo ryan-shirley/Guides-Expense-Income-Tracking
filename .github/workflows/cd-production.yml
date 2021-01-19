@@ -30,6 +30,8 @@ jobs:
         path: /tmp/composer-cache
         key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
     - uses: php-actions/composer@v5
+      with:
+        php_version: 7.2
       
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
