@@ -195,10 +195,6 @@ class IncomeController extends Controller
                 'title' => 'Details'
             ),
             array(
-                'data' => 'title',
-                'title' => 'Details'
-            ),
-            array(
                 'data' => 'keyID',
                 'title' => 'Ref'
             ),
