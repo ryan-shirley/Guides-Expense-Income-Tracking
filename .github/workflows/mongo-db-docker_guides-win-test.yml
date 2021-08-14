@@ -30,12 +30,19 @@
         - name: Run composer install if composer.json exists
           if: steps.check_files.outputs.files_exists == 'true'
           run: composer validate --no-check-publish && composer install --prefer-dist --no-progress
+
+        - name: Archive Release
+          uses: thedoctor0/zip-release@master
+          with:
+            type: 'zip'
+            filename: 'build.zip'
+            exclusions: '*.git* /*node_modules/* .editorconfig'
   
         - name: Upload artifact for deployment job
           uses: actions/upload-artifact@v2
           with:
             name: php-app
-            path: .
+            path: 'build.zip'
   
     deploy:
       runs-on: ubuntu-latest
@@ -57,4 +64,4 @@
             app-name: 'guides-win-test'
             slot-name: 'production'
             publish-profile: ${{ secrets.AzureAppService_PublishProfile_3f9f50a1a4b94290869fa07f30594b8e }}
-            package: .
+            package: 'build.zip'
