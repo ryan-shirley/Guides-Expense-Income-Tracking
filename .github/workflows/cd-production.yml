@@ -24,24 +24,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Setup nightly PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.1'
-        extensions: mbstring
-        ini-values: post_max_size=256M, max_execution_time=180
-        coverage: xdebug
-        tools: php-cs-fixer, phpunit
-
     - name: Cache Composer dependencies
       uses: actions/cache@v2
       with:
         path: /tmp/composer-cache
         key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
-        php_version: '8.1'
     - uses: php-actions/composer@v5
       with:
-        php_version: '8.1'
+        php_version: 7.2
       
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
