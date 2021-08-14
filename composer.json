@@ -8,7 +8,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.0.3",
+        "php": "^7.4",
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "~6.0",
         "jenssegers/mongodb": "^3.6",
