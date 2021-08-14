@@ -6,6 +6,7 @@ use Jenssegers\Mongodb\Eloquent\Model;
 
 class Payment extends Model
 {
+    
     protected $connection = 'mongodb';
     protected $collection = 'payments';
 
