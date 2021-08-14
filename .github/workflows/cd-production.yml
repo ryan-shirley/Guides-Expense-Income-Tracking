@@ -24,19 +24,15 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.0'
-
     - name: Cache Composer dependencies
       uses: actions/cache@v2
       with:
         path: /tmp/composer-cache
         key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+        php_version: '8.0.3'
     - uses: php-actions/composer@v5
       with:
-        php_version: 8.0.3
+        php_version: '8.0.3'
       
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
