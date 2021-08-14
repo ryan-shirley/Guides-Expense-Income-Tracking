@@ -2,10 +2,13 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Jenssegers\Mongodb\Eloquent\Model;
 
 class Income extends Model
 {
+    protected $connection = 'mongodb';
+    protected $collection = 'incomes';
+
     /**
      * Get the user that owns the income.
      */

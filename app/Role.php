@@ -2,10 +2,13 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Jenssegers\Mongodb\Eloquent\Model;
 
 class Role extends Model
 {
+    protected $connection = 'mongodb';
+    protected $collection = 'roles';
+
     /**
      * The users that belong to the role.
      */
