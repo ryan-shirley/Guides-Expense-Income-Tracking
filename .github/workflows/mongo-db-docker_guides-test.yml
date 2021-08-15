@@ -9,9 +9,9 @@
         - mongo-db-docker
     workflow_dispatch:
 
-  env:
-    AZURE_WEBAPP_NAME: 'guides-test'    # set this to your application's name
-    NODE_VERSION: '10.x'                # set this to the node version to use
+env:
+  AZURE_WEBAPP_NAME: 'guides-test'    # set this to your application's name
+  NODE_VERSION: '10.x'                # set this to the node version to use
   
   jobs:
     build:
@@ -33,20 +33,20 @@
   
         - name: Run composer install if composer.json exists
           if: steps.check_files.outputs.files_exists == 'true'
-            run: composer validate --no-check-publish && composer install --prefer-dist --no-progress
+          run: composer validate --no-check-publish && composer install --prefer-dist --no-progress
 
-         - name: Use Node.js ${{ env.NODE_VERSION }}
-            uses: actions/setup-node@v2
-            with:
-              node-version: ${{ env.NODE_VERSION }}
+        - name: Use Node.js ${{ env.NODE_VERSION }}
+          uses: actions/setup-node@v2
+          with:
+            node-version: ${{ env.NODE_VERSION }}
 
-          - name: npm install, build, and test
-            run: |
-              # Build and test the project, then
-              # deploy to Azure Web App.
-              npm install
-              npm run build --if-present
-              npm run test --if-present
+        - name: npm install, build, and test
+          run: |
+            # Build and test the project, then
+            # deploy to Azure Web App.
+            npm install
+            npm run build --if-present
+            npm run test --if-present
 
         - name: Archive Release
           uses: thedoctor0/zip-release@master
