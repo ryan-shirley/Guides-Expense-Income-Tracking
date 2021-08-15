@@ -56,6 +56,7 @@ class UsersController extends Controller
     {
         $user = User::findOrFail($id);
         $user->approved_at = now();
+        $user->api_token = md5(uniqid($user->email, true))
         $user->save();
 
         $request->session()->flash('alert-success', $user->name . ' has been approved.');
