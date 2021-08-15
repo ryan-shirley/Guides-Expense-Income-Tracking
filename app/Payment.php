@@ -6,9 +6,9 @@ use Jenssegers\Mongodb\Eloquent\Model;
 
 class Payment extends Model
 {
-    
     protected $connection = 'mongodb';
     protected $collection = 'payments';
+    protected $dates = ['purchase_date'];
 
     /**
      * Get the user that owns the payment.

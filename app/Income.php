@@ -8,6 +8,7 @@ class Income extends Model
 {
     protected $connection = 'mongodb';
     protected $collection = 'incomes';
+    protected $dates = ['date'];
 
     /**
      * Get the user that owns the income.
