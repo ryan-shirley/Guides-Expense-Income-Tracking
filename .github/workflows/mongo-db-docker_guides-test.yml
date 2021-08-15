@@ -44,8 +44,8 @@ jobs:
         run: |
           # Build and test the project, then
           # deploy to Azure Web App.
-          npm install
-          npm run prod --if-present
+          npm ci
+          npm run dev --if-present
           npm run test --if-present
 
       - name: Archive Release
