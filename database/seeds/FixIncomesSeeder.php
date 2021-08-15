@@ -2,9 +2,12 @@
 
 use Illuminate\Database\Seeder;
 use App\Income;
+use App\Traits\UseAutoIncrementID;
 
 class FixIncomesSeeder extends Seeder
 {
+    use UseAutoIncrementID;
+
     /**
      * Run the database seeds.
      *
@@ -23,8 +26,12 @@ class FixIncomesSeeder extends Seeder
             $newIncome->code = $oldIncome->code;
             $newIncome->is_cash = $oldIncome->is_cash;
             $newIncome->event_id = $oldIncome->event_id;
+            $newIncome->ref_id = $oldIncome->id;
+            $newIncome->created_at = $oldIncome->created_at;
+            $newIncome->updated_at = $oldIncome->updated_at;
             $newIncome->save();
 
+            $this->updateIfBigger("incomes", $oldIncome->id);
             $oldIncome->delete();
         }
     }

@@ -4,9 +4,12 @@ use Illuminate\Database\Seeder;
 use App\Role;
 use App\User;
 use App\Payment;
+use App\Traits\UseAutoIncrementID;
 
 class FixUsersSeeder extends Seeder
 {
+    use UseAutoIncrementID;
+
     /**
      * Run the database seeds.
      *
@@ -59,9 +62,11 @@ class FixUsersSeeder extends Seeder
                 $newPayment->event_id = $oldPayment->event_id;
                 $newPayment->created_at = $oldPayment->created_at;
                 $newPayment->updated_at = $oldPayment->updated_at;
+                $newPayment->ref_id = $oldPayment->id;
 
                 $newPayment->save();
 
+                $this->updateIfBigger("payments", $oldPayment->id);
                 $oldPayment->delete();
             }
         
