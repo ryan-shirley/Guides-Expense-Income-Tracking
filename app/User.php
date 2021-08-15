@@ -11,6 +11,7 @@ class User extends Authenticatable
     protected $table = 'users';
     protected $connection = 'mongodb';
     protected $collection = 'users';
+    protected $dates = ['approved_at'];
 
     use Notifiable;
 
