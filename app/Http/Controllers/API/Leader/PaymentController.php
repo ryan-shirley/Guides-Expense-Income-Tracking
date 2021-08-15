@@ -48,6 +48,7 @@ class PaymentController extends Controller
 
         $p->approved = false;
         $p->user_id = $request->user()->id;
+        $p->ref_id = $this->getID("payments");
         $p->save();
 
         return $p;

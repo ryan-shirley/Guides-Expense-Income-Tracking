@@ -71,7 +71,7 @@ class IncomeController extends Controller
             'date' => 'required|date',
             'code' => 'string|max:65535',
             'is_cash' => 'boolean',
-            'event_id' => 'exclude_if:event_id,0|exists:events,id'
+            'event_id' => 'exclude_if:event_id,0|exists:events,_id'
         ]);
 
         // Create Income
@@ -88,6 +88,7 @@ class IncomeController extends Controller
             $i->event_id = null;
         }
         
+        $i->ref_id = $this->getID("incomes");
         $i->save();
 
         $request->session()->flash('alert-success', $i->title . ' income has been added.');

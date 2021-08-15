@@ -9,9 +9,12 @@ use App\Role;
 use App\BankAccount;
 use App\Event;
 use Auth;
+use App\Traits\UseAutoIncrementID;
 
 class PaymentController extends Controller
 {
+    use UseAutoIncrementID;
+
     /**
      * Create a new controller instance.
      *
@@ -34,7 +37,7 @@ class PaymentController extends Controller
 
         // Format Payments ID
         foreach ($payments as $index => $payment) {
-            $payments[$index]->keyID = "p_" . $payment->id;
+            $payments[$index]->keyID = "p_" . $payment->ref_id;
             
             if($payment->is_cash) {
                 $payments[$index]->cash_only = $payment->amount;
@@ -75,10 +78,10 @@ class PaymentController extends Controller
             'purchase_date' => 'required|date',
             'guide_money' => 'required|boolean',
             'paid_back' => 'required|boolean',
-            'user_id' => 'required|exists:users,id',
+            'user_id' => 'required|exists:users,_id',
             'code' => 'string|max:65535',
             'is_cash' => 'boolean',
-            'event_id' => 'exclude_if:event_id,0|exists:events,id'
+            'event_id' => 'exclude_if:event_id,0|exists:events,_id'
         ]);
 
         // Create Payment
@@ -98,7 +101,8 @@ class PaymentController extends Controller
         } else {
             $p->event_id = null;
         }
-
+        
+        $p->ref_id = $this->getID("payments");
         $p->save();
 
         $request->session()->flash('alert-success', $p->title . ' payment has been added.');

@@ -39,7 +39,7 @@ class IncomeController extends Controller
         // Format Incomes ID
         if($incomes) {
             foreach ($incomes as $index => $income) {
-                $incomes[$index]->keyID = "i_" . $income->id;
+                $incomes[$index]->keyID = "i_" . $income->ref_id;
 
                 if($income->is_cash) {
                     $incomes[$index]->cash_and_cheque = $income->amount;
