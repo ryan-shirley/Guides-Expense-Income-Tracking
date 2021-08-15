@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Role;
 use App\User;
 use App\Payment;
 
@@ -13,6 +14,10 @@ class FixUsersSeeder extends Seeder
      */
     public function run()
     {
+        // Roles
+        $role_admin = Role::where('name', 'admin')->first();
+        $role_leader = Role::where('name', 'leader')->first();
+
         // Get Users
         $users =  User::all();
         foreach ($users as $oldUser) {
@@ -24,6 +29,15 @@ class FixUsersSeeder extends Seeder
             $newUser->api_token = md5(uniqid($oldUser->email, true));
             $newUser->approved_at = $oldUser->approved_at;
             $newUser->save();
+
+            // Assign roles
+            if($newUser->name == "Ryan Shirley" || $newUser->name == "Emily") {
+                $newUser->roles()->attach($role_admin);
+                $role_admin->users()->attach($newUser);
+            } else {
+                $newUser->roles()->attach($role_leader);
+                $role_leader->users()->attach($newUser);
+            }
             
             // Migrate payments to new user and delete old
             $userPayments = $oldUser->payments;
