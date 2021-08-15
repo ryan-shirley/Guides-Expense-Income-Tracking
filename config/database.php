@@ -79,7 +79,7 @@ return [
         'mongodb' => [
             'driver' => 'mongodb',
             'dsn' => env('DB_HOST'),
-            'database' => 'laravel',
+            'database' => env('DB_DATABASE', 'laravel'),
         ]
     ],
 
