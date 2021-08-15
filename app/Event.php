@@ -8,6 +8,7 @@ class Event extends Model
 {
     protected $connection = 'mongodb';
     protected $collection = 'events';
+    protected $dates = ['start_date', 'end_date'];
 
     /**
      * Get the payments for the event.
