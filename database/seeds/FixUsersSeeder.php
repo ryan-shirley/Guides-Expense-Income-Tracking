@@ -28,6 +28,9 @@ class FixUsersSeeder extends Seeder
             $newUser->password = $oldUser->password;
             $newUser->api_token = md5(uniqid($oldUser->email, true));
             $newUser->approved_at = $oldUser->approved_at;
+            $newUser->remember_token = $oldUser->remember_token;
+            $newUser->created_at = $oldUser->created_at;
+            $newUser->updated_at = $oldUser->updated_at;
             $newUser->save();
 
             // Assign roles
@@ -54,6 +57,8 @@ class FixUsersSeeder extends Seeder
                 $newPayment->code = $oldPayment->code;
                 $newPayment->is_cash = $oldPayment->is_cash;
                 $newPayment->event_id = $oldPayment->event_id;
+                $newPayment->created_at = $oldPayment->created_at;
+                $newPayment->updated_at = $oldPayment->updated_at;
 
                 $newPayment->save();
 

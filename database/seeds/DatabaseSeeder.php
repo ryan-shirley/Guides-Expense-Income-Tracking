@@ -20,5 +20,6 @@ class DatabaseSeeder extends Seeder
         $this->call(FixIncomesSeeder::class);
         $this->call(FixEventsSeeder::class);
         $this->call(FixBankAccountSeeder::class);
+        $this->call(FixBankTransactionsSeeder::class);
     }
 }
