@@ -60,7 +60,7 @@
 
                     <div class="form-group">
                         <label for="purchase_date">Purchase Date</label>
-                        <input type="date" class="form-control" name="purchase_date" value="{{ old( 'purchase_date', $payment->purchase_date) }}">
+                        <input type="date" class="form-control" name="purchase_date" value="{{ old( 'purchase_date', $payment->purchase_date->format('Y-m-d')) }}">
                         <small class="form-text text-muted">The date for this expense</small>
                         <div class="text-danger">{{ $errors->first('purchase_date') }}</div>
                     </div>

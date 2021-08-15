@@ -49,7 +49,7 @@
 
                     <div class="form-group">
                         <label for="date">Date</label>
-                        <input type="date" class="form-control" name="date" value="{{ old( 'date', $income->date) }}">
+                        <input type="date" class="form-control" name="date" value="{{ old( 'date', $income->date->format('Y-m-d')) }}">
                         <small class="form-text text-muted">The date for this income</small>
                         <div class="text-danger">{{ $errors->first('date') }}</div>
                     </div>
