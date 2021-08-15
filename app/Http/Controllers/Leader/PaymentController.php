@@ -58,7 +58,7 @@ class PaymentController extends Controller
 
         $p->approved = false;
         $p->user_id = Auth::user()->id;
-        $p->ref_id = $this->getID("payments");
+        $p->ref_id = $p->generateReadableId();
         $p->save();
 
         $request->session()->flash('alert-success', $p->title . ' payment has been added.');

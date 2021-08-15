@@ -9,12 +9,9 @@ use App\Role;
 use App\BankAccount;
 use App\Event;
 use Auth;
-use App\Traits\UseAutoIncrementID;
 
 class PaymentController extends Controller
 {
-    use UseAutoIncrementID;
-
     /**
      * Create a new controller instance.
      *
@@ -102,7 +99,7 @@ class PaymentController extends Controller
             $p->event_id = null;
         }
         
-        $p->ref_id = $this->getID("payments");
+        $p->ref_id = $p->generateReadableId();
         $p->save();
 
         $request->session()->flash('alert-success', $p->title . ' payment has been added.');

@@ -88,7 +88,7 @@ class IncomeController extends Controller
             $i->event_id = null;
         }
         
-        $i->ref_id = $this->getID("incomes");
+        $i->ref_id = $i->generateReadableId();
         $i->save();
 
         $request->session()->flash('alert-success', $i->title . ' income has been added.');

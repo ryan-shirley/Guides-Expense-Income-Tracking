@@ -3,9 +3,12 @@
 namespace App;
 
 use Jenssegers\Mongodb\Eloquent\Model;
+use App\Traits\UseAutoIncrementID;
 
 class Income extends Model
 {
+    use UseAutoIncrementID;
+
     protected $connection = 'mongodb';
     protected $collection = 'incomes';
     protected $dates = ['date'];
@@ -24,5 +27,13 @@ class Income extends Model
     public function event()
     {
         return $this->belongsTo('App\Event');
+    }
+
+    /**
+     * Generate and return a new readable id.
+     */
+    public function generateReadableId()
+    {
+        return $this->getID($this->collection);
     }
 }
