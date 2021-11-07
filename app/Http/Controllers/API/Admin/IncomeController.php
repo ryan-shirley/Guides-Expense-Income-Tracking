@@ -41,6 +41,7 @@ class IncomeController extends Controller
         if($incomes) {
             foreach ($incomes as $index => $income) {
                 $incomes[$index]->keyID = "i_" . $income->ref_id;
+                $incomes[$index]->code = $income->code != null ? $income->code : "N/A";
 
                 if($income->is_cash) {
                     $incomes[$index]->cash_and_cheque = $income->amount;

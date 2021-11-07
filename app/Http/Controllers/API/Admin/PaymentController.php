@@ -41,6 +41,7 @@ class PaymentController extends Controller
         if($payments) {
             foreach ($payments as $index => $payment) {
                 $payments[$index]->keyID = "p_" . $payment->ref_id;
+                $payments[$index]->code = $payment->code != null ? $payment->code : "N/A";
                 
                 if($payment->is_cash) {
                     $payments[$index]->cash_only = $payment->amount;
