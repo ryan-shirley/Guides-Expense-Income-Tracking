@@ -138,7 +138,7 @@ export default {
                         }`,
                         method: "GET",
                         dataSrc: json => json.data.map(d => {
-                            const property = JSON.parse(app.$props.columns).find(col => col.title == "Date").data
+                            const property = app.tableColumns.find(col => col.title == "Date").data
                             d[property] = app.formatDate(d[property]);
 
                             return d;
@@ -154,7 +154,8 @@ export default {
             startDate: "",
             endDate: "",
             rows: [],
-            tableColumns: []
+            tableColumns: [],
+            viewing: this.$attrs.url.split("/").at(-1),
         };
     }
 };
