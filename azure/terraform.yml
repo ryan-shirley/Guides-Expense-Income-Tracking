@@ -36,7 +36,7 @@ stages:
             inputs:
               command: init
               workingDirectory: '$(System.DefaultWorkingDirectory)/dazure/terraform'
-              secureVarsFile: 'terraform.env'
+              # secureVarsFile: 'terraform.env'
               backendType: selfConfigured
               allowTelemetryCollection: false
 
@@ -68,6 +68,6 @@ stages:
             inputs:
               command: apply
               workingDirectory: '$(System.DefaultWorkingDirectory)/azure/terraform'
-              secureVarsFile: 'terraform.env'
+              # secureVarsFile: 'terraform.env'
               commandOptions: '-refresh=true -auto-approve'
               allowTelemetryCollection: false
