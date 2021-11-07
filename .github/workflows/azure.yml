@@ -14,8 +14,7 @@ on:
 
 
 env:
-  NODE_VERSION: '10.x'                # set this to the node version to use
-  IS_MASTER: ${{ github.ref == 'refs/heads/master' }}
+  NODE_VERSION: '10.x'                # set this to the
   appServiceNameDev: 'az-eun-guides-development-appservice-01'
   appServiceNameProd: 'az-eun-guides-production-appservice-01'
   
@@ -71,7 +70,7 @@ jobs:
   deploy_development:
     name: Deploy Development
     runs-on: ubuntu-latest
-    if: ${{ env.IS_MASTER }}
+    if: github.ref != 'refs/heads/master'
     needs: build
     environment:
       name: 'azure-development'
@@ -95,7 +94,7 @@ jobs:
   deploy_production:
     name: Deploy Production
     runs-on: ubuntu-latest
-    if: ${{ !env.IS_MASTER }}
+    if: github.ref == 'refs/heads/master'
     needs: build
     environment:
       name: 'azure-production'
