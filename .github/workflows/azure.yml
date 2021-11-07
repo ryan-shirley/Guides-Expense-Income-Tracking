@@ -1,21 +1,27 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-  # More GitHub Actions for Azure: https://github.com/Azure/actions
-  
 name: Build and deploy Laravel to Azure App Service
   
 on:
+  # Trigger the workflow on push or pull request,
+  # but only for the master branch
   push:
     branches:
-      # - mongo-db-docker
+      - master
+  pull_request:
+    branches:
       - master
   workflow_dispatch:
 
+
+
 env:
-  AZURE_WEBAPP_NAME: 'guides-test'    # set this to your application's name
   NODE_VERSION: '10.x'                # set this to the node version to use
+  IS_MASTER: ${{ github.ref == 'refs/heads/master' }}
+  appServiceNameDev: 'az-eun-guides-development-appservice-01'
+  appServiceNameProd: 'az-eun-guides-production-appservice-01'
   
 jobs:
   build:
+    name: Build And Test
     runs-on: ubuntu-latest
 
     steps:
@@ -62,11 +68,13 @@ jobs:
           name: php-app
           path: 'build.zip'
 
-  deploy:
+  deploy_development:
+    name: Deploy Development
     runs-on: ubuntu-latest
+    if: ${{ env.IS_MASTER }}
     needs: build
     environment:
-      name: 'production'
+      name: 'azure-development'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
@@ -79,7 +87,31 @@ jobs:
         uses: azure/webapps-deploy@v2
         id: deploy-to-webapp
         with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          app-name: ${{ env.appServiceNameDev }}
+          slot-name: 'production'
+          publish-profile: ${{ secrets.AzureAppService_PublishProfile_0c01ab4217f24bd69a06ca72ba73f298 }}
+          package: 'build.zip'
+  
+  deploy_production:
+    name: Deploy Production
+    runs-on: ubuntu-latest
+    if: ${{ !env.IS_MASTER }}
+    needs: build
+    environment:
+      name: 'azure-production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: php-app
+
+      - name: 'Deploy to Azure Web App'
+        uses: azure/webapps-deploy@v2
+        id: deploy-to-webapp
+        with:
+          app-name: ${{ env.appServiceNameProd }}
           slot-name: 'production'
           publish-profile: ${{ secrets.AzureAppService_PublishProfile_0c01ab4217f24bd69a06ca72ba73f298 }}
           package: 'build.zip'
