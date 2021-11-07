@@ -1,4 +1,4 @@
-local_rg_name=`echo "RG-guides" | sed 's/ //g'`
+local_rg_name=`echo "az-guides-rg-01" | sed 's/ //g'`
 
 rm -rf terraform.tfvars
 

@@ -40,15 +40,6 @@ variable "tags" {
 # }
 
 locals {
-  # kv_name               = "integ-hub-${var.environment.name}"
-  # sbus_name             = "integ-hub-${var.environment.name}-sbus"
-  # shared_storage_name   = "fdinteghub${replace(var.environment.name, "-", "")}"
-  # static_storage_name   = "fdinteghub${replace(var.environment.name, "-", "")}static"
-  # app_service_plan_name = "integ-hub-${var.environment.name}-plan"
-  app_service_plan_linux_name = "guides-planlinux"
-  # signalrservice_name   = "integ-hub-${var.environment.name}-signalr"
-
-  ##### NEW Infrastructure variables #####
   resource_group_name     = "az-${var.environment.location_prefix}-guides-rg-01"
   service_plan_linux_name = "az-${var.environment.location_prefix}-guides-asp-01"
 }
