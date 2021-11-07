@@ -133,11 +133,11 @@ class PaymentController extends Controller
             'purchase_date' => 'required|date',
             'guide_money' => 'required|boolean',
             'paid_back' => 'required|boolean',
-            'user_id' => 'required|exists:users,id',
+            'user_id' => 'required|exists:users,_id',
             'title' => 'required|string|max:65535',
             'code' => 'string|max:65535',
             'is_cash' => 'boolean',
-            'event_id' => 'exclude_if:event_id,0|exists:events,id',
+            'event_id' => 'exclude_if:event_id,0|exists:events,_id',
         ]);
 
         // Update Payment

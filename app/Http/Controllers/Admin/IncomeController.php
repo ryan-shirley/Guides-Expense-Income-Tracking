@@ -120,7 +120,7 @@ class IncomeController extends Controller
             'date' => 'required|date',
             'code' => 'string|max:65535',
             'is_cash' => 'boolean',
-            'event_id' => 'exclude_if:event_id,0|exists:events,id'
+            'event_id' => 'exclude_if:event_id,0|exists:events,_id'
         ]);
 
         // Update Income
