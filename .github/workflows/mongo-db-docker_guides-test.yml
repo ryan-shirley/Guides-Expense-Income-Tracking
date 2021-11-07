@@ -6,7 +6,7 @@ name: Build and deploy Laravel to Azure App Service
 on:
   push:
     branches:
-      - mongo-db-docker
+      # - mongo-db-docker
   workflow_dispatch:
 
 env:
