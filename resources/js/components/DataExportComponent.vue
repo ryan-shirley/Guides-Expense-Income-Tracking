@@ -85,6 +85,19 @@ export default {
                     .load();
             });
         },
+        formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2) 
+                month = '0' + month;
+            if (day.length < 2) 
+                day = '0' + day;
+
+            return [year, month, day].join('-');
+        },
         initTable() {
             let app = this;
 
@@ -124,7 +137,12 @@ export default {
                             app.$props.api_token
                         }`,
                         method: "GET",
-                        dataSrc: json => json.data
+                        dataSrc: json => json.data.map(d => {
+                            const property = JSON.parse(app.$props.columns).find(col => col.title == "Date").data
+                            d[property] = app.formatDate(d[property]);
+
+                            return d;
+                        })
                     }
                 });
             });
