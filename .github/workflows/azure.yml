@@ -88,7 +88,7 @@ jobs:
         with:
           app-name: ${{ env.appServiceNameDev }}
           slot-name: 'production'
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_0c01ab4217f24bd69a06ca72ba73f298 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_DEVELOPMENT }}
           package: 'build.zip'
   
   deploy_production:
@@ -112,5 +112,5 @@ jobs:
         with:
           app-name: ${{ env.appServiceNameProd }}
           slot-name: 'production'
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_0c01ab4217f24bd69a06ca72ba73f298 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_PRODUCTION }}
           package: 'build.zip'
