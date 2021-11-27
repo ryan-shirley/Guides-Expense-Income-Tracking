@@ -5264,6 +5264,7 @@ input[type=button].btn-block {
 
 .pagination {
   display: flex;
+  float: right;
   padding-left: 0;
   list-style: none;
   border-radius: 0.375rem;

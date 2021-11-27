@@ -128,6 +128,10 @@
                 </table>
             </div>
             <!-- /.Payments List -->
+
+            <div class="bg-transparent mx-4 my-4">
+                {{ $payments->links() }}
+            </div>
         </div>
         <!-- /.Card -->
     </div>
@@ -140,12 +144,9 @@
         // my custom script
         $(document).ready(function() {
             $('#payment_table').DataTable({
-                language: {
-                    paginate: {
-                        next: '<i class="fas fa-chevron-right"></i>',
-                        previous: '<i class="fas fa-chevron-left"></i>'
-                    }
-                },
+                "paging": false,
+                "searching": false,
+                "info": false,
                 "order": [
                     [4, "desc"]
                 ]

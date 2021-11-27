@@ -29,7 +29,7 @@ class IncomeController extends Controller
      */
     public function index()
     {
-        $incomes  = Income::all()->sortByDesc("id");
+        $incomes  = Income::all()->sortByDesc("date");
 
         foreach ($incomes as $index => $income) {
             $incomes[$index]->keyID = "i_" . $income->ref_id;
