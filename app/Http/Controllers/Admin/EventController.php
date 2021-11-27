@@ -151,8 +151,8 @@ class EventController extends Controller
         // Find event
         $event = Event::findOrFail($id);
 
-        // Delete only if no payments or incomes associated
-        if ($event->payments->count() == 0 || $event->incomes->count() == 0) {
+        // Delete only if no payments and no incomes associated
+        if ($event->payments->count() == 0 && $event->incomes->count() == 0) {
             $event->delete();
             
             $request->session()->flash('alert-success', $event->title . ' event has been deleted');

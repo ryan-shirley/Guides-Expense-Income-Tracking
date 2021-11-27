@@ -41,28 +41,28 @@
                                 <td>€{{ $p->amount }}</td>
                                 <td>{{ date('Y-m-d', strtotime($p->purchase_date)) }}</td>
                                 <td>
-                                    @if ($p->guide_money === 1)
+                                    @if ($p->guide_money)
                                         Guide
                                     @else
                                         Personal
                                     @endif
                                 </td>
                                 <td>
-                                    @if ($p->paid_back === 1)
+                                    @if ($p->paid_back)
                                         <i class="fas fa-check text-success"></i>
                                     @else
                                         <i class="fas fa-times text-danger"></i>
                                     @endif
                                 </td>
                                 <td>
-                                    @if ($p->receipt_received === 1)
+                                    @if ($p->receipt_received)
                                         <i class="fas fa-check text-success"></i>
                                     @else
                                         <i class="fas fa-times text-danger"></i>
                                     @endif
                                 </td>
                                 <td>
-                                    @if ($p->is_cash === 1)
+                                    @if ($p->is_cash)
                                         Cash
                                     @else
                                         Other
@@ -72,7 +72,7 @@
                                    {{ $p->code }}
                                 </td>
                                 <td>
-                                    @if ($p->approved === 1)
+                                    @if ($p->approved)
                                         <i class="fas fa-check text-success"></i>
                                     @else
                                         <i class="fas fa-times text-danger"></i>
@@ -123,14 +123,14 @@
                                 <td>€{{ $i->amount }}</td>
                                 <td>{{ date('Y-m-d', strtotime($i->date)) }}</td>
                                 <td>
-                                    @if ($i->is_cash === 1)
+                                    @if ($i->is_cash)
                                         Cash or Cheque
                                     @else
                                         Online
                                     @endif</td>
                                 <td>{{ $i->code }}</td>
                                 <td>
-                                    @if ($i->approved === 1)
+                                    @if ($i->approved)
                                         <i class="fas fa-check text-success"></i>
                                     @else
                                         <i class="fas fa-times text-danger"></i>

@@ -204,7 +204,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
     @yield('scripts')
 
-    @foreach (['danger', 'warning', 'success', 'info'] as $msg)
+    @foreach (['error', 'warning', 'success', 'info'] as $msg)
         @if(Session::has('alert-' . $msg))
 
             <!-- Notification -->

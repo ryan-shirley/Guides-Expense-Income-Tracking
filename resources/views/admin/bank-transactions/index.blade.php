@@ -35,7 +35,7 @@
                                 <td>{{ $t->amount }}</td>
                                 <td>{{ date('Y-m-d', strtotime($t->date)) }}</td>
                                 <td>
-                                    @if ($t->is_logement === 1)
+                                    @if ($t->is_logement)
                                         Logement
                                     @else
                                         Withdrawal

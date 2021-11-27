@@ -42,7 +42,7 @@
                             <td>€{{ $i->amount }}</td>
                             <td>{{ date('Y-m-d', strtotime($i->date)) }}</td>
                             <td>
-                                @if ($i->is_cash === 1)
+                                @if ($i->is_cash)
                                 Cash or Cheque
                                 @else
                                 Online
@@ -56,7 +56,7 @@
                                 @endif
                             </td>
                             <td>
-                                @if ($i->approved === 1)
+                                @if ($i->approved)
                                 <i class="fas fa-check text-success"></i>
                                 @else
                                 <i class="fas fa-times text-danger"></i>
@@ -69,7 +69,7 @@
                                     <input name="_method" type="hidden" value="DELETE">
                                     <button class="btn btn-danger btn-sm"><i class="fas fa-times"></i></button>
                                 </form>
-                                @if ($i->approved !== 1)
+                                @if (!$i->approved)
                                 <form action="{{ action('Admin\IncomeController@approve', $i->id )}}" class="income-approve" method="post" style="display: inline;">
                                     @csrf
                                     <button class="btn btn-success btn-sm">Approve</button>

@@ -102,11 +102,11 @@ class PaymentController extends Controller
 
         // Check if leader own this payment or is in accounts
         if($p->user->id !== $user->id) {
-            $request->session()->flash('alert-danger', 'You do not own this payment! Please do not try this again.');
+            $request->session()->flash('alert-error', 'You do not own this payment! Please do not try this again.');
             return redirect()->route('leader.home');
         }
         else if($p->in_accounts === 1) {
-            $request->session()->flash('alert-danger', 'You can not alter a payment after it has been added to accounts! Please do not try this again.');
+            $request->session()->flash('alert-error', 'You can not alter a payment after it has been added to accounts! Please do not try this again.');
             return redirect()->route('leader.home');
         }
         

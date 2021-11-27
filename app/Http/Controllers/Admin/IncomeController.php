@@ -167,7 +167,7 @@ class IncomeController extends Controller
     {
         // Mark income approved
         $income = Income::findOrFail($id);
-        $income->approved = 1;
+        $income->approved = true;
         $income->save();
 
         // Add to bank account
