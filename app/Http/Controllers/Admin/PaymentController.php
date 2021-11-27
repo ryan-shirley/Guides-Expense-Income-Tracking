@@ -30,7 +30,7 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        $payments  = Payment::all();
+        $payments  = Payment::orderBy('purchase_date', 'desc')->paginate(15)->onEachSide(2);
 
         // Format Payments ID
         foreach ($payments as $index => $payment) {
