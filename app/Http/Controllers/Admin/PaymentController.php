@@ -86,12 +86,12 @@ class PaymentController extends Controller
         $p->title = $request->input('title');
         $p->amount = $request->input('amount');
         $p->purchase_date = $request->input('purchase_date');
-        $p->guide_money = $request->input('guide_money');
-        $p->paid_back = $request->input('paid_back');
+        $p->guide_money = boolval($request->input('guide_money'));
+        $p->paid_back = boolval($request->input('paid_back'));
         $p->approved = false;
         $p->user_id = $request->input('user_id');
         $p->code = $request->input('code');
-        $p->is_cash = $request->input('is_cash');
+        $p->is_cash = boolval($request->input('is_cash'));
         
         if($request->input('event_id') !== '0') {
             $p->event_id = $request->input('event_id');
@@ -145,11 +145,11 @@ class PaymentController extends Controller
         $p->title = $request->input('title');
         $p->amount = $request->input('amount');
         $p->purchase_date = $request->input('purchase_date');
-        $p->guide_money = $request->input('guide_money');
-        $p->paid_back = $request->input('paid_back');
+        $p->guide_money = boolval($request->input('guide_money'));
+        $p->paid_back = boolval($request->input('paid_back'));
         $p->user_id = $request->input('user_id');
         $p->code = $request->input('code');
-        $p->is_cash = $request->input('is_cash');
+        $p->is_cash = boolval($request->input('is_cash'));
 
         if($request->input('event_id') !== '0') {
             $p->event_id = $request->input('event_id');

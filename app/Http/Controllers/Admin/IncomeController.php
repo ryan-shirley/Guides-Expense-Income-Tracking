@@ -80,7 +80,7 @@ class IncomeController extends Controller
         $i->amount = $request->input('amount');
         $i->date = $request->input('date');
         $i->code = $request->input('code');
-        $i->is_cash = $request->input('is_cash');
+        $i->is_cash = boolval($request->input('is_cash'));
 
         if($request->input('event_id') !== '0') {
             $i->event_id = $request->input('event_id');
@@ -129,7 +129,7 @@ class IncomeController extends Controller
         $i->amount = $request->input('amount');
         $i->date = $request->input('date');
         $i->code = $request->input('code');
-        $i->is_cash = $request->input('is_cash');
+        $i->is_cash = boolval($request->input('is_cash'));
 
         if($request->input('event_id') !== '0') {
             $i->event_id = $request->input('event_id');

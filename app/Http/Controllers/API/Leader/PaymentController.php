@@ -36,7 +36,7 @@ class PaymentController extends Controller
         $p->title = $request->input('title');
         $p->amount = $request->input('amount');
         $p->purchase_date = $request->input('purchase_date');
-        $p->guide_money = $request->input('guide_money');
+        $p->guide_money = boolval($request->input('guide_money'));
 
         // Check type of money used to determin if needs to be paid back.
         if($p->guide_money) {
