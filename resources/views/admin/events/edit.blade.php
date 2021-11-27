@@ -29,7 +29,7 @@
 
                     <div class="form-group">
                         <label for="date">Start Date</label>
-                        <input type="date" class="form-control" name="start_date" value="{{ old( 'start_date', $event->start_date) }}">
+                        <input type="date" class="form-control" name="start_date" value="{{ old( 'start_date', $event->start_date->format('Y-m-d')) }}">
                         <small class="form-text text-muted">The start date for this event.</small>
                         <div class="text-danger">{{ $errors->first('start_date') }}</div>
                     </div>
@@ -37,7 +37,7 @@
 
                     <div class="form-group">
                         <label for="date">End Date</label>
-                        <input type="date" class="form-control" name="end_date" value="{{ old( 'end_date', $event->end_date) }}">
+                        <input type="date" class="form-control" name="end_date" value="{{ old( 'end_date', $event->end_date->format('Y-m-d')) }}">
                         <small class="form-text text-muted">The end date for this event.</small>
                         <div class="text-danger">{{ $errors->first('end_date') }}</div>
                     </div>

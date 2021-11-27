@@ -52,28 +52,28 @@
                             <td>€{{ $p->amount }}</td>
                             <td>{{ date('Y-m-d', strtotime($p->purchase_date)) }}</td>
                             <td>
-                                @if ($p->guide_money === 1)
+                                @if ($p->guide_money)
                                 Guide
                                 @else
                                 Personal
                                 @endif
                             </td>
                             <td>
-                                @if ($p->paid_back === 1)
+                                @if ($p->paid_back)
                                 <i class="fas fa-check text-success"></i>
                                 @else
                                 <i class="fas fa-times text-danger"></i>
                                 @endif
                             </td>
                             <td>
-                                @if ($p->receipt_received === 1)
+                                @if ($p->receipt_received)
                                 <i class="fas fa-check text-success"></i>
                                 @else
                                 <i class="fas fa-times text-danger"></i>
                                 @endif
                             </td>
                             <td>
-                                @if ($p->is_cash === 1)
+                                @if ($p->is_cash)
                                 Cash
                                 @else
                                 Other
@@ -90,7 +90,7 @@
                                 @endif
                             </td>
                             <td>
-                                @if ($p->approved === 1)
+                                @if ($p->approved)
                                 <i class="fas fa-check text-success"></i>
                                 @else
                                 <i class="fas fa-times text-danger"></i>
@@ -103,19 +103,19 @@
                                     <input name="_method" type="hidden" value="DELETE">
                                     <button class="btn btn-danger btn-sm"><i class="fas fa-times"></i></button>
                                 </form>
-                                @if ($p->approved !== 1)
+                                @if (!$p->approved)
                                 <form action="{{ action('Admin\PaymentController@approve', $p->id )}}" class="payment-approve" method="post" style="display: inline;">
                                     @csrf
                                     <button class="btn btn-success btn-sm">Approve</button>
                                 </form>
                                 @endif
-                                @if ($p->paid_back === 0)
+                                @if (!$p->paid_back)
                                 <form action="{{ action('Admin\PaymentController@paidBack', $p->id )}}" class="payment-pay" method="post" style="display: inline;">
                                     @csrf
                                     <button class="btn btn-info btn-sm">Mark Paid</button>
                                 </form>
                                 @endif
-                                @if ($p->receipt_received === 0)
+                                @if (!$p->receipt_received)
                                 <form action="{{ action('Admin\PaymentController@receivedReceipt', $p->id )}}" class="payment-received-receipt" method="post" style="display: inline;">
                                     @csrf
                                     <button class="btn btn-info btn-sm">Received Receipt</button>

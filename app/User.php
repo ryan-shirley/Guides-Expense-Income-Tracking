@@ -3,11 +3,16 @@
 namespace App;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Jenssegers\Mongodb\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    protected $table = 'users';
+    protected $connection = 'mongodb';
+    protected $collection = 'users';
+    protected $dates = ['approved_at'];
+
     use Notifiable;
 
     /**

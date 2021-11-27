@@ -32,7 +32,7 @@ class IncomeController extends Controller
         $incomes  = Income::all()->sortByDesc("id");
 
         foreach ($incomes as $index => $income) {
-            $incomes[$index]->keyID = "i_" . $income->id;
+            $incomes[$index]->keyID = "i_" . $income->ref_id;
 
             if($income->is_cash) {
                 $incomes[$index]->cash_and_cheque = $income->amount;
@@ -71,7 +71,7 @@ class IncomeController extends Controller
             'date' => 'required|date',
             'code' => 'string|max:65535',
             'is_cash' => 'boolean',
-            'event_id' => 'exclude_if:event_id,0|exists:events,id'
+            'event_id' => 'exclude_if:event_id,0|exists:events,_id'
         ]);
 
         // Create Income
@@ -80,7 +80,7 @@ class IncomeController extends Controller
         $i->amount = $request->input('amount');
         $i->date = $request->input('date');
         $i->code = $request->input('code');
-        $i->is_cash = $request->input('is_cash');
+        $i->is_cash = boolval($request->input('is_cash'));
 
         if($request->input('event_id') !== '0') {
             $i->event_id = $request->input('event_id');
@@ -88,6 +88,7 @@ class IncomeController extends Controller
             $i->event_id = null;
         }
         
+        $i->ref_id = $i->generateReadableId();
         $i->save();
 
         $request->session()->flash('alert-success', $i->title . ' income has been added.');
@@ -119,7 +120,7 @@ class IncomeController extends Controller
             'date' => 'required|date',
             'code' => 'string|max:65535',
             'is_cash' => 'boolean',
-            'event_id' => 'exclude_if:event_id,0|exists:events,id'
+            'event_id' => 'exclude_if:event_id,0|exists:events,_id'
         ]);
 
         // Update Income
@@ -128,7 +129,7 @@ class IncomeController extends Controller
         $i->amount = $request->input('amount');
         $i->date = $request->input('date');
         $i->code = $request->input('code');
-        $i->is_cash = $request->input('is_cash');
+        $i->is_cash = boolval($request->input('is_cash'));
 
         if($request->input('event_id') !== '0') {
             $i->event_id = $request->input('event_id');
@@ -166,7 +167,7 @@ class IncomeController extends Controller
     {
         // Mark income approved
         $income = Income::findOrFail($id);
-        $income->approved = !$income->approved;
+        $income->approved = true;
         $income->save();
 
         // Add to bank account

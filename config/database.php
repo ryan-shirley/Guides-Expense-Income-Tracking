@@ -76,6 +76,11 @@ return [
             'prefix_indexes' => true,
         ],
 
+        'mongodb' => [
+            'driver' => 'mongodb',
+            'dsn' => env('DB_HOST'),
+            'database' => env('DB_DATABASE', 'laravel'),
+        ]
     ],
 
     /*

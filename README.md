@@ -18,7 +18,7 @@ Payments are added by leaders but require approval by an admin. This allows admi
 
 Graphs are provided for current year totals on a monthly grouping. With the addition of a bank balance value a history of balance is also available.
 
-Both expenses and incoming money can be sent to Google Sheets through Zapier for accounting purposes.
+Both expenses and incoming money can be exported to .csv for accounting purposes.
 
 ## Install Laravel & Database Config
 
@@ -27,10 +27,7 @@ In the project directory, you can run:
 ### `composer install`
 Installs laravel packages into project directory.
 
-Create .env file from the .env.example and input correct database information. Zapier webhook endpoints will need to be created for the below for approvals to be sent successfully.
-
-##### `ZAPIER_WEBHOOK_PAYMENT`
-##### `ZAPIER_WEBHOOK_INCOME`
+Create .env file from the .env.example and input correct database information
 
 ## Migrate and seed database
 

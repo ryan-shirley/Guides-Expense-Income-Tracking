@@ -120,35 +120,35 @@
                                 <td>€{{ $p->amount }}</td>
                                 <td>{{ date('Y-m-d', strtotime($p->purchase_date)) }}</td>
                                 <td>
-                                    @if ($p->guide_money === 1)
+                                    @if ($p->guide_money)
                                         Guide
                                     @else
                                         Personal
                                     @endif
                                 </td>
                                 <td>
-                                    @if ($p->paid_back === 1)
+                                    @if ($p->paid_back)
                                         <i class="fas fa-check text-success"></i>
                                     @else
                                         <i class="fas fa-times text-danger"></i>
                                     @endif
                                 </td>
                                 <td>
-                                    @if ($p->receipt_received === 1)
+                                    @if ($p->receipt_received)
                                         <i class="fas fa-check text-success"></i>
                                     @else
                                         <i class="fas fa-times text-danger"></i>
                                     @endif
                                 </td>
                                 <td>
-                                    @if ($p->approved === 1)
+                                    @if ($p->approved)
                                         <i class="fas fa-check text-success"></i>
                                     @else
                                         <i class="fas fa-times text-danger"></i>
                                     @endif
                                 </td>
                                 <td>
-                                    @if ($p->approved !== 1)
+                                    @if (!$p->approved)
                                         <a class="btn btn-warning btn-sm" href="{{ route('leader.payments.edit', $p->id) }}" role="button"><i class="far fa-edit"></i></a>
                                         <form action="{{ action('Leader\PaymentController@destroy', $p->id )}}" class="payment-delete" method="post" style="display: inline;">
                                             @csrf

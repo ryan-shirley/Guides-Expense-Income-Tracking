@@ -52,7 +52,7 @@ class EventController extends Controller
         // Format Payments ID
         $payments = $event->payments;
         foreach ($payments as $index => $payment) {
-            $payments[$index]->keyID = "p_" . $payment->id;
+            $payments[$index]->keyID = "p_" . $payment->ref_id;
             
             if($payment->is_cash) {
                 $payments[$index]->cash_only = $payment->amount;
@@ -66,7 +66,7 @@ class EventController extends Controller
         // Format Incomes ID/ref
         $incomes = $event->incomes;
         foreach ($incomes as $index => $income) {
-            $incomes[$index]->keyID = "i_" . $income->id;
+            $incomes[$index]->keyID = "i_" . $income->ref_id;
 
             if($income->is_cash) {
                 $incomes[$index]->cash_and_cheque = $income->amount;
@@ -151,8 +151,8 @@ class EventController extends Controller
         // Find event
         $event = Event::findOrFail($id);
 
-        // Delete only if no payments or incomes associated
-        if ($event->payments->count() == 0 || $event->incomes->count() == 0) {
+        // Delete only if no payments and no incomes associated
+        if ($event->payments->count() == 0 && $event->incomes->count() == 0) {
             $event->delete();
             
             $request->session()->flash('alert-success', $event->title . ' event has been deleted');
