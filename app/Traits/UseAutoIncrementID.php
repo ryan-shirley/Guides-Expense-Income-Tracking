@@ -39,13 +39,8 @@ trait UseAutoIncrementID {
             ]);
             return;
         } 
-
-        var_dump($seq);
-        echo $incrementSeq;
-        echo $seq['seq'];
+        
         $isHigherId = $seq['seq'] < $incrementSeq;
-        echo $isHigherId;
-
         if($isHigherId) {
             \DB::table('_data_counters')->where('_id', $collection)->update(['seq' => $incrementSeq]);
         }
