@@ -1,0 +1,4 @@
+# app.yaml
+
+runtime: nodejs12
+
