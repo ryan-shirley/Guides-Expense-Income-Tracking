@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\BankTransaction;
+use DateTime;
 
 class BankTransactionsController extends Controller
 {
@@ -28,8 +29,8 @@ class BankTransactionsController extends Controller
 
         // Get Transactions
         if(!is_null($startDate) && !is_null($endDate)) {
-            $from = date($startDate);
-            $to = date($endDate);
+            $from = new DateTime($startDate);
+            $to = new DateTime($endDate);
 
             $transactions = BankTransaction::whereBetween('date', [$from, $to])->orderBy('date', 'ASC')->get();
         } else {

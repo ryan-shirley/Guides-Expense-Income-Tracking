@@ -33,7 +33,7 @@ class HomeController extends Controller
 
         // Format Payments ID
         foreach ($payments as $index => $payment) {
-            $payments[$index]->keyID = "p_" . $payment->id;
+            $payments[$index]->keyID = "p_" . $payment->ref_id;
             
             if($payment->is_cash) {
                 $payments[$index]->cash_only = $payment->amount;

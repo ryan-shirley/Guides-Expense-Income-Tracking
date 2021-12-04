@@ -2,10 +2,14 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Jenssegers\Mongodb\Eloquent\Model;
 
 class Event extends Model
 {
+    protected $connection = 'mongodb';
+    protected $collection = 'events';
+    protected $dates = ['start_date', 'end_date'];
+
     /**
      * Get the payments for the event.
      */

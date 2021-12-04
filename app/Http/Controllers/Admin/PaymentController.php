@@ -30,11 +30,11 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        $payments  = Payment::all();
+        $payments  = Payment::orderBy('purchase_date', 'desc')->paginate(15)->onEachSide(2);
 
         // Format Payments ID
         foreach ($payments as $index => $payment) {
-            $payments[$index]->keyID = "p_" . $payment->id;
+            $payments[$index]->keyID = "p_" . $payment->ref_id;
             
             if($payment->is_cash) {
                 $payments[$index]->cash_only = $payment->amount;
@@ -75,10 +75,10 @@ class PaymentController extends Controller
             'purchase_date' => 'required|date',
             'guide_money' => 'required|boolean',
             'paid_back' => 'required|boolean',
-            'user_id' => 'required|exists:users,id',
+            'user_id' => 'required|exists:users,_id',
             'code' => 'string|max:65535',
             'is_cash' => 'boolean',
-            'event_id' => 'exclude_if:event_id,0|exists:events,id'
+            'event_id' => 'exclude_if:event_id,0|exists:events,_id'
         ]);
 
         // Create Payment
@@ -86,19 +86,20 @@ class PaymentController extends Controller
         $p->title = $request->input('title');
         $p->amount = $request->input('amount');
         $p->purchase_date = $request->input('purchase_date');
-        $p->guide_money = $request->input('guide_money');
-        $p->paid_back = $request->input('paid_back');
+        $p->guide_money = boolval($request->input('guide_money'));
+        $p->paid_back = boolval($request->input('paid_back'));
         $p->approved = false;
         $p->user_id = $request->input('user_id');
         $p->code = $request->input('code');
-        $p->is_cash = $request->input('is_cash');
+        $p->is_cash = boolval($request->input('is_cash'));
         
         if($request->input('event_id') !== '0') {
             $p->event_id = $request->input('event_id');
         } else {
             $p->event_id = null;
         }
-
+        
+        $p->ref_id = $p->generateReadableId();
         $p->save();
 
         $request->session()->flash('alert-success', $p->title . ' payment has been added.');
@@ -132,11 +133,11 @@ class PaymentController extends Controller
             'purchase_date' => 'required|date',
             'guide_money' => 'required|boolean',
             'paid_back' => 'required|boolean',
-            'user_id' => 'required|exists:users,id',
+            'user_id' => 'required|exists:users,_id',
             'title' => 'required|string|max:65535',
             'code' => 'string|max:65535',
             'is_cash' => 'boolean',
-            'event_id' => 'exclude_if:event_id,0|exists:events,id',
+            'event_id' => 'exclude_if:event_id,0|exists:events,_id',
         ]);
 
         // Update Payment
@@ -144,11 +145,11 @@ class PaymentController extends Controller
         $p->title = $request->input('title');
         $p->amount = $request->input('amount');
         $p->purchase_date = $request->input('purchase_date');
-        $p->guide_money = $request->input('guide_money');
-        $p->paid_back = $request->input('paid_back');
+        $p->guide_money = boolval($request->input('guide_money'));
+        $p->paid_back = boolval($request->input('paid_back'));
         $p->user_id = $request->input('user_id');
         $p->code = $request->input('code');
-        $p->is_cash = $request->input('is_cash');
+        $p->is_cash = boolval($request->input('is_cash'));
 
         if($request->input('event_id') !== '0') {
             $p->event_id = $request->input('event_id');

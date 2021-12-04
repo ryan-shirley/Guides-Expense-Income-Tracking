@@ -28,7 +28,7 @@
 
                     <div class="form-group">
                         <label for="date">Date</label>
-                        <input type="date" class="form-control" name="date" value="{{ old( 'date', $transaction->date) }}">
+                        <input type="date" class="form-control" name="date" value="{{ old( 'date', $transaction->date->format('Y-m-d')) }}">
                         <small class="form-text text-muted">The date for this transaction.</small>
                         <div class="text-danger">{{ $errors->first('date') }}</div>
                     </div>

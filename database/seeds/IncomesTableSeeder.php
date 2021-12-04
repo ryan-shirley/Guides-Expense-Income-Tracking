@@ -16,13 +16,13 @@ class IncomesTableSeeder extends Seeder
         $payment = new Income();
         $payment->title = 'Fees';
         $payment->amount = 1000;
-        $payment->date = '2019/09/25';
+        $payment->date = '2019-09-24 23:00:00';
         $payment->save();
 
         $payment2 = new Income();
         $payment2->title = 'Grant';
         $payment2->amount = 550;
-        $payment2->date = '2019/09/26';
+        $payment2->date = '2019-09-24 23:00:00';
         $payment2->save();
     }
 }

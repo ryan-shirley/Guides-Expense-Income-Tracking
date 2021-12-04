@@ -46,7 +46,7 @@ class PaymentController extends Controller
         $p->title = $request->input('title');
         $p->amount = $request->input('amount');
         $p->purchase_date = $request->input('purchase_date');
-        $p->guide_money = $request->input('guide_money');
+        $p->guide_money = boolval($request->input('guide_money'));
 
         // Check type of money used to determin if needs to be paid back.
         if($p->guide_money) {
@@ -58,6 +58,7 @@ class PaymentController extends Controller
 
         $p->approved = false;
         $p->user_id = Auth::user()->id;
+        $p->ref_id = $p->generateReadableId();
         $p->save();
 
         $request->session()->flash('alert-success', $p->title . ' payment has been added.');
@@ -101,18 +102,18 @@ class PaymentController extends Controller
 
         // Check if leader own this payment or is in accounts
         if($p->user->id !== $user->id) {
-            $request->session()->flash('alert-danger', 'You do not own this payment! Please do not try this again.');
+            $request->session()->flash('alert-error', 'You do not own this payment! Please do not try this again.');
             return redirect()->route('leader.home');
         }
         else if($p->in_accounts === 1) {
-            $request->session()->flash('alert-danger', 'You can not alter a payment after it has been added to accounts! Please do not try this again.');
+            $request->session()->flash('alert-error', 'You can not alter a payment after it has been added to accounts! Please do not try this again.');
             return redirect()->route('leader.home');
         }
         
         $p->title = $request->input('title');
         $p->amount = $request->input('amount');
         $p->purchase_date = $request->input('purchase_date');
-        $p->guide_money = $request->input('guide_money');
+        $p->guide_money = boolval($request->input('guide_money'));
         
         // Check type of money used to determin if needs to be paid back.
         if($p->guide_money) {

@@ -2,9 +2,13 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Jenssegers\Mongodb\Eloquent\Model;
 
 class BankTransaction extends Model
 {
+    protected $connection = 'mongodb';
+    protected $collection = 'bank_transactions';
+    protected $dates = ['date'];
+
     //
 }

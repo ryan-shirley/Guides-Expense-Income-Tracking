@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Payment;
+use DateTime;
 
 class PaymentController extends Controller
 {
@@ -28,8 +29,8 @@ class PaymentController extends Controller
 
         // Get Payments
         if(!is_null($startDate) && !is_null($endDate)) {
-            $from = date($startDate);
-            $to = date($endDate);
+            $from = new DateTime($startDate);
+            $to = new DateTime($endDate);
 
             $payments = Payment::whereBetween('purchase_date', [$from, $to])->orderBy('purchase_date', 'ASC')->get();
         } else {
@@ -39,7 +40,8 @@ class PaymentController extends Controller
         // Format Payments ID
         if($payments) {
             foreach ($payments as $index => $payment) {
-                $payments[$index]->keyID = "p_" . $payment->id;
+                $payments[$index]->keyID = "p_" . $payment->ref_id;
+                $payments[$index]->code = $payment->code != null ? $payment->code : "N/A";
                 
                 if($payment->is_cash) {
                     $payments[$index]->cash_only = $payment->amount;

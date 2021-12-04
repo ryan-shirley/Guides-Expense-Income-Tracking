@@ -9,7 +9,7 @@
             <div class="card-header bg-transparent mb-4">
                 <div class="row align-items-center">
                     <div class="col">
-                        <h2 class="mb-0">Edot Payment</h2>
+                        <h2 class="mb-0">Edit Payment</h2>
                     </div>
                 </div>
             </div>
@@ -36,7 +36,7 @@
 
                     <div class="form-group">
                         <label for="purchase_date">Purchase Date</label>
-                        <input type="date" class="form-control" name="purchase_date" value="{{ old( 'purchase_date', $payment->purchase_date) }}">
+                        <input type="date" class="form-control" name="purchase_date" value="{{ old( 'purchase_date', $payment->purchase_date->format('Y-m-d')) }}">
                         <small class="form-text text-muted">The date for this expense</small>
                         <div class="text-danger">{{ $errors->first('purchase_date') }}</div>
                     </div>

@@ -51,7 +51,7 @@ class BankTransactionsController extends Controller
         $tx = new BankTransaction();
         $tx->amount = $request->input('amount');
         $tx->date = $request->input('date');
-        $tx->is_logement = $request->input('is_logement');
+        $tx->is_logement = boolval($request->input('is_logement'));
         $tx->save();
 
         $request->session()->flash('alert-success', 'Transaction has been added.');
@@ -92,7 +92,7 @@ class BankTransactionsController extends Controller
         $tx = BankTransaction::findOrFail($id);
         $tx->amount = $request->input('amount');
         $tx->date = $request->input('date');
-        $tx->is_logement = $request->input('is_logement');
+        $tx->is_logement = boolval($request->input('is_logement'));
         $tx->save();
 
         $request->session()->flash('alert-success', 'Transaction has been updated.');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Income;
+use DateTime;
 
 class IncomeController extends Controller
 {
@@ -28,8 +29,8 @@ class IncomeController extends Controller
 
         // Get Incomes
         if(!is_null($startDate) && !is_null($endDate)) {
-            $from = date($startDate);
-            $to = date($endDate);
+            $from = new DateTime($startDate);
+            $to = new DateTime($endDate);
 
             $incomes = Income::whereBetween('date', [$from, $to])->orderBy('date', 'ASC')->get();
         } else {
@@ -39,7 +40,8 @@ class IncomeController extends Controller
         // Format Incomes ID
         if($incomes) {
             foreach ($incomes as $index => $income) {
-                $incomes[$index]->keyID = "i_" . $income->id;
+                $incomes[$index]->keyID = "i_" . $income->ref_id;
+                $incomes[$index]->code = $income->code != null ? $income->code : "N/A";
 
                 if($income->is_cash) {
                     $incomes[$index]->cash_and_cheque = $income->amount;

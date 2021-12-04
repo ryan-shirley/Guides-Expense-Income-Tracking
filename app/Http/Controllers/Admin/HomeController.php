@@ -35,16 +35,16 @@ class HomeController extends Controller
         // Payments by month for current year
         $paymentsByMonth = DB::table('payments')
             ->select(DB::raw('SUM(`amount`) AS TotalSpent, MONTH(`purchase_date`) AS Month, YEAR(`purchase_date`) AS Year'))
-            ->whereDate('purchase_date', '>=', Carbon::now()->startOfMonth()->subMonths(12))
+            // ->whereDate('purchase_date', '>=', Carbon::now()->startOfMonth()->subMonths(12))
             ->groupby('year','month')
             ->get();
 
         $paymentMonths = array();
         $paymentTotals = array();
-        foreach($paymentsByMonth as $month) {
-            array_push($paymentMonths, date("M", mktime(0, 0, 0, $month->Month, 10)));
-            array_push($paymentTotals, $month->TotalSpent);
-        }
+        // foreach($paymentsByMonth as $month) {
+        //     array_push($paymentMonths, date("M", mktime(0, 0, 0, $month->Month, 10)));
+        //     array_push($paymentTotals, $month->TotalSpent);
+        // }
 
         $paymentDetailsForYear = array(
             'paymentMonths' => json_encode($paymentMonths, true),
@@ -84,21 +84,21 @@ class HomeController extends Controller
         $bankBalance = BankAccount::where('title', 'Main')->first()->balance;
 
         // Payment history for year
-        $paymentTotalsPerMonth = Payment::whereDate('purchase_date', '>=', Carbon::now()->startOfMonth()->subMonths(12))->get()->groupBy(function($val) {
-            return Carbon::parse($val->purchase_date)->format('M');
-        });
+        // $paymentTotalsPerMonth = Payment::whereDate('purchase_date', '>=', Carbon::now()->startOfMonth()->subMonths(12))->get()->groupBy(function($val) {
+        //     return Carbon::parse($val->purchase_date)->format('M');
+        // });
 
         // Payment totals per month
         $paymentHistory = array();
         $prevMonthBal = $bankBalance;
-        foreach($paymentTotalsPerMonth as $month => $payments) {
-            $total = 0;
-            foreach($payments as $payment) {
-                $total += $payment->amount;
-            }
-            $paymentHistory[date_parse($month)['month']]['label'] = $month;
-            $paymentHistory[date_parse($month)['month']]['balance'] = $total;
-        }
+        // foreach($paymentTotalsPerMonth as $month => $payments) {
+        //     $total = 0;
+        //     foreach($payments as $payment) {
+        //         $total += $payment->amount;
+        //     }
+        //     $paymentHistory[date_parse($month)['month']]['label'] = $month;
+        //     $paymentHistory[date_parse($month)['month']]['balance'] = $total;
+        // }
         // Sort months in order
         ksort($paymentHistory);
 
@@ -119,21 +119,21 @@ class HomeController extends Controller
 
 
         // Income history for year
-        $incomeTotalsPerMonth = Income::whereDate('date', '>=', Carbon::now()->startOfMonth()->subMonths(12))->get()->groupBy(function($val) {
-            return Carbon::parse($val->date)->format('M');
-        });
+        // $incomeTotalsPerMonth = Income::whereDate('date', '>=', Carbon::now()->startOfMonth()->subMonths(12))->get()->groupBy(function($val) {
+        //     return Carbon::parse($val->date)->format('M');
+        // });
 
         // Payment totals per month
         $incomeHistory = array();
         $prevMonthBal = $bankBalance;
-        foreach($incomeTotalsPerMonth as $month => $payments) {
-            $total = 0;
-            foreach($payments as $payment) {
-                $total += $payment->amount;
-            }
-            $incomeHistory[date_parse($month)['month']]['label'] = $month;
-            $incomeHistory[date_parse($month)['month']]['balance'] = $total;
-        }
+        // foreach($incomeTotalsPerMonth as $month => $payments) {
+        //     $total = 0;
+        //     foreach($payments as $payment) {
+        //         $total += $payment->amount;
+        //     }
+        //     $incomeHistory[date_parse($month)['month']]['label'] = $month;
+        //     $incomeHistory[date_parse($month)['month']]['balance'] = $total;
+        // }
         // Sort months in order
         ksort($incomeHistory);
 
