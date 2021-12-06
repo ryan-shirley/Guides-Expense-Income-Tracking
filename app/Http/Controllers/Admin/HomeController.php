@@ -9,6 +9,7 @@ use App\Income;
 use App\BankAccount;
 use Carbon\Carbon;
 use DB;
+use DateTime;
 
 class HomeController extends Controller
 {
@@ -30,7 +31,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $payments = Payment::where('purchase_date', 'LIKE', '%'. date("Y") .'%')->get()->sortByDesc("id");
+        $from = new DateTime(Carbon::now()->startOfYear());
+        $to = new DateTime(Carbon::now());
+        $payments = Payment::whereBetween('purchase_date', [$from, $to])->orderBy('id', 'DESC')->get();
 
         // Payments by month for current year
         $paymentsByMonth = DB::table('payments')
@@ -54,7 +57,7 @@ class HomeController extends Controller
         // Total for year
         $total_year = 0;
         foreach ($payments as $payment) {
-            if(Carbon::now()->startOfYear() <= Carbon::parse($payment->purchase_date) && Carbon::now()->endOfYear() > Carbon::parse($payment->purchase_date) && $payment->approved === 1) {
+            if(Carbon::now()->startOfYear() <= Carbon::parse($payment->purchase_date) && Carbon::now()->endOfYear() > Carbon::parse($payment->purchase_date) && $payment->approved === true) {
                 $total_year += $payment->amount;
             }
         }
@@ -78,7 +81,8 @@ class HomeController extends Controller
         }
 
         // Income for current year
-        $incomeForYear = Income::where('date', 'LIKE', '%'. date("Y") .'%')->where('approved', '1')->get()->sum('amount');
+        // $incomeForYear = Income::where('date', 'LIKE', '%'. date("Y") .'%')-
+        $incomeForYear = Income::whereBetween('date', [$from, $to])->where('approved', true)->get()->sum('amount');
 
         // Bank balance
         $bankBalance = BankAccount::where('title', 'Main')->first()->balance;
