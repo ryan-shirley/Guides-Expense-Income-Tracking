@@ -1,7 +1,8 @@
 FROM php:7.4-fpm-alpine
 
-RUN pecl install mongodb \
-    &&  echo "extension=mongodb.so" > $PHP_INI_DIR/conf.d/mongo.ini
+RUN apt-get install  -y openssl libssl-dev libcurl4-openssl-dev
+RUN pecl install mongodb-1.6.0
+RUN docker-php-ext-enable /usr/local/lib/php/extensions/no-debug-non-zts-20180731/mongodb.so
 
 RUN apk add --no-cache nginx wget
 
