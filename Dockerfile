@@ -23,14 +23,14 @@ RUN apt-get update \
 	&& docker-php-ext-install zip \
 	&& apt-get autoclean -y \
 	&& rm -rf /var/lib/apt/lists/* \
-	&& rm -rf /tmp/pear/
+	&& rm -rf /tmp/pear/ \
     # Mongo db
-    # ${PHPIZE_DEPS} \
-    # && pecl install mongodb \
-    # && docker-php-ext-enable \
-    # mongodb \
-    # && apk del \
-    # ${PHPIZE_DEPS}
+    ${PHPIZE_DEPS} \
+    && pecl install mongodb \
+    && docker-php-ext-enable \
+    mongodb \
+    && apk del \
+    ${PHPIZE_DEPS}
 
 # Copy files
 COPY . /var/www
@@ -51,7 +51,8 @@ RUN npm install
 # include your other npm run scripts e.g npm rebuild node-sass
 
 # run your default build command here mine is npm run prod
-RUN npm run prod
+# RUN npm run prod
+RUN npm run dev
 
 # setup composer and laravel
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
