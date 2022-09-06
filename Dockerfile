@@ -1,8 +1,20 @@
-FROM php:7.4-fpm-alpine
+FROM php:7.1-fpm
 
-RUN apt-get install  -y openssl libssl-dev libcurl4-openssl-dev
-RUN pecl install mongodb-1.6.0
-RUN docker-php-ext-enable /usr/local/lib/php/extensions/no-debug-non-zts-20180731/mongodb.so
+RUN apt-get update && apt-get install -y zlib1g-dev libicu-dev g++ libssl-dev
+
+RUN pecl install apcu-5.1.5 && \
+    docker-php-ext-enable apcu && \
+    docker-php-ext-install \
+        intl \
+        mbstring \
+        pdo_mysql \
+        zip \
+        bcmath \
+        opcache
+
+# Install mongo
+RUN pecl install mongodb \
+&& echo "extension=mongodb.so" > /usr/local/etc/php/conf.d/ext-mongodb.ini
 
 RUN apk add --no-cache nginx wget
 
