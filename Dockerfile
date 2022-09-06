@@ -29,7 +29,7 @@ RUN apt-get update \
     && pecl install mongodb \
     && docker-php-ext-enable \
     mongodb \
-    && apk del \
+    # && apk del \
     ${PHPIZE_DEPS}
 
 # Copy files
