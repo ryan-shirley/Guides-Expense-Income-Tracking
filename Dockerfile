@@ -1,6 +1,7 @@
 FROM php:7.4-fpm-alpine
 
-RUN echo "extension=mongodb.so" >> /usr/local/etc/php/conf.d/mongodb.ini
+RUN pecl install mongodb \
+    &&  echo "extension=mongodb.so" > $PHP_INI_DIR/conf.d/mongo.ini
 
 RUN apk add --no-cache nginx wget
 
