@@ -24,13 +24,20 @@ RUN apt-get update \
 	&& apt-get autoclean -y \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& rm -rf /tmp/pear/
+    # Mongo db
+    # ${PHPIZE_DEPS} \
+    # && pecl install mongodb \
+    # && docker-php-ext-enable \
+    # mongodb \
+    # && apk del \
+    # ${PHPIZE_DEPS}
 
 # Copy files
 COPY . /var/www
 
-COPY ./deploy/local.ini /usr/local/etc/php/local.ini
+# COPY ./deploy/local.ini /usr/local/etc/php/local.ini
 
-COPY ./deploy/conf.d/nginx.conf /etc/nginx/nginx.conf
+COPY ./docker/nginx.conf /etc/nginx/nginx.conf
 
 RUN chmod +rwx /var/www
 
