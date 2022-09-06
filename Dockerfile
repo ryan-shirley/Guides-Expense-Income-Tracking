@@ -1,6 +1,6 @@
 FROM php:7.4-fpm-alpine
 
-sudo apt-get install libssl-dev pkg-config
+RUN sudo apt-get install libssl-dev pkg-config
 
 RUN apk add --no-cache nginx wget \
     ${PHPIZE_DEPS} \
