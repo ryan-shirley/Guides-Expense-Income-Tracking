@@ -83,7 +83,8 @@
 
 FROM php:7.4-fpm-alpine
 
-RUN ["chmod", "+x", "./post_deploy.sh"]
+RUN ["chmod", "+x", "post_deploy.sh"]
+CMD [ "sh", "./post_deploy.sh" ]
 
 RUN apk add --no-cache nginx wget \
     ${PHPIZE_DEPS} \
