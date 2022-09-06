@@ -1,6 +1,8 @@
 FROM php:7.4-fpm-alpine
 
-RUN apk add --no-cache nginx wget libssl-dev pkg-config \
+sudo apt-get install libssl-dev pkg-config
+
+RUN apk add --no-cache nginx wget \
     ${PHPIZE_DEPS} \
     && pecl install mongodb \
     && docker-php-ext-enable \
