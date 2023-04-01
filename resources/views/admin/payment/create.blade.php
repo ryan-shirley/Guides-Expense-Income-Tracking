@@ -51,8 +51,8 @@
 
                     <div class="form-group">
                         <label for="amount">Amount</label>
-                        <input type="number" class="form-control" name="amount" step="0.01" placeholder="Enter amount" value="{{ old( 'amount') }}">
-                        <small class="form-text text-muted">The amount for this expense</small>
+                        <input type="number" class="form-control" name="amount" step="1" placeholder="Enter amount" value="{{ old( 'amount') }}">
+                        <small class="form-text text-muted">Expense amount (Round nearest euro)</small>
                         <div class="text-danger">{{ $errors->first('amount') }}</div>
                     </div>
                     <!-- /.Amount -->
