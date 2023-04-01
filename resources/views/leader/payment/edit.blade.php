@@ -19,17 +19,25 @@
                     @csrf
 
                     <div class="form-group">
-                        <label for="title">Title</label>
-                        <input type="text" class="form-control" name="title" placeholder="Enter title" value="{{ old( 'title', $payment->title) }}">
-                        <small class="form-text text-muted">Describe what this expense was for.</small>
+                        <label for="title">Store name</label>
+                        <input type="text" class="form-control" name="title" placeholder="Enter the name of the store" value="{{ old( 'title', $payment->title) }}">
+                        <small class="form-text text-muted">Full name of the store</small>
                         <div class="text-danger">{{ $errors->first('title') }}</div>
                     </div>
-                    <!-- /.Title -->
+                    <!-- /.Title | Store Name -->
+
+                    <div class="form-group">
+                        <label for="title">Description</label>
+                        <input type="text" class="form-control" name="description" placeholder="Description what was purchased" value="{{ old( 'description', $payment->description) }}">
+                        <small class="form-text text-muted">Description of what was purchased</small>
+                        <div class="text-danger">{{ $errors->first('description') }}</div>
+                    </div>
+                    <!-- /.Description -->
 
                     <div class="form-group">
                         <label for="amount">Amount</label>
-                        <input type="number" class="form-control" name="amount" step="0.01" placeholder="Enter amount" value="{{ old( 'amount', $payment->amount) }}">
-                        <small class="form-text text-muted">The amount for this expense</small>
+                        <input type="number" class="form-control" name="amount" step="1" placeholder="Enter amount" value="{{ old( 'amount', $payment->amount) }}">
+                        <small class="form-text text-muted">Expense amount (Round nearest euro)</small>
                         <div class="text-danger">{{ $errors->first('amount') }}</div>
                     </div>
                     <!-- /.Amount -->
@@ -40,7 +48,7 @@
                         <small class="form-text text-muted">The date for this expense</small>
                         <div class="text-danger">{{ $errors->first('purchase_date') }}</div>
                     </div>
-                    <!-- /.Amount -->
+                    <!-- /.Purchase Date -->
 
                     <div class="form-group">
                         <label for="guide_money">Type of money</label>

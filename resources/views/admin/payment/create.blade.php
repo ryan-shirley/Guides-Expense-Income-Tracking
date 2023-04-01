@@ -29,30 +29,25 @@
                     <!-- /.Leader -->
 
                     <div class="form-group">
-                        <label for="user_id">Event</label>
-                        <select class="form-control" name="event_id" id="eventsList">
-                            <option value="0"></option>
-                            @foreach ($events as $e)
-                                <option value="{{ $e->id }}" {{ (old('event_id') == $e->id) ? "selected" : "" }}>{{ $e->title }}</option>
-                            @endforeach
-                        </select>
-                        <small class="form-text text-muted">Event where this payment took place</small>
-                        <div class="text-danger">{{ $errors->first('event_id') }}</div>
-                    </div>
-                    <!-- /.Event -->
-
-                    <div class="form-group">
-                        <label for="title">Title</label>
-                        <input type="text" class="form-control" name="title" placeholder="Enter title" value="{{ old( 'title') }}">
-                        <small class="form-text text-muted">Describe what this expense was for.</small>
+                        <label for="title">Store name</label>
+                        <input type="text" class="form-control" name="title" placeholder="Enter the name of the store" value="{{ old( 'title') }}">
+                        <small class="form-text text-muted">Full name of the store</small>
                         <div class="text-danger">{{ $errors->first('title') }}</div>
                     </div>
-                    <!-- /.Title -->
+                    <!-- /.Title | Store Name -->
+
+                    <div class="form-group">
+                        <label for="title">Description</label>
+                        <input type="text" class="form-control" name="description" placeholder="Description what was purchased" value="{{ old( 'description') }}">
+                        <small class="form-text text-muted">Description of what was purchased</small>
+                        <div class="text-danger">{{ $errors->first('description') }}</div>
+                    </div>
+                    <!-- /.Description -->
 
                     <div class="form-group">
                         <label for="amount">Amount</label>
-                        <input type="number" class="form-control" name="amount" step="0.01" placeholder="Enter amount" value="{{ old( 'amount') }}">
-                        <small class="form-text text-muted">The amount for this expense</small>
+                        <input type="number" class="form-control" name="amount" step="1" placeholder="Enter amount" value="{{ old( 'amount') }}">
+                        <small class="form-text text-muted">Expense amount (Round nearest euro)</small>
                         <div class="text-danger">{{ $errors->first('amount') }}</div>
                     </div>
                     <!-- /.Amount -->
@@ -63,7 +58,7 @@
                         <small class="form-text text-muted">The date for this expense</small>
                         <div class="text-danger">{{ $errors->first('purchase_date') }}</div>
                     </div>
-                    <!-- /.Amount -->
+                    <!-- /.Purchase Date -->
 
                     <div class="form-group">
                         <label for="guide_money">Type of money</label>
@@ -108,13 +103,13 @@
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="is_cash" id="is_cash1" value="1" {{ (old('is_cash') == '1') ? "checked" : "" }}>
                             <label class="form-check-label" for="is_cash1">
-                                Cash or Cheque 
+                                Cash or Cheque
                             </label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="is_cash" id="is_cash2" value="0" {{ (old('is_cash') == '0') ? "checked" : "" }}>
                             <label class="form-check-label" for="is_cash2">
-                                Bank payment 
+                                Bank payment
                             </label>
                         </div>
                         <small class="form-text text-muted">Please pick the type of payment that was used.</small>
@@ -143,6 +138,19 @@
                         <div class="text-danger">{{ $errors->first('code') }}</div>
                     </div>
                     <!-- /.Code -->
+
+                    <div class="form-group">
+                        <label for="user_id">Event</label>
+                        <select class="form-control" name="event_id" id="eventsList">
+                            <option value="0"></option>
+                            @foreach ($events as $e)
+                                <option value="{{ $e->id }}" {{ (old('event_id') == $e->id) ? "selected" : "" }}>{{ $e->title }}</option>
+                            @endforeach
+                        </select>
+                        <small class="form-text text-muted">Event where this payment took place</small>
+                        <div class="text-danger">{{ $errors->first('event_id') }}</div>
+                    </div>
+                    <!-- /.Event -->
 
                     <button class="btn btn-primary" type="submit" value="Store">Submit</button>
                 </form>

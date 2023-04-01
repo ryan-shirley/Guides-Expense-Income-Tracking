@@ -102,7 +102,7 @@
                     <thead class="thead-light">
                         <tr>
                             <th scope="col">Ref</th>
-                            <th scope="col">Title</th>
+                            <th scope="col">Store Name</th>
                             <th scope="col">Amount</th>
                             <th scope="col">Purchase Date</th>
                             <th scope="col">Guide Money</th>
@@ -153,7 +153,7 @@
                                         <form action="{{ action('Leader\PaymentController@destroy', $p->id )}}" class="payment-delete" method="post" style="display: inline;">
                                             @csrf
                                             <input name="_method" type="hidden" value="DELETE">
-                                            
+
                                             <button class="btn btn-danger btn-sm" ><i class="fas fa-times"></i></button>
                                         </form>
                                     @endif
@@ -181,7 +181,7 @@
             $('#payment_table').DataTable({
                 language: {
                     paginate: {
-                        next: '<i class="fas fa-chevron-right"></i>', 
+                        next: '<i class="fas fa-chevron-right"></i>',
                         previous: '<i class="fas fa-chevron-left"></i>'
                     }
                 },

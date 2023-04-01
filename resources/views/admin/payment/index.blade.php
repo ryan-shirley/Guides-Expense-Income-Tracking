@@ -30,7 +30,7 @@
                         <tr>
                             <th scope="col">Ref</th>
                             <th scope="col">Leader</th>
-                            <th scope="col">Title</th>
+                            <th scope="col">Store Name</th>
                             <th scope="col">Amount</th>
                             <th scope="col">Purchase Date</th>
                             <th scope="col">Guide Money</th>
