@@ -43,9 +43,9 @@
                     <!-- /.Event -->
 
                     <div class="form-group">
-                        <label for="title">Title</label>
-                        <input type="text" class="form-control" name="title" placeholder="Enter title" value="{{ old( 'title', $payment->title) }}">
-                        <small class="form-text text-muted">Describe what this expense was for.</small>
+                        <label for="title">Store name</label>
+                        <input type="text" class="form-control" name="title" placeholder="Enter the name of the store" value="{{ old( 'title', $payment->title) }}">
+                        <small class="form-text text-muted">Full name of the store</small>
                         <div class="text-danger">{{ $errors->first('title') }}</div>
                     </div>
                     <!-- /.Title -->
@@ -109,13 +109,13 @@
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="is_cash" id="is_cash1" value="1" {{ (old('is_cash', $payment->is_cash) == '1') ? "checked" : "" }}>
                             <label class="form-check-label" for="is_cash1">
-                                Cash or Cheque 
+                                Cash or Cheque
                             </label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="is_cash" id="is_cash2" value="0" {{ (old('is_cash', $payment->is_cash) == '0') ? "checked" : "" }}>
                             <label class="form-check-label" for="is_cash2">
-                                Bank payment 
+                                Bank payment
                             </label>
                         </div>
                         <small class="form-text text-muted">Please pick the type of payment that was used.</small>

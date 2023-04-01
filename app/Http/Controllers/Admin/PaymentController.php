@@ -35,7 +35,7 @@ class PaymentController extends Controller
         // Format Payments ID
         foreach ($payments as $index => $payment) {
             $payments[$index]->keyID = "p_" . $payment->ref_id;
-            
+
             if($payment->is_cash) {
                 $payments[$index]->cash_only = $payment->amount;
                 $payments[$index]->other = 0;
@@ -92,13 +92,13 @@ class PaymentController extends Controller
         $p->user_id = $request->input('user_id');
         $p->code = $request->input('code');
         $p->is_cash = boolval($request->input('is_cash'));
-        
+
         if($request->input('event_id') !== '0') {
             $p->event_id = $request->input('event_id');
         } else {
             $p->event_id = null;
         }
-        
+
         $p->ref_id = $p->generateReadableId();
         $p->save();
 
@@ -179,7 +179,7 @@ class PaymentController extends Controller
 
     /**
      * Change paid back status.
-     * 
+     *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -199,13 +199,13 @@ class PaymentController extends Controller
 
     /**
      * Change account status.
-     * 
+     *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function approve(Request $request, $id)
     {
-        // Mark Approved 
+        // Mark Approved
         $payment = Payment::findOrFail($id);
         $payment->approved = true;
         $payment->save();
@@ -221,7 +221,7 @@ class PaymentController extends Controller
 
     /**
      * Mark payment as received receipt.
-     * 
+     *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -232,15 +232,15 @@ class PaymentController extends Controller
 
         // Create data and convert amount into negative as expense
         $payment = Payment::findOrFail($id);
-        
-        // Save 
+
+        // Save
         $payment->receipt_received = true;
         $payment->save();
 
         $request->session()->flash('alert-success', $payment->title . ' payment has been marked as received receipt.');
         return redirect()->route('admin.payments.index');
     }
-        
+
     /**
      * List of people that need to be paid back
      *
@@ -289,7 +289,7 @@ class PaymentController extends Controller
             ),
             array(
                 'data' => 'title',
-                'title' => 'Details'
+                'title' => 'Store Name'
             ),
             array(
                 'data' => 'keyID',
@@ -315,5 +315,5 @@ class PaymentController extends Controller
         ]);
     }
 
-    
+
 }
