@@ -30,19 +30,6 @@
                     <!-- /.Leader -->
 
                     <div class="form-group">
-                        <label for="user_id">Event</label>
-                        <select class="form-control" name="event_id" id="eventsList">
-                            <option value="0"></option>
-                            @foreach ($events as $e)
-                                <option value="{{ $e->id }}" {{ (old('event_id', $payment->event_id) == $e->id) ? "selected" : "" }}>{{ $e->title }}</option>
-                            @endforeach
-                        </select>
-                        <small class="form-text text-muted">Event where this payment took place</small>
-                        <div class="text-danger">{{ $errors->first('event_id') }}</div>
-                    </div>
-                    <!-- /.Event -->
-
-                    <div class="form-group">
                         <label for="title">Store name</label>
                         <input type="text" class="form-control" name="title" placeholder="Enter the name of the store" value="{{ old( 'title', $payment->title) }}">
                         <small class="form-text text-muted">Full name of the store</small>
@@ -64,7 +51,7 @@
                         <small class="form-text text-muted">The date for this expense</small>
                         <div class="text-danger">{{ $errors->first('purchase_date') }}</div>
                     </div>
-                    <!-- /.Amount -->
+                    <!-- /.Purchase Date -->
 
                     <div class="form-group">
                         <label for="guide_money">Type of money</label>
@@ -144,6 +131,19 @@
                         <div class="text-danger">{{ $errors->first('code') }}</div>
                     </div>
                     <!-- /.Code -->
+
+                    <div class="form-group">
+                        <label for="user_id">Event</label>
+                        <select class="form-control" name="event_id" id="eventsList">
+                            <option value="0"></option>
+                            @foreach ($events as $e)
+                                <option value="{{ $e->id }}" {{ (old('event_id', $payment->event_id) == $e->id) ? "selected" : "" }}>{{ $e->title }}</option>
+                            @endforeach
+                        </select>
+                        <small class="form-text text-muted">Event where this payment took place</small>
+                        <div class="text-danger">{{ $errors->first('event_id') }}</div>
+                    </div>
+                    <!-- /.Event -->
 
                     <button class="btn btn-primary" type="submit" value="Store">Update</button>
                 </form>

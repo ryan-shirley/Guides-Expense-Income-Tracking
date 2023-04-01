@@ -40,7 +40,7 @@
                         <small class="form-text text-muted">The date for this expense</small>
                         <div class="text-danger">{{ $errors->first('purchase_date') }}</div>
                     </div>
-                    <!-- /.Amount -->
+                    <!-- /.Purchase Date -->
 
                     <div class="form-group">
                         <label for="guide_money">Type of money</label>
