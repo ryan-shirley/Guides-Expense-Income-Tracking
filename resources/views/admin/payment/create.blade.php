@@ -34,7 +34,15 @@
                         <small class="form-text text-muted">Full name of the store</small>
                         <div class="text-danger">{{ $errors->first('title') }}</div>
                     </div>
-                    <!-- /.Title -->
+                    <!-- /.Title | Store Name -->
+
+                    <div class="form-group">
+                        <label for="title">Description</label>
+                        <input type="text" class="form-control" name="description" placeholder="Description what was purchased" value="{{ old( 'description') }}">
+                        <small class="form-text text-muted">Description of what was purchased</small>
+                        <div class="text-danger">{{ $errors->first('description') }}</div>
+                    </div>
+                    <!-- /.Description -->
 
                     <div class="form-group">
                         <label for="amount">Amount</label>

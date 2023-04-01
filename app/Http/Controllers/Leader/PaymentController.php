@@ -36,6 +36,7 @@ class PaymentController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:65535',
+            'description' => 'required|string|max:65535',
             'amount' => 'required|regex:/^\d*(\.\d{1,2})?$/',
             'purchase_date' => 'required|date',
             'guide_money' => 'required|boolean'
@@ -44,6 +45,7 @@ class PaymentController extends Controller
         // Create Payment
         $p = new Payment();
         $p->title = $request->input('title');
+        $p->description = $request->input('description');
         $p->amount = $request->input('amount');
         $p->purchase_date = $request->input('purchase_date');
         $p->guide_money = boolval($request->input('guide_money'));
@@ -91,6 +93,7 @@ class PaymentController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:65535',
+            'description' => 'required|string|max:65535',
             'amount' => 'required|regex:/^\d*(\.\d{1,2})?$/',
             'purchase_date' => 'required|date',
             'guide_money' => 'required|boolean'
@@ -109,12 +112,13 @@ class PaymentController extends Controller
             $request->session()->flash('alert-error', 'You can not alter a payment after it has been added to accounts! Please do not try this again.');
             return redirect()->route('leader.home');
         }
-        
+
         $p->title = $request->input('title');
+        $p->description = $request->input('description');
         $p->amount = $request->input('amount');
         $p->purchase_date = $request->input('purchase_date');
         $p->guide_money = boolval($request->input('guide_money'));
-        
+
         // Check type of money used to determin if needs to be paid back.
         if($p->guide_money) {
             $p->paid_back = true;
@@ -155,5 +159,5 @@ class PaymentController extends Controller
         $request->session()->flash('alert-success', $p->title . ' payment has been deleted');
         return redirect()->route('leader.home');
     }
-        
+
 }

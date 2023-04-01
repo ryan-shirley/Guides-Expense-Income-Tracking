@@ -71,6 +71,7 @@ class PaymentController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:65535',
+            'description' => 'required|string|max:65535',
             'amount' => 'required|regex:/^\d*(\.\d{1,2})?$/',
             'purchase_date' => 'required|date',
             'guide_money' => 'required|boolean',
@@ -84,6 +85,7 @@ class PaymentController extends Controller
         // Create Payment
         $p = new Payment();
         $p->title = $request->input('title');
+        $p->description = $request->input('description');
         $p->amount = $request->input('amount');
         $p->purchase_date = $request->input('purchase_date');
         $p->guide_money = boolval($request->input('guide_money'));
@@ -129,12 +131,12 @@ class PaymentController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:65535',
+            'description' => 'required|string|max:65535',
             'amount' => 'required|regex:/^\d*(\.\d{1,2})?$/',
             'purchase_date' => 'required|date',
             'guide_money' => 'required|boolean',
             'paid_back' => 'required|boolean',
             'user_id' => 'required|exists:users,_id',
-            'title' => 'required|string|max:65535',
             'code' => 'string|max:65535',
             'is_cash' => 'boolean',
             'event_id' => 'exclude_if:event_id,0|exists:events,_id',
@@ -142,6 +144,7 @@ class PaymentController extends Controller
 
         // Update Payment
         $p = Payment::findOrFail($id);
+        $p->description = $request->input('description');
         $p->title = $request->input('title');
         $p->amount = $request->input('amount');
         $p->purchase_date = $request->input('purchase_date');
