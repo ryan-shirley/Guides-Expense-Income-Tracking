@@ -39,11 +39,40 @@ var Chart = require('chart.js')
 
 
 $(document).ready(function () {
- 
+
     window.setTimeout(function() {
         $(".alert").fadeTo(1000, 0).slideUp(500, function(){
-            $(this).remove(); 
+            $(this).remove();
         });
     }, 3000);
-     
+
 });
+
+
+// Payment type hiding based on type of money used
+// Guides | Allow All
+const guideMoney = "#guide_money1";
+const personalMoney = "#guide_money2";
+const cashPayment = "#is_cash1";
+const bankPayment = "#is_cash2";
+$(guideMoney).click(function() {
+    TogglePaymentTypeInput(false)
+});
+
+// Personal | Disable input and force cash checked
+$(personalMoney).click(function() {
+    $(cashPayment).prop('checked', true);
+    TogglePaymentTypeInput(true)
+});
+
+function TogglePaymentTypeInput(disable) {
+    if(disable) {
+        $(cashPayment).attr("disabled", true);
+        $(bankPayment).attr("disabled", true);
+
+        return;
+    }
+
+    $(cashPayment).removeAttr("disabled");
+    $(bankPayment).removeAttr("disabled");
+}
