@@ -1,6 +1,6 @@
 FROM php:7.4-fpm-alpine
 
-RUN docker-php-ext-install gd 
+RUN docker-php-ext-install gd
 
 RUN apk add libressl-dev pkgconfig nodejs npm
 
