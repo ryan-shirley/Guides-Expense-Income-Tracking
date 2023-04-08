@@ -2,7 +2,7 @@ FROM php:7.4-fpm-alpine
 
 RUN apk add libressl-dev pkgconfig nodejs npm
 
-RUN apk add --no-cache nginx wget libpng libpng-dev \
+RUN apk add --no-cache nginx wget libjpeg62-turbo-dev \
     ${PHPIZE_DEPS} \
     && pecl install mongodb \
     && docker-php-ext-enable \
