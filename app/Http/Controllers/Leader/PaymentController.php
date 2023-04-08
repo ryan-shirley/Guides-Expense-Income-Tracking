@@ -67,7 +67,7 @@ class PaymentController extends Controller
         $p->ref_id = $p->generateReadableId();
         $p->save();
 
-        $paymentId = Payment::where('ref_id', $p->ref_id)->first();
+        $paymentId = Payment::where('ref_id', $p->ref_id)->first()->_id;
         $this->SaveReceipt($request->receipt_image, $p->ref_id, $paymentId);
 
         $request->session()->flash('alert-success', $p->title . ' payment has been added.');
@@ -138,7 +138,7 @@ class PaymentController extends Controller
 
         $p->save();
 
-        $paymentId = Payment::where('ref_id', $p->ref_id)->first();
+        $paymentId = Payment::where('ref_id', $p->ref_id)->first()->_id;
         $this->SaveReceipt($request->receipt_image, $p->ref_id, $paymentId);
 
         $request->session()->flash('alert-success', $p->title . ' payment has been updated.');
