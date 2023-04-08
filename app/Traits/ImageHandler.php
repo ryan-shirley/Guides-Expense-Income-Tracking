@@ -2,6 +2,8 @@
 
 namespace App\Traits;
 
+use Illuminate\Support\Facades\Storage;
+
 trait ImageHandler
 {
     public function SaveReceipt($imageToSave, $paymentRefId, $paymentId) {
@@ -17,7 +19,7 @@ trait ImageHandler
         $interventionImage = \Intervention\Image\Facades\Image::make($imageToSave)->encode("jpg", 80);
 
         // Save image on server
-        $savedImagePath = $interventionImage->storeAs($imageFolder, $filename);
+        Storage::put($imageFolder . '/' . $filename, $interventionImage->__toString());
     }
 
     public function GetReceiptUrl($paymentRefId, $paymentId) {
