@@ -19,15 +19,15 @@ COPY . /app
 
 # setup npm fir Vue.js
 RUN npm install -g npm@latest
-RUN cd /app && \
+RUN cd /app && \ 
     npm install
-RUN cd /app && \
+RUN cd /app && \ 
     npm run dev
 
 
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN sh -c "wget http://getcomposer.org/composer.phar && chmod a+x composer.phar && mv composer.phar /usr/local/bin/composer"
 RUN cd /app && \
-    /usr/bin/composer install --no-dev
+    /usr/local/bin/composer install --no-dev
 
 RUN chown -R www-data: /app
 
