@@ -9,11 +9,6 @@ RUN apk add --update \
 		libpng-dev \
 		libxml2-dev \
 		libzip-dev \
-		imagemagick \
-		imagemagick-libs \
-		imagemagick-dev \
-		php7-imagick \
-		php7-pcntl \
 	&& docker-php-ext-configure gd --with-jpeg --with-freetype \
 	&& docker-php-ext-install gd
 
