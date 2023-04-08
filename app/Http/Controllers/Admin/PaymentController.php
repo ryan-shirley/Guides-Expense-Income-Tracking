@@ -108,7 +108,8 @@ class PaymentController extends Controller
         $p->ref_id = $p->generateReadableId();
         $p->save();
 
-        $this->SaveReceipt($request->receipt_image, $p->ref_id, 'xxx');
+        $paymentId = Payment::where('ref_id', $p->ref_id)->first();
+        $this->SaveReceipt($request->receipt_image, $p->ref_id, $paymentId);
 
         $request->session()->flash('alert-success', $p->title . ' payment has been added.');
         return redirect()->route('admin.payments.index');
