@@ -13,7 +13,7 @@ trait ImageHandler
         $imageFolder = 'payments';
 
         // Image file name
-        $filename = 'p_' . $paymentRefId . '_' . $paymentId . '.jpg';
+        $filename = $this->GenerateFileName($paymentRefId, $paymentId);
         $interventionImage = \ImageConvert::make($imageToSave)->stream("jpg", 80);
 
         // Save image on server
@@ -23,15 +23,19 @@ trait ImageHandler
     public function GetReceiptUrl($paymentRefId, $paymentId) {
         $domainPath = env('GOOGLE_CLOUD_STORAGE_API_PATH');
 
+        // Image Folder
+        $imageFolder = 'payments';
+
         if($domainPath == null) {
             return '';
         }
 
-        // Image Folder
-        $imageFolder = 'payments';
-
         // Image file url
-        return $domainPath . '/' . $imageFolder . 'p_' . $paymentRefId . '_' . $paymentId . '.jpg';
+        return $domainPath . '/' . $imageFolder . '/' . $this->GenerateFileName($paymentRefId, $paymentId);
+    }
+
+    private function GenerateFileName($paymentRefId, $paymentId) {
+        return 'p_' . $paymentRefId . '_' . $paymentId . '.jpg';
     }
 
 }
