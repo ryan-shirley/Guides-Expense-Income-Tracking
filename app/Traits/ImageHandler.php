@@ -14,7 +14,7 @@ trait ImageHandler
 
         // Image file name
         $filename = $this->GenerateFileName($paymentRefId, $paymentId);
-        $interventionImage = \Intervention\Image\Facades\Image::make($imageToSave)->stream("jpg", 80);
+        $interventionImage = \Intervention\Image\Facades\Image::make($imageToSave)->encode("jpg", 80);
 
         // Save image on server
         $savedImagePath = $interventionImage->storeAs($imageFolder, $filename);
