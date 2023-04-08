@@ -16,6 +16,7 @@
         "laravel/tinker": "^1.0",
         "laravel/ui": "^1.0",
         "sentry/sentry-laravel": "^2.3",
+        "superbalist/laravel-google-cloud-storage": "^2.2",
         "symfony/http-foundation": "^4.3.8"
     },
     "require-dev": {
