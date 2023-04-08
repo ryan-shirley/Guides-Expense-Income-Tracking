@@ -2,24 +2,20 @@ FROM php:7.4-fpm-alpine
 
 RUN apk add libressl-dev pkgconfig nodejs npm
 
-RUN apk add -y libpng-dev
-RUN apk add \
-    libwebp-dev \
-    libjpeg62-turbo-dev \
-    libpng-dev libxpm-dev \
-    libfreetype6-dev
-
-RUN docker-php-ext-configure gd \
-    --with-gd \
-    --with-webp-dir \
-    --with-jpeg-dir \
-    --with-png-dir \
-    --with-zlib-dir \
-    --with-xpm-dir \
-    --with-freetype-dir \
-    --enable-gd-native-ttf
-
-RUN docker-php-ext-install gd
+RUN apk add --update \
+		$PHPIZE_DEPS \
+		freetype-dev \
+		libjpeg-turbo-dev \
+		libpng-dev \
+		libxml2-dev \
+		libzip-dev \
+		imagemagick \
+		imagemagick-libs \
+		imagemagick-dev \
+		php7-imagick \
+		php7-pcntl \
+	&& docker-php-ext-configure gd --with-jpeg --with-freetype \
+	&& docker-php-ext-install gd
 
 RUN apk add --no-cache nginx wget \
     ${PHPIZE_DEPS} \
