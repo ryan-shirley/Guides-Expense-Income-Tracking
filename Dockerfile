@@ -4,7 +4,7 @@ RUN apk add libressl-dev pkgconfig nodejs npm
 
 RUN apk add --no-cache nginx wget \
     ${PHPIZE_DEPS} \
-#    && pecl install mongodb \
+    && pecl install mongodb \
     && docker-php-ext-enable \
     mongodb \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
