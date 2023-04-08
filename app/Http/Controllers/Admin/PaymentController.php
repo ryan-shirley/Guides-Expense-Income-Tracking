@@ -83,7 +83,7 @@ class PaymentController extends Controller
             'code' => 'string|max:65535',
             'is_cash' => 'boolean',
             'event_id' => 'exclude_if:event_id,0|exists:events,_id',
-            'receipt_image' => 'required|file|image'
+            'receipt_image' => 'image'
         ]);
 
         // Create Payment
@@ -106,11 +106,9 @@ class PaymentController extends Controller
         }
 
         $p->ref_id = $p->generateReadableId();
-        $paymentId = $p->save();
+        $p->save();
 
-        if($p->receipt_image != null) {
-            $this->SaveReceipt($p->receipt_image, $p->ref_id, $paymentId);
-        }
+        $this->SaveReceipt($request->receipt_image, $p->ref_id, 'xxx');
 
         $request->session()->flash('alert-success', $p->title . ' payment has been added.');
         return redirect()->route('admin.payments.index');
