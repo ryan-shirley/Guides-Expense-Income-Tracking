@@ -80,6 +80,7 @@ class PaymentController extends Controller
     public function edit(Request $request, $id)
     {
         $payment = Payment::findOrFail($id);
+        $payment->receipt_url = $this->GetReceiptUrl($payment->ref_id, $payment->_id);
         $user = Auth::user();
 
         // Check if leader own this payment

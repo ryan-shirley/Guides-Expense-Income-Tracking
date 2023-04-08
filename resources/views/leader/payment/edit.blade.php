@@ -71,6 +71,7 @@
 
                     <div class="form-group">
                         <label for="title">Receipt Image</label>
+                        <img src="{{ $payment->receipt_url  }}" onerror="this.src='https://placehold.co/600x200?text=No+Receipt'" class="img-thumbnail mb-2" />
                         <input type="file" class="form-control" name="receipt_image" placeholder="Receipt image" value="{{ old( 'receipt_image') }}">
                         <small class="form-text text-muted">Close up of the full receipt</small>
                         <div class="text-danger">{{ $errors->first('receipt_image') }}</div>
