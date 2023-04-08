@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Leader;
 
+use App\Traits\ImageHandler;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Payment;
@@ -10,6 +11,8 @@ use Auth;
 
 class PaymentController extends Controller
 {
+    use Imagehandler;
+    
     /**
      * Create a new controller instance.
      *
@@ -39,7 +42,8 @@ class PaymentController extends Controller
             'description' => 'required|string|max:65535',
             'amount' => 'required|regex:/^\d*(\.\d{1,2})?$/',
             'purchase_date' => 'required|date',
-            'guide_money' => 'required|boolean'
+            'guide_money' => 'required|boolean',
+            'receipt_image' => 'image'
         ]);
 
         // Create Payment
@@ -62,6 +66,9 @@ class PaymentController extends Controller
         $p->user_id = Auth::user()->id;
         $p->ref_id = $p->generateReadableId();
         $p->save();
+
+        $paymentId = Payment::where('ref_id', $p->ref_id)->first();
+        $this->SaveReceipt($request->receipt_image, $p->ref_id, $paymentId);
 
         $request->session()->flash('alert-success', $p->title . ' payment has been added.');
         return redirect()->route('leader.home');
@@ -96,7 +103,8 @@ class PaymentController extends Controller
             'description' => 'required|string|max:65535',
             'amount' => 'required|regex:/^\d*(\.\d{1,2})?$/',
             'purchase_date' => 'required|date',
-            'guide_money' => 'required|boolean'
+            'guide_money' => 'required|boolean',
+            'receipt_image' => 'image'
         ]);
 
         // Update Payment
@@ -128,6 +136,9 @@ class PaymentController extends Controller
         }
 
         $p->save();
+
+        $paymentId = Payment::where('ref_id', $p->ref_id)->first();
+        $this->SaveReceipt($request->receipt_image, $p->ref_id, $paymentId);
 
         $request->session()->flash('alert-success', $p->title . ' payment has been updated.');
         return redirect()->route('leader.home');

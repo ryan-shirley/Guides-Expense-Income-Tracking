@@ -147,6 +147,7 @@ class PaymentController extends Controller
             'code' => 'string|max:65535',
             'is_cash' => 'boolean',
             'event_id' => 'exclude_if:event_id,0|exists:events,_id',
+            'receipt_image' => 'image'
         ]);
 
         // Update Payment
@@ -168,6 +169,9 @@ class PaymentController extends Controller
         }
 
         $p->save();
+
+        $paymentId = Payment::where('ref_id', $p->ref_id)->first();
+        $this->SaveReceipt($request->receipt_image, $p->ref_id, $paymentId);
 
         $request->session()->flash('alert-success', $p->title . ' payment has been updated.');
         return redirect()->route('admin.payments.index');
