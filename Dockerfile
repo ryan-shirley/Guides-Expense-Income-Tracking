@@ -8,8 +8,8 @@ RUN apk add --no-cache nginx wget libpng libpng-dev \
     && docker-php-ext-enable \
     mongodb \
     && docker-php-ext-configure gd \
-    --with-jpeg \
-    && docker-php-ext-install gd \
+    --with-freetype --with-jpeg \
+    && docker-php-ext-install gd --with-freetype --with-jpeg \
     && apk del libpng-dev \
     ${PHPIZE_DEPS}
 
