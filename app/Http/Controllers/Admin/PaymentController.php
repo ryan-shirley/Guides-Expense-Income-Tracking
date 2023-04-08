@@ -122,6 +122,7 @@ class PaymentController extends Controller
     {
         $role_leader = Role::where('name', 'leader')->first();
         $payment = Payment::findOrFail($id);
+        $payment->receipt_url = $this->GetReceiptUrl($payment->ref_id, $payment->_id);
         $events = Event::all();
 
         return view('admin.payment.edit')->with([

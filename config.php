@@ -60,7 +60,6 @@
       'File' => 'Illuminate\\Support\\Facades\\File',
       'Gate' => 'Illuminate\\Support\\Facades\\Gate',
       'Hash' => 'Illuminate\\Support\\Facades\\Hash',
-      'ImageConvert' => Intervention\Image\Facades\Image::class,
       'Lang' => 'Illuminate\\Support\\Facades\\Lang',
       'Log' => 'Illuminate\\Support\\Facades\\Log',
       'Mail' => 'Illuminate\\Support\\Facades\\Mail',
