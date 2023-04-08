@@ -1,5 +1,7 @@
 FROM php:7.4-fpm-alpine
 
+RUN docker-php-ext-install gd 
+
 RUN apk add libressl-dev pkgconfig nodejs npm
 
 RUN apk add --no-cache nginx wget \
@@ -19,9 +21,9 @@ COPY . /app
 
 # setup npm fir Vue.js
 RUN npm install -g npm@latest
-RUN cd /app && \ 
+RUN cd /app && \
     npm install
-RUN cd /app && \ 
+RUN cd /app && \
     npm run dev
 
 
