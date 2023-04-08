@@ -12,7 +12,7 @@ use Auth;
 class PaymentController extends Controller
 {
     use Imagehandler;
-    
+
     /**
      * Create a new controller instance.
      *

@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <form method="POST" action="{{ route('admin.payments.update', $payment->id )}}">
+                <form method="POST" action="{{ route('admin.payments.update', $payment->id )}}" enctype="multipart/form-data">
                     @method('PATCH')
                     @csrf
                     <div class="form-group">
@@ -152,6 +152,14 @@
                         <div class="text-danger">{{ $errors->first('event_id') }}</div>
                     </div>
                     <!-- /.Event -->
+
+                    <div class="form-group">
+                        <label for="title">Receipt Image</label>
+                        <input type="file" class="form-control" name="receipt_image" placeholder="Receipt image" value="{{ old( 'receipt_image') }}">
+                        <small class="form-text text-muted">Close up of the full receipt</small>
+                        <div class="text-danger">{{ $errors->first('receipt_image') }}</div>
+                    </div>
+                    <!-- /.Receipt Image -->
 
                     <button class="btn btn-primary" type="submit" value="Store">Update</button>
                 </form>

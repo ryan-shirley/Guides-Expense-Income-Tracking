@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <form method="POST" action="{{ route('leader.payments.store' )}}">
+                <form method="POST" action="{{ route('leader.payments.store' )}}" enctype="multipart/form-data">
                     @csrf
 
                     <div class="form-group">
@@ -67,6 +67,14 @@
                         <div class="text-danger">{{ $errors->first('guide_money') }}</div>
                     </div>
                     <!-- /.Guide Money -->
+
+                    <div class="form-group">
+                        <label for="title">Receipt Image</label>
+                        <input type="file" class="form-control" name="receipt_image" placeholder="Receipt image" value="{{ old( 'receipt_image') }}">
+                        <small class="form-text text-muted">Close up of the full receipt</small>
+                        <div class="text-danger">{{ $errors->first('receipt_image') }}</div>
+                    </div>
+                    <!-- /.Receipt Image -->
 
                     <button class="btn btn-primary" type="submit" value="Store">Submit</button>
                 </form>
