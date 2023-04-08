@@ -2,8 +2,8 @@ FROM php:7.4-fpm-alpine
 
 RUN apk add libressl-dev pkgconfig nodejs npm
 
-RUN apt-get update && apt-get install -y libpng-dev
-RUN apt-get install -y \
+RUN apk add -y libpng-dev
+RUN apk add \
     libwebp-dev \
     libjpeg62-turbo-dev \
     libpng-dev libxpm-dev \
