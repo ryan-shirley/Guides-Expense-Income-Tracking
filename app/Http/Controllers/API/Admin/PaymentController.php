@@ -20,6 +20,37 @@ class PaymentController extends Controller
     }
 
     /**
+     *  Loads payments
+     */
+    public function index(Request $request)
+    {
+        // TODO: Limit and offset from API call
+
+        // Get Payments
+        $payments = Payment::orderBy('purchase_date', 'DESC')->offset(0)->limit(10)->get();
+
+        // Format Payments ID
+        if($payments) {
+            foreach ($payments as $index => $payment) {
+                $payments[$index]->keyID = "p_" . $payment->ref_id;
+                $payments[$index]->code = $payment->code != null ? $payment->code : "N/A";
+
+                if($payment->is_cash) {
+                    $payments[$index]->cash_only = $payment->amount;
+                    $payments[$index]->other = 0;
+                } else {
+                    $payments[$index]->cash_only = 0;
+                    $payments[$index]->other = $payment->amount;
+                }
+            }
+        }
+
+        return [
+            'data' => $payments
+        ];
+    }
+
+    /**
      *  Loads payments from date range
      */
     public function export(Request $request)
