@@ -2,7 +2,7 @@
     <div>
         <div class="list-group list-group-flush">
             <div v-for="payment in payments">
-                <a href="#" class="list-group-item list-group-item-action py-2 border-bottom">
+                <a :href="'/admin/payments/' + payment._id + '/edit'" class="list-group-item list-group-item-action py-2 border-bottom">
                     <div class="container">
                         <div class="row align-items-center row justify-content-start">
                             <div class="col col-lg-3">
@@ -22,7 +22,6 @@
                                 <img :src="payment.receipt_url" onerror="this.src='https://placehold.co/600x600?text=No+Receipt'" class="img-thumbnail mb-2" style="max-height: 70px;" />
                             </div>
                             <div class="col col-lg-3 text-right">
-                                <button class="btn btn-warning btn-sm mb-2"><i class="far fa-edit"></i></button>
                                 <button class="btn btn-danger btn-sm mb-2"><i class="fas fa-times"></i></button>
                                 <button v-if="!payment.approved" class="btn btn-success btn-sm mb-2">Approve</button>
                                 <button v-if="!payment.paid_back" class="btn btn-info btn-sm mb-2">Mark Paid</button>
