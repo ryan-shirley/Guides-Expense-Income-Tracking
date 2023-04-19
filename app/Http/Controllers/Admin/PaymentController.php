@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Traits\ImageHandler;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Payment;
@@ -12,6 +13,8 @@ use Auth;
 
 class PaymentController extends Controller
 {
+    use Imagehandler;
+
     /**
      * Create a new controller instance.
      *
@@ -79,7 +82,8 @@ class PaymentController extends Controller
             'user_id' => 'required|exists:users,_id',
             'code' => 'string|max:65535',
             'is_cash' => 'boolean',
-            'event_id' => 'exclude_if:event_id,0|exists:events,_id'
+            'event_id' => 'exclude_if:event_id,0|exists:events,_id',
+            'receipt_image' => 'image'
         ]);
 
         // Create Payment
@@ -104,6 +108,9 @@ class PaymentController extends Controller
         $p->ref_id = $p->generateReadableId();
         $p->save();
 
+        $paymentId = Payment::where('ref_id', $p->ref_id)->first()->_id;
+        $this->SaveReceipt($request->receipt_image, $p->ref_id, $paymentId);
+
         $request->session()->flash('alert-success', $p->title . ' payment has been added.');
         return redirect()->route('admin.payments.index');
     }
@@ -115,6 +122,7 @@ class PaymentController extends Controller
     {
         $role_leader = Role::where('name', 'leader')->first();
         $payment = Payment::findOrFail($id);
+        $payment->receipt_url = $this->GetReceiptUrl($payment->ref_id, $payment->_id);
         $events = Event::all();
 
         return view('admin.payment.edit')->with([
@@ -140,6 +148,7 @@ class PaymentController extends Controller
             'code' => 'string|max:65535',
             'is_cash' => 'boolean',
             'event_id' => 'exclude_if:event_id,0|exists:events,_id',
+            'receipt_image' => 'image'
         ]);
 
         // Update Payment
@@ -161,6 +170,9 @@ class PaymentController extends Controller
         }
 
         $p->save();
+
+        $paymentId = Payment::where('ref_id', $p->ref_id)->first()->_id;
+        $this->SaveReceipt($request->receipt_image, $p->ref_id, $paymentId);
 
         $request->session()->flash('alert-success', $p->title . ' payment has been updated.');
         return redirect()->route('admin.payments.index');

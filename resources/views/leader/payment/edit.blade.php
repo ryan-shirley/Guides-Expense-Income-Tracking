@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <form method="POST" action="{{ route('leader.payments.update', $payment->id )}}">
+                <form method="POST" action="{{ route('leader.payments.update', $payment->id )}}" enctype="multipart/form-data">
                     @method('PATCH')
                     @csrf
 
@@ -68,6 +68,15 @@
                         <div class="text-danger">{{ $errors->first('guide_money') }}</div>
                     </div>
                     <!-- /.Guide Money -->
+
+                    <div class="form-group">
+                        <label for="title">Receipt Image</label>
+                        <img src="{{ $payment->receipt_url  }}" onerror="this.src='https://placehold.co/600x200?text=No+Receipt'" class="img-thumbnail mb-2" />
+                        <input type="file" class="form-control" name="receipt_image" placeholder="Receipt image" value="{{ old( 'receipt_image') }}">
+                        <small class="form-text text-muted">Close up of the full receipt</small>
+                        <div class="text-danger">{{ $errors->first('receipt_image') }}</div>
+                    </div>
+                    <!-- /.Receipt Image -->
 
                     <button class="btn btn-primary" type="submit" value="Store">Update</button>
                 </form>
