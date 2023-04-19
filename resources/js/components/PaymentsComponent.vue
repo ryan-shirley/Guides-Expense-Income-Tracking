@@ -7,8 +7,8 @@
                         <div class="row align-items-center row justify-content-start">
                             <div class="col col-lg-3">
                                 <h4 class="mb-1">{{ payment.title }}</h4>
-                                <p class="text-muted mb-0">{{ payment.user.name }}</p>
-                                <p class="text-muted mb-0">{{ payment.keyID }} | {{ payment.code_name }}</p>
+                                <small class="text-muted mb-0">{{ payment.user.name }}</small><br />
+                                <small class="text-muted mb-0">{{ payment.keyID }} | {{ payment.code_name }}</small>
                             </div>
                             <div class="col col-lg-2 text-center">
                                 <p class="mb-0">{{ formatDate(payment.purchase_date) }}</p>
