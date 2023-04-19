@@ -19,7 +19,7 @@
                                 <small class="text-muted">{{ payment.is_cash ? "Cash": "Other" }} ({{ payment.guide_money ? "Guide" : "Personal" }})</small>
                             </div>
                             <div class="col col-lg-2">
-                                <p class="mb-0 font-weight-bold">Image...</p>
+                                <img :src="payment.receipt_url" onerror="this.src='https://placehold.co/600x600?text=No+Receipt'" class="img-thumbnail mb-2" style="max-height: 70px;" />
                             </div>
                             <div class="col col-lg-3 text-right">
                                 <button class="btn btn-warning btn-sm mb-2"><i class="far fa-edit"></i></button>

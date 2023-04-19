@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Admin;
 
+use App\Traits\ImageHandler;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Payment;
@@ -9,6 +10,8 @@ use DateTime;
 
 class PaymentController extends Controller
 {
+    use Imagehandler;
+
     /**
      * Create a new controller instance.
      *
@@ -36,6 +39,7 @@ class PaymentController extends Controller
             foreach ($payments as $index => $payment) {
                 $payments[$index]->keyID = "p_" . $payment->ref_id;
                 $payments[$index]->code = $payment->code != null ? $payment->code : "N/A";
+                $payments[$index]->receipt_url = $this->GetReceiptUrl($payment->ref_id, $payment->_id);
 
                 if($payment->is_cash) {
                     $payments[$index]->cash_only = $payment->amount;
