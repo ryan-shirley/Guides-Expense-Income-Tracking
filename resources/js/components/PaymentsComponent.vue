@@ -8,7 +8,7 @@
                             <div class="col col-lg-3">
                                 <h4 class="mb-1">{{ payment.title }}</h4>
                                 <p class="text-muted mb-0">{{ payment.user.name }}</p>
-                                <p class="text-muted mb-0">{{ payment.keyID }}</p>
+                                <p class="text-muted mb-0">{{ payment.keyID }} | {{ payment.code_name }}</p>
                             </div>
                             <div class="col col-lg-2 text-center">
                                 <p class="mb-0">{{ formatDate(payment.purchase_date) }}</p>
