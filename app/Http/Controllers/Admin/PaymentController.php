@@ -49,7 +49,8 @@ class PaymentController extends Controller
         }
 
         return view('admin.payment.index')->with([
-            'payments' => $payments
+            'payments' => $payments,
+            'user' => Auth::user(),
         ]);
     }
 

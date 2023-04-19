@@ -22,7 +22,7 @@ class PaymentController extends Controller
     /**
      *  Loads payments from date range
      */
-    public function index(Request $request)
+    public function export(Request $request)
     {
         $startDate = $request->query('startDate');
         $endDate = $request->query('endDate');
@@ -42,7 +42,7 @@ class PaymentController extends Controller
             foreach ($payments as $index => $payment) {
                 $payments[$index]->keyID = "p_" . $payment->ref_id;
                 $payments[$index]->code = $payment->code != null ? $payment->code : "N/A";
-                
+
                 if($payment->is_cash) {
                     $payments[$index]->cash_only = $payment->amount;
                     $payments[$index]->other = 0;

@@ -22,7 +22,7 @@ class IncomeController extends Controller
     /**
      *  Loads incomes from date range
      */
-    public function index(Request $request)
+    public function export(Request $request)
     {
         $startDate = $request->query('startDate');
         $endDate = $request->query('endDate');

@@ -14,7 +14,7 @@
                     </div>
                 </div>
             </div>
-           <data-export api_token="{{ $user->api_token }}" columns="{{ $columns }}" url="/api/payments" />
+           <data-export api_token="{{ $user->api_token }}" columns="{{ $columns }}" url="/api/payments/export" />
         </div>
         <!-- /.Card -->
     </div>

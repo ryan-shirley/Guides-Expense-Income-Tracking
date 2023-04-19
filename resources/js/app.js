@@ -24,6 +24,7 @@ window.Vue = Vue;
 
 Vue.component('chat-bot', require('./components/ChatbotComponent.vue').default);
 Vue.component('data-export', require('./components/DataExportComponent.vue').default);
+Vue.component('payments-component', require('./components/PaymentsComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
