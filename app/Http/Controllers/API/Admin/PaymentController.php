@@ -27,7 +27,9 @@ class PaymentController extends Controller
         // TODO: Limit and offset from API call
 
         // Get Payments
-        $payments = Payment::orderBy('purchase_date', 'DESC')->offset(0)->limit(10)->get();
+        $payments = Payment::with(['user' => function ($query) {
+            $query->select('name');
+        }])->orderBy('purchase_date', 'DESC')->offset(0)->limit(10)->get();
 
         // Format Payments ID
         if($payments) {
