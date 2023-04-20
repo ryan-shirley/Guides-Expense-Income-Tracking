@@ -1,5 +1,20 @@
 <template>
     <div v-if="payments != null && payments.data != null">
+        <div class="card-body py-0 row">
+            <div class="col-3">
+                <div class="form-group row align-items-center">
+                    <label for="limit" class="col-md-auto col-form-label">Show</label>
+                    <select class="col-3 custom-select custom-select-sm" v-model="limit" @change="reloadData">
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                    <label class="col-md-auto col-form-label">entries</label>
+                </div>
+                <!-- /.Start Date -->
+            </div>
+        </div>
+
         <div class="list-group list-group-flush">
             <div v-for="payment in payments.data">
                 <a :href="'/admin/payments/' + payment._id + '/edit'" class="list-group-item list-group-item-action clearfix py-2 border-bottom">
@@ -57,19 +72,13 @@ export default {
     data () {
         return {
             payments: null,
-            processingActionRequest: false
+            processingActionRequest: false,
+            limit: 25,
+            page: 1
         }
     },
     mounted () {
-        let app = this;
-        axios
-            .get(`/api/payments?api_token=${app.$attrs.api_token}`)
-            .then(response => {
-                this.payments = response.data;
-            })
-            .catch(error => {
-                app.displayError(error.message, error.response.data.message)
-            });
+        this.reloadData();
     },
     methods: {
         formatDate(date) {
@@ -189,6 +198,17 @@ export default {
                 timer: 4000,
                 timerProgressBar: true,
             })
+        },
+        reloadData(){
+            let app = this;
+            axios
+                .get(`/api/payments?api_token=${app.$attrs.api_token}&limit=${app.limit}&page=${app.page}`)
+                .then(response => {
+                    this.payments = response.data;
+                })
+                .catch(error => {
+                    app.displayError(error.message, error.response.data.message)
+                });
         }
     }
 }

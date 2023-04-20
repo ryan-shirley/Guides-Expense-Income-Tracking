@@ -31,12 +31,16 @@ class PaymentController extends Controller
      */
     public function index(Request $request)
     {
-        // TODO: Limit and offset from API call
+        $request->validate([
+            'limit' => 'required|integer|max:200|min:1',
+        ]);
+
+        $limit = $request->query('limit');
 
         // Get Payments
         $payments = Payment::with(['user' => function ($query) {
             $query->select('name');
-        }])->orderBy('purchase_date', 'DESC')->paginate(15);
+        }])->orderBy('purchase_date', 'DESC')->paginate(intval($limit));
 
         return $this->Enrich($payments);
     }
