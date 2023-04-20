@@ -61,7 +61,23 @@
         </div>
 
         <div class="card-body">
-            <small>Showing from {{ payments.from }} to {{ payments.to }} of {{ payments.total }} payments</small>
+            <div class="d-flex w-100 justify-content-between">
+                <small>Showing from {{ payments.from }} to {{ payments.to }} of {{ payments.total }} payments</small>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-end">
+                        <li class="page-item" v-if="payments.prev_page_url !== null" @click="page -= 1">
+                            <a class="page-link"><i class="fas fa-chevron-left"></i></a>
+                        </li>
+                        <div v-for="pageNum in pageNumbers">
+                            <li class="page-item" :class="payments.current_page === pageNum && 'active'"><a class="page-link" @click="page = pageNum">{{ pageNum }}</a></li>
+                        </div>
+                        <li class="page-item" v-if="payments.next_page_url !== null" @click="page += 1">
+                            <a class="page-link"><i class="fas fa-chevron-right"></i></a>
+                        </li>
+                    </ul>
+                </nav>
+
+            </div>
         </div>
     </div>
 </template>
@@ -74,11 +90,17 @@ export default {
             payments: null,
             processingActionRequest: false,
             limit: 25,
-            page: 1
+            page: 1,
+            pageNumbers: [1]
         }
     },
     mounted () {
         this.reloadData();
+    },
+    watch: {
+        page: function (value) {
+            this.reloadData();
+        }
     },
     methods: {
         formatDate(date) {
@@ -204,7 +226,21 @@ export default {
             axios
                 .get(`/api/payments?api_token=${app.$attrs.api_token}&limit=${app.limit}&page=${app.page}`)
                 .then(response => {
-                    this.payments = response.data;
+                    app.payments = response.data;
+
+                    let currentPage = app.page;
+                    let hasPreviousPage = app.payments.prev_page_url !== null;
+                    let hasNextPage = app.payments.next_page_url !== null;
+
+                    let nextPageNumbers = [currentPage];
+                    if(hasPreviousPage) {
+                        nextPageNumbers.push(currentPage - 1)
+                    }
+                    if(hasNextPage) {
+                        nextPageNumbers.push(currentPage + 1)
+                    }
+
+                    this.pageNumbers = nextPageNumbers.sort();
                 })
                 .catch(error => {
                     app.displayError(error.message, error.response.data.message)
