@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\API\Admin;
 
+use App\BankAccount;
 use App\Traits\ImageHandler;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Payment;
@@ -32,7 +34,7 @@ class PaymentController extends Controller
         // Get Payments
         $payments = Payment::with(['user' => function ($query) {
             $query->select('name');
-        }])->orderBy('purchase_date', 'DESC')->offset(0)->limit(10)->get();
+        }])->orderBy('purchase_date', 'DESC')->paginate(15);
 
         // Format Payments ID
         if($payments) {
@@ -95,9 +97,7 @@ class PaymentController extends Controller
             }
         }
 
-        return [
-            'data' => $payments
-        ];
+        return $payments;
     }
 
     /**
@@ -139,6 +139,80 @@ class PaymentController extends Controller
             'endDate' => $endDate,
             'startDate' => $startDate
         ];
+    }
+
+
+    /**
+     * Mark as paid back
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function markPaidBack(Request $request, int $id){
+        // Change paid back status
+        $payment = Payment::findOrFail($id);
+        $payment->paid_back = true;
+        $payment->save();
+
+        return response()->json([
+            'message' => 'Payment successfully marked as paid back',
+        ]);
+    }
+
+    /**
+     * Approve payment
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function approve(Request $request, int $id){
+        // Mark Approved
+        $payment = Payment::findOrFail($id);
+        $payment->approved = true;
+        $payment->save();
+
+        // Take out of bank account
+        $bankBalance = BankAccount::where('title', 'Main')->first();
+        $bankBalance->balance -= $payment->amount;
+        $bankBalance->save();
+
+        return response()->json([
+            'message' => 'Payment successfully approved',
+        ]);
+    }
+
+    /**
+     * Mark as received receipt
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function receivedReceipt(Request $request, int $id){
+        // Create data and convert amount into negative as expense
+        $payment = Payment::findOrFail($id);
+
+        // Save
+        $payment->receipt_received = true;
+        $payment->save();
+
+        return response()->json([
+            'message' => 'Payment successfully marked with receipt received',
+        ]);
+    }
+
+    /**
+     * Delete receipt
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function destroy(Request $request, int $id){
+        $p = Payment::find($id);
+        $p->delete();
+
+        return response()->json([
+            'message' => 'Payment successfully deleted',
+        ]);
     }
 
 }

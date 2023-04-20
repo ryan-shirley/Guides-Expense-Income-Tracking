@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="list-group list-group-flush">
-            <div v-for="payment in payments">
+            <div v-for="payment in payments.data">
                 <a :href="'/admin/payments/' + payment._id + '/edit'" class="list-group-item list-group-item-action py-2 border-bottom">
                     <div class="container">
                         <div class="row align-items-center row justify-content-start">
@@ -59,7 +59,9 @@ export default {
         let app = this;
         axios
             .get(`/api/payments?api_token=${app.$attrs.api_token}`)
-            .then(response => (this.payments = response.data.data));
+            .then(response => {
+                this.payments = response.data;
+            });
     },
     methods: {
         formatDate(date) {
@@ -74,6 +76,22 @@ export default {
                 day = '0' + day;
 
             return [year, month, day].join('-');
+        },
+        async approve(id){
+            let response = await axios.post(`/api/payments/${id}/approve?api_token=${app.$attrs.api_token}`)
+            console.log(response.data);
+        },
+        async markPaidBack(id){
+            let response = await axios.post(`/api/payments/${id}/paid-back?api_token=${app.$attrs.api_token}`)
+            console.log(response.data);
+        },
+        async markReceivedReceipt(id){
+            let response = await axios.post(`/api/payments/${id}/received-receipt?api_token=${app.$attrs.api_token}`)
+            console.log(response.data);
+        },
+        async delete(id){
+            let response = await axios.delete(`/api/payments/${id}?api_token=${app.$attrs.api_token}`)
+            console.log(response.data);
         }
     }
 }
