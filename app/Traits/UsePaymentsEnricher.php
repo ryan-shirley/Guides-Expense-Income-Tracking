@@ -54,7 +54,7 @@ trait UsePaymentsEnricher
                         $payments[$index]->code_name = "If drawing cash from bank or float (petty cash)";
                         break;
                     default:
-                        echo "N/A";
+                        $payments[$index]->code_name = "N/A";
                 }
 
                 if($payment->is_cash) {
