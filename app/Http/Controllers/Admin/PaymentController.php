@@ -35,10 +35,7 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        $payments  = Payment::orderBy('purchase_date', 'desc')->paginate(15)->onEachSide(2);
-
         return view('admin.payment.index')->with([
-            'payments' => $this->Enrich($payments),
             'user' => Auth::user(),
         ]);
     }
