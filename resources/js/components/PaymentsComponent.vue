@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div v-if="payments != null && payments.data != null">
         <div class="list-group list-group-flush">
-            <div v-for="payment in payments.data" v-if="payments != null && payments.data != null">
+            <div v-for="payment in payments.data">
                 <a :href="'/admin/payments/' + payment._id + '/edit'" class="list-group-item list-group-item-action clearfix py-2 border-bottom">
                     <div class="container">
                         <div class="row align-items-center row justify-content-start">
@@ -43,6 +43,10 @@
 
                 </a>
             </div>
+        </div>
+
+        <div class="card-body">
+            <small>Showing from {{ payments.from }} to {{ payments.to }} of {{ payments.total }} payments</small>
         </div>
     </div>
 </template>
