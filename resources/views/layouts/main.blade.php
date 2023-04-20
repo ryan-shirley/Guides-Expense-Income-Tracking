@@ -204,25 +204,25 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
     @yield('scripts')
 
-    @foreach (['error', 'warning', 'success', 'info'] as $msg)
-        @if(Session::has('alert-' . $msg))
+{{--    @foreach (['error', 'warning', 'success', 'info'] as $msg)--}}
+{{--        @if(Session::has('alert-' . $msg))--}}
 
-            <!-- Notification -->
-            <script type="text/javascript">
-                Swal.fire({
-                    title: "{{ Session::get('alert-' . $msg) }}",
-                    type: "{{ $msg }}",
-                    showButton: true,
-                    confirmButtonText: 'close',
-                    buttonsStyling: false,
-                    customClass: {
-                        confirmButton: 'btn btn-default',
-                    },
-                    timer: 3000
-                })
-            </script>
-            <!-- /.Notification -->
-        @endif
-    @endforeach
+{{--            <!-- Notification -->--}}
+{{--            <script type="text/javascript">--}}
+{{--                Swal.fire({--}}
+{{--                    title: "{{ Session::get('alert-' . $msg) }}",--}}
+{{--                    type: "{{ $msg }}",--}}
+{{--                    showButton: true,--}}
+{{--                    confirmButtonText: 'close',--}}
+{{--                    buttonsStyling: false,--}}
+{{--                    customClass: {--}}
+{{--                        confirmButton: 'btn btn-default',--}}
+{{--                    },--}}
+{{--                    timer: 3000--}}
+{{--                })--}}
+{{--            </script>--}}
+{{--            <!-- /.Notification -->--}}
+{{--        @endif--}}
+{{--    @endforeach--}}
 </body>
 </html>

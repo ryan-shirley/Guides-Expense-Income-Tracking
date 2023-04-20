@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers\API\Admin;
 
+use App\BankAccount;
+use App\Traits\ImageHandler;
+use App\Traits\UsePaymentsEnricher;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Payment;
@@ -9,6 +13,9 @@ use DateTime;
 
 class PaymentController extends Controller
 {
+    use Imagehandler;
+    use UsePaymentsEnricher;
+
     /**
      * Create a new controller instance.
      *
@@ -20,9 +27,28 @@ class PaymentController extends Controller
     }
 
     /**
-     *  Loads payments from date range
+     *  Loads payments
      */
     public function index(Request $request)
+    {
+        $request->validate([
+            'limit' => 'required|integer|max:200|min:1',
+        ]);
+
+        $limit = $request->query('limit');
+
+        // Get Payments
+        $payments = Payment::with(['user' => function ($query) {
+            $query->select('name');
+        }])->orderBy('purchase_date', 'DESC')->paginate(intval($limit));
+
+        return $this->Enrich($payments);
+    }
+
+    /**
+     *  Loads payments from date range
+     */
+    public function export(Request $request)
     {
         $startDate = $request->query('startDate');
         $endDate = $request->query('endDate');
@@ -37,27 +63,85 @@ class PaymentController extends Controller
             $payments = null;
         }
 
-        // Format Payments ID
-        if($payments) {
-            foreach ($payments as $index => $payment) {
-                $payments[$index]->keyID = "p_" . $payment->ref_id;
-                $payments[$index]->code = $payment->code != null ? $payment->code : "N/A";
-                
-                if($payment->is_cash) {
-                    $payments[$index]->cash_only = $payment->amount;
-                    $payments[$index]->other = 0;
-                } else {
-                    $payments[$index]->cash_only = 0;
-                    $payments[$index]->other = $payment->amount;
-                }
-            }
-        }
-
         return [
-            'data' => $payments,
+            'data' => $this->Enrich($payments),
             'endDate' => $endDate,
             'startDate' => $startDate
         ];
+    }
+
+
+    /**
+     * Mark as paid back
+     * @param Request $request
+     * @param string $id
+     * @return JsonResponse
+     */
+    public function markPaidBack(Request $request, string $id){
+        // Change paid back status
+        $payment = Payment::findOrFail($id);
+        $payment->paid_back = true;
+        $payment->save();
+
+        return response()->json([
+            'message' => 'Payment successfully marked as paid back',
+        ]);
+    }
+
+    /**
+     * Approve payment
+     * @param Request $request
+     * @param string $id
+     * @return JsonResponse
+     */
+    public function approve(Request $request, string $id){
+        // Mark Approved
+        $payment = Payment::findOrFail($id);
+        $payment->approved = true;
+        $payment->save();
+
+        // Take out of bank account
+        $bankBalance = BankAccount::where('title', 'Main')->first();
+        $bankBalance->balance -= $payment->amount;
+        $bankBalance->save();
+
+        return response()->json([
+            'message' => 'Payment successfully approved',
+        ]);
+    }
+
+    /**
+     * Mark as received receipt
+     * @param Request $request
+     * @param string $id
+     * @return JsonResponse
+     */
+    public function receivedReceipt(Request $request, string $id){
+        // Create data and convert amount into negative as expense
+        $payment = Payment::findOrFail($id);
+
+        // Save
+        $payment->receipt_received = true;
+        $payment->save();
+
+        return response()->json([
+            'message' => 'Payment successfully marked with receipt received',
+        ]);
+    }
+
+    /**
+     * Delete receipt
+     * @param Request $request
+     * @param string $id
+     * @return JsonResponse
+     */
+    public function destroy(Request $request, string $id){
+        $p = Payment::find($id);
+        $p->delete();
+
+        return response()->json([
+            'message' => 'Payment successfully deleted',
+        ]);
     }
 
 }

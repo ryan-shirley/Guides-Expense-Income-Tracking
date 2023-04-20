@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Traits\ImageHandler;
+use App\Traits\UsePaymentsEnricher;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Payment;
@@ -14,6 +15,7 @@ use Auth;
 class PaymentController extends Controller
 {
     use Imagehandler;
+    use UsePaymentsEnricher;
 
     /**
      * Create a new controller instance.
@@ -33,23 +35,8 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        $payments  = Payment::orderBy('purchase_date', 'desc')->paginate(15)->onEachSide(2);
-
-        // Format Payments ID
-        foreach ($payments as $index => $payment) {
-            $payments[$index]->keyID = "p_" . $payment->ref_id;
-
-            if($payment->is_cash) {
-                $payments[$index]->cash_only = $payment->amount;
-                $payments[$index]->other = 0;
-            } else {
-                $payments[$index]->cash_only = 0;
-                $payments[$index]->other = $payment->amount;
-            }
-        }
-
         return view('admin.payment.index')->with([
-            'payments' => $payments
+            'user' => Auth::user(),
         ]);
     }
 
