@@ -1,8 +1,8 @@
 <template>
     <div>
         <div class="list-group list-group-flush">
-            <div v-for="payment in payments.data">
-                <a :href="'/admin/payments/' + payment._id + '/edit'" class="list-group-item list-group-item-action py-2 border-bottom">
+            <div v-for="payment in payments.data" v-if="payments != null && payments.data != null">
+                <a :href="'/admin/payments/' + payment._id + '/edit'" class="list-group-item list-group-item-action clearfix py-2 border-bottom">
                     <div class="container">
                         <div class="row align-items-center row justify-content-start">
                             <div class="col col-lg-3">
@@ -22,10 +22,10 @@
                                 <img :src="payment.receipt_url" onerror="this.src='https://placehold.co/600x600?text=No+Receipt'" class="img-thumbnail mb-2" style="max-height: 70px;" />
                             </div>
                             <div class="col col-lg-3 text-right">
-                                <button class="btn btn-danger btn-sm mb-2"><i class="fas fa-times"></i></button>
-                                <button v-if="!payment.approved" class="btn btn-success btn-sm mb-2">Approve</button>
-                                <button v-if="!payment.paid_back" class="btn btn-info btn-sm mb-2">Mark Paid</button>
-                                <button v-if="!payment.receipt_received" class="btn btn-info btn-sm mb-2">Received Receipt</button>
+                                <button class="btn btn-danger btn-sm mb-2" @click="deletePayment(payment._id)" v-bind:disabled="processingActionRequest"><i class="fas fa-times"></i></button>
+                                <button v-if="!payment.approved" class="btn btn-success btn-sm mb-2" @click="approve(payment._id)" v-bind:disabled="processingActionRequest">Approve</button>
+                                <button v-if="!payment.paid_back" class="btn btn-info btn-sm mb-2" @click="markPaidBack(payment._id)" v-bind:disabled="processingActionRequest">Mark Paid</button>
+                                <button v-if="!payment.receipt_received" class="btn btn-info btn-sm mb-2" @click="markReceivedReceipt(payment._id)" v-bind:disabled="processingActionRequest">Received Receipt</button>
                             </div>
                             <div class="col-12">
                                 <span v-if="!payment.paid_back" class="badge badge-pill badge-danger">
@@ -52,7 +52,8 @@ export default {
     name: "PaymentsComponent",
     data () {
         return {
-            payments: null
+            payments: null,
+            processingActionRequest: false
         }
     },
     mounted () {
@@ -78,20 +79,63 @@ export default {
             return [year, month, day].join('-');
         },
         async approve(id){
-            let response = await axios.post(`/api/payments/${id}/approve?api_token=${app.$attrs.api_token}`)
+            this.handleClickInit();
+            let response = await axios.post(`/api/payments/${id}/approve?api_token=${this.$attrs.api_token}`)
             console.log(response.data);
+
+            const index = this.getPaymentIndex(id)
+            const updatedPayment = this.payments.data[index];
+            updatedPayment.approved = true;
+            this.payments.data[index] = updatedPayment;
+
+            this.handleClickFinish();
         },
         async markPaidBack(id){
-            let response = await axios.post(`/api/payments/${id}/paid-back?api_token=${app.$attrs.api_token}`)
+            this.handleClickInit();
+            let response = await axios.post(`/api/payments/${id}/paid-back?api_token=${this.$attrs.api_token}`)
             console.log(response.data);
+
+            const index = this.getPaymentIndex(id)
+            const updatedPayment = this.payments.data[index];
+            updatedPayment.paid_back = true;
+            this.payments.data[index] = updatedPayment;
+
+            this.handleClickFinish();
         },
         async markReceivedReceipt(id){
-            let response = await axios.post(`/api/payments/${id}/received-receipt?api_token=${app.$attrs.api_token}`)
+            this.handleClickInit();
+            let response = await axios.post(`/api/payments/${id}/received-receipt?api_token=${this.$attrs.api_token}`)
             console.log(response.data);
+
+            const index = this.getPaymentIndex(id)
+            const updatedPayment = this.payments.data[index];
+            updatedPayment.receipt_received = true;
+            this.payments.data[index] = updatedPayment;
+
+            this.handleClickFinish();
         },
-        async delete(id){
-            let response = await axios.delete(`/api/payments/${id}?api_token=${app.$attrs.api_token}`)
+        async deletePayment(id){
+            this.handleClickInit();
+            let response = await axios.delete(`/api/payments/${id}?api_token=${this.$attrs.api_token}`)
             console.log(response.data);
+
+            const index = this.getPaymentIndex(id)
+            if (index > -1) { // only splice array when item is found
+                this.payments.data.splice(index, 1); // 2nd parameter means remove one item only
+            }
+
+            this.handleClickFinish();
+        },
+        getPaymentIndex(id){
+            var foundIndex = this.payments.data.findIndex(x => x._id == id);
+            return foundIndex;
+        },
+        handleClickInit(){
+            event.preventDefault();
+            this.processingActionRequest = true;
+        },
+        handleClickFinish(){
+            this.processingActionRequest = false;
         }
     }
 }
