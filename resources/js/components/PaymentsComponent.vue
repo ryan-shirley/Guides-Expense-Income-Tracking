@@ -80,6 +80,7 @@ export default {
         },
         async approve(id){
             this.handleClickInit();
+
             let response = await axios.post(`/api/payments/${id}/approve?api_token=${this.$attrs.api_token}`)
             console.log(response.data);
 
@@ -116,12 +117,25 @@ export default {
         },
         async deletePayment(id){
             this.handleClickInit();
-            let response = await axios.delete(`/api/payments/${id}?api_token=${this.$attrs.api_token}`)
-            console.log(response.data);
 
-            const index = this.getPaymentIndex(id)
-            if (index > -1) { // only splice array when item is found
-                this.payments.data.splice(index, 1); // 2nd parameter means remove one item only
+            let result = await Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            })
+
+            if (result.value === true) {
+                let response = await axios.delete(`/api/payments/${id}?api_token=${this.$attrs.api_token}`)
+                console.log(response.data);
+
+                const index = this.getPaymentIndex(id)
+                if (index > -1) { // only splice array when item is found
+                    this.payments.data.splice(index, 1); // 2nd parameter means remove one item only
+                }
             }
 
             this.handleClickFinish();
