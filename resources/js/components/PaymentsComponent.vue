@@ -62,6 +62,9 @@ export default {
             .get(`/api/payments?api_token=${app.$attrs.api_token}`)
             .then(response => {
                 this.payments = response.data;
+            })
+            .catch(error => {
+                app.displayError(error.message, error.response.data.message)
             });
     },
     methods: {
@@ -81,37 +84,54 @@ export default {
         async approve(id){
             this.handleClickInit();
 
-            let response = await axios.post(`/api/payments/${id}/approve?api_token=${this.$attrs.api_token}`)
-            console.log(response.data);
+            try {
+                let response = await axios.post(`/api/payments/${id}/approve?api_token=${this.$attrs.api_token}`)
+                console.log(response.data);
 
-            const index = this.getPaymentIndex(id)
-            const updatedPayment = this.payments.data[index];
-            updatedPayment.approved = true;
-            this.payments.data[index] = updatedPayment;
+                const index = this.getPaymentIndex(id)
+                const updatedPayment = this.payments.data[index];
+                updatedPayment.approved = true;
+                this.payments.data[index] = updatedPayment;
+            }
+            catch (error) {
+                this.displayError(error.message, error.response.data.message)
+            }
 
             this.handleClickFinish();
         },
         async markPaidBack(id){
             this.handleClickInit();
-            let response = await axios.post(`/api/payments/${id}/paid-back?api_token=${this.$attrs.api_token}`)
-            console.log(response.data);
 
-            const index = this.getPaymentIndex(id)
-            const updatedPayment = this.payments.data[index];
-            updatedPayment.paid_back = true;
-            this.payments.data[index] = updatedPayment;
+            try {
+                let response = await axios.post(`/api/payments/${id}/paid-back?api_token=${this.$attrs.api_token}`)
+                console.log(response.data);
+
+                const index = this.getPaymentIndex(id)
+                const updatedPayment = this.payments.data[index];
+                updatedPayment.paid_back = true;
+                this.payments.data[index] = updatedPayment;
+            }
+            catch (error) {
+                this.displayError(error.message, error.response.data.message)
+            }
 
             this.handleClickFinish();
         },
         async markReceivedReceipt(id){
             this.handleClickInit();
-            let response = await axios.post(`/api/payments/${id}/received-receipt?api_token=${this.$attrs.api_token}`)
-            console.log(response.data);
 
-            const index = this.getPaymentIndex(id)
-            const updatedPayment = this.payments.data[index];
-            updatedPayment.receipt_received = true;
-            this.payments.data[index] = updatedPayment;
+            try {
+                let response = await axios.post(`/api/payments/${id}/received-receipt?api_token=${this.$attrs.api_token}`)
+                console.log(response.data);
+
+                const index = this.getPaymentIndex(id)
+                const updatedPayment = this.payments.data[index];
+                updatedPayment.receipt_received = true;
+                this.payments.data[index] = updatedPayment;
+            }
+            catch (error) {
+                this.displayError(error.message, error.response.data.message)
+            }
 
             this.handleClickFinish();
         },
@@ -129,19 +149,24 @@ export default {
             })
 
             if (result.value === true) {
-                let response = await axios.delete(`/api/payments/${id}?api_token=${this.$attrs.api_token}`)
-                console.log(response.data);
+                try {
+                    let response = await axios.delete(`/api/payments/${id}?api_token=${this.$attrs.api_token}`)
+                    console.log(response.data);
 
-                const index = this.getPaymentIndex(id)
-                if (index > -1) { // only splice array when item is found
-                    this.payments.data.splice(index, 1); // 2nd parameter means remove one item only
+                    const index = this.getPaymentIndex(id)
+                    if (index > -1) { // only splice array when item is found
+                        this.payments.data.splice(index, 1); // 2nd parameter means remove one item only
+                    }
+                }
+                catch (error) {
+                    this.displayError(error.message, error.response.data.message)
                 }
             }
 
             this.handleClickFinish();
         },
         getPaymentIndex(id){
-            var foundIndex = this.payments.data.findIndex(x => x._id == id);
+            let foundIndex = this.payments.data.findIndex(x => x._id == id);
             return foundIndex;
         },
         handleClickInit(){
@@ -150,6 +175,16 @@ export default {
         },
         handleClickFinish(){
             this.processingActionRequest = false;
+        },
+        displayError(title, message){
+            Swal.fire({
+                icon: 'error',
+                title: title,
+                text: message,
+                footer: 'I\'m sorry 🥺',
+                timer: 4000,
+                timerProgressBar: true,
+            })
         }
     }
 }
