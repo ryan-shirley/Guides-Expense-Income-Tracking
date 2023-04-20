@@ -145,10 +145,10 @@ class PaymentController extends Controller
     /**
      * Mark as paid back
      * @param Request $request
-     * @param int $id
+     * @param string $id
      * @return JsonResponse
      */
-    public function markPaidBack(Request $request, int $id){
+    public function markPaidBack(Request $request, string $id){
         // Change paid back status
         $payment = Payment::findOrFail($id);
         $payment->paid_back = true;
@@ -162,10 +162,10 @@ class PaymentController extends Controller
     /**
      * Approve payment
      * @param Request $request
-     * @param int $id
+     * @param string $id
      * @return JsonResponse
      */
-    public function approve(Request $request, int $id){
+    public function approve(Request $request, string $id){
         // Mark Approved
         $payment = Payment::findOrFail($id);
         $payment->approved = true;
@@ -184,10 +184,10 @@ class PaymentController extends Controller
     /**
      * Mark as received receipt
      * @param Request $request
-     * @param int $id
+     * @param string $id
      * @return JsonResponse
      */
-    public function receivedReceipt(Request $request, int $id){
+    public function receivedReceipt(Request $request, string $id){
         // Create data and convert amount into negative as expense
         $payment = Payment::findOrFail($id);
 
@@ -203,10 +203,10 @@ class PaymentController extends Controller
     /**
      * Delete receipt
      * @param Request $request
-     * @param int $id
+     * @param string $id
      * @return JsonResponse
      */
-    public function destroy(Request $request, int $id){
+    public function destroy(Request $request, string $id){
         $p = Payment::find($id);
         $p->delete();
 
