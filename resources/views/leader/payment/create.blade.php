@@ -72,7 +72,9 @@
                         <label for="title">Receipt Image</label>
                         <input type="file" class="form-control" name="receipt_image" placeholder="Receipt image" value="{{ old( 'receipt_image') }}">
                         <small class="form-text text-muted">Close up of the full receipt</small>
-                        <div class="text-danger">{{ $errors->first('receipt_image') }}</div>
+                        @error('receipt_image')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                     <!-- /.Receipt Image -->
 
