@@ -41,4 +41,6 @@ RUN cd /app && \
 
 RUN chown -R www-data: /app
 
+RUN /app/docker/custom-php.ini /usr/local/etc/php/conf.d/custom-php.ini
+
 CMD sh /app/docker/startup.sh
