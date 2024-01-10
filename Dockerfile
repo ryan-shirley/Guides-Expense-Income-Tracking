@@ -28,7 +28,7 @@ RUN mkdir -p /app
 COPY . /app
 
 # setup npm fir Vue.js
-RUN npm install -g npm@latest
+RUN npm install -g npm@9.5.1
 RUN cd /app && \
     npm install
 RUN cd /app && \
@@ -40,5 +40,7 @@ RUN cd /app && \
     /usr/local/bin/composer install --no-dev
 
 RUN chown -R www-data: /app
+
+RUN /app/docker/custom-php.ini /usr/local/etc/php/conf.d/custom-php.ini
 
 CMD sh /app/docker/startup.sh
