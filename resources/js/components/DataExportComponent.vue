@@ -96,7 +96,7 @@ export default {
             if (day.length < 2) 
                 day = '0' + day;
 
-            return [year, month, day].join('-');
+            return [day, month, year].join('-');
         },
         initTable() {
             let app = this;
