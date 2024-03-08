@@ -40,7 +40,7 @@
                             <td>{{ $i->keyID }}</td>
                             <td>{{ $i->title }}</td>
                             <td>€{{ $i->amount }}</td>
-                            <td>{{ date('Y-m-d', strtotime($i->date)) }}</td>
+                            <td>{{ date('d-m-Y', strtotime($i->date)) }}</td>
                             <td>
                                 @if ($i->is_cash)
                                 Cash or Cheque

@@ -33,7 +33,7 @@
                         @foreach ($transactions as $t)
                             <tr>
                                 <td>{{ $t->amount }}</td>
-                                <td>{{ date('Y-m-d', strtotime($t->date)) }}</td>
+                                <td>{{ date('d-m-Y', strtotime($t->date)) }}</td>
                                 <td>
                                     @if ($t->is_logement)
                                         Logement
