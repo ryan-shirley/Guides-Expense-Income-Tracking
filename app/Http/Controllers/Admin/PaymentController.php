@@ -47,8 +47,9 @@ class PaymentController extends Controller
     {
         $role_leader = Role::where('name', 'leader')->first();
         $events = Event::all();
-        $users = $role_leader->users;
-        usort($users, 'customSort');
+        $users = $role_leader->users->sortBy(function ($user) {
+            return $user->name === 'Emily' ? -1 : 1;
+        });
 
         return view('admin.payment.create')->with([
             'leaders' => $users,
@@ -327,14 +328,5 @@ class PaymentController extends Controller
         ]);
     }
 
-    function customSort($a, $b) {
-        // Move Emily to the beginning
-        if ($a->name == 'Emily') {
-            return -1;
-        } elseif ($b->name == 'Emily') {
-            return 1;
-        }
-        // Keep the order of other elements unchanged
-        return 0;
-    }
+
 }
