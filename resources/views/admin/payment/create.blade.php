@@ -103,13 +103,13 @@
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="is_cash" id="is_cash1" value="1" {{ (old('is_cash') == '1') ? "checked" : "" }}>
                             <label class="form-check-label" for="is_cash1">
-                                Cash or Cheque
+                                Cash
                             </label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="is_cash" id="is_cash2" value="0" {{ (old('is_cash') == '0') ? "checked" : "" }}>
                             <label class="form-check-label" for="is_cash2">
-                                Bank payment
+                                All other (Cheques, cards, online payments)
                             </label>
                         </div>
                         <small class="form-text text-muted">Please pick the type of payment that was used.</small>
