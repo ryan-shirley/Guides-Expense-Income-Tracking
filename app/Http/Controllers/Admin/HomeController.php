@@ -68,7 +68,8 @@ class HomeController extends Controller
             'total_year' => number_format($total_year, 2),
             'incomeForYear' => number_format($incomeForYear, 2),
             'total_to_pay_back' => number_format($total_to_pay_back, 2), 
-            'num_waiting_approval' => $num_waiting_approval
+            'num_waiting_approval' => $num_waiting_approval,
+            'show_sidebar' => false,
         ]);
     }
 }

@@ -42,95 +42,103 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light bg-white" id="sidenav-main">
-            <div class="container-fluid">
-                <!-- Toggler -->
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidenav-collapse-main" aria-controls="sidenav-main" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <!-- Brand -->
-                <a class="navbar-brand pt-0" href="{{ url('/home') }}">
-                    <img src="{{ asset('images/igg-logo.png') }}" class="navbar-brand-img" alt="IGG Logo">
-                </a>
-                <!-- Collapse -->
-                <div class="collapse navbar-collapse" id="sidenav-collapse-main">
-                    <!-- Collapse header -->
-                    <div class="navbar-collapse-header d-md-none">
-                        <div class="row">
-                            <div class="col-6 collapse-brand">
-                                <a href="{{ url('/home') }}">
-                                    <img src="{{ asset('images/igg-logo.png') }}"alt="IGG Logo">
-                                </a>
-                            </div>
-                            <div class="col-6 collapse-close">
-                                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#sidenav-collapse-main" aria-controls="sidenav-main" aria-expanded="false" aria-label="Toggle sidenav">
-                                    <span></span>
-                                    <span></span>
-                                </button>
+        @if (!isset($show_sidebar) || $show_sidebar)
+            <nav class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light bg-white" id="sidenav-main">
+                <div class="container-fluid">
+                    <!-- Toggler -->
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidenav-collapse-main" aria-controls="sidenav-main" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <!-- Brand -->
+                    <a class="navbar-brand pt-0" href="{{ url('/home') }}">
+                        <img src="{{ asset('images/igg-logo.png') }}" class="navbar-brand-img" alt="IGG Logo">
+                    </a>
+                    <!-- Collapse -->
+                    <div class="collapse navbar-collapse" id="sidenav-collapse-main">
+                        <!-- Collapse header -->
+                        <div class="navbar-collapse-header d-md-none">
+                            <div class="row">
+                                <div class="col-6 collapse-brand">
+                                    <a href="{{ url('/home') }}">
+                                        <img src="{{ asset('images/igg-logo.png') }}"alt="IGG Logo">
+                                    </a>
+                                </div>
+                                <div class="col-6 collapse-close">
+                                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#sidenav-collapse-main" aria-controls="sidenav-main" aria-expanded="false" aria-label="Toggle sidenav">
+                                        <span></span>
+                                        <span></span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
+                        <!-- Navigation -->
+                        <ul class="navbar-nav">
+                            @if(Auth::user()->hasRole('admin'))
+                                <li class="nav-item">
+                                    <a class="nav-link {{ Route::currentRouteName() == 'admin.home' ? 'active' : '' }}" href="{{ route('admin.home') }}">
+                                        <i class="ni ni-tv-2 text-primary"></i> Dashboard
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {{ Route::currentRouteName() == 'admin.payments.index' ? 'active' : '' }}" href="{{ route('admin.payments.index') }}">
+                                        <i class="fas fa-receipt text-danger"></i> Payments
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {{ Route::currentRouteName() == 'admin.incomes.index' ? 'active' : '' }}" href="{{ route('admin.incomes.index') }}">
+                                        <i class="fas fa-euro-sign text-success"></i> Income
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {{ Route::currentRouteName() == 'admin.bank-transactions.index' ? 'active' : '' }}" href="{{ route('admin.bank-transactions.index') }}">
+                                        <i class="fas fa-piggy-bank text-info"></i> Bank Transactions
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {{ Route::currentRouteName() == 'admin.events.index' ? 'active' : '' }}" href="{{ route('admin.events.index') }}">
+                                        <i class="fas fa-map-signs text-default"></i> Events
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {{ Route::currentRouteName() == 'admin.payments.toPayBack' ? 'active' : '' }}" href="{{ route('admin.payments.toPayBack') }}">
+                                        <i class="fas fa-users text-warning"></i> To Pay Back
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {{ Route::currentRouteName() == 'admin.users' ? 'active' : '' }}" href="{{ route('admin.users') }}">
+                                    <i class="fas fa-user-plus text-primary"></i> Approve Accounts
+                                    </a>
+                                </li>
+                            @else
+                                <li class="nav-item">
+                                    <a class="nav-link {{ Route::currentRouteName() == 'leader.home' ? 'active' : '' }}" href="{{ route('leader.home') }}">
+                                        <i class="ni ni-tv-2 text-primary"></i> Dashboard
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {{ Route::currentRouteName() == 'leader.chatbot' ? 'active' : '' }}" href="{{ route('leader.chatbot') }}">
+                                        <i class="fas fa-receipt text-warning"></i> Chatbot
+                                    </a>
+                                </li>
+                            @endif
+                        </ul>
                     </div>
-                    <!-- Navigation -->
-                    <ul class="navbar-nav">
-                        @if(Auth::user()->hasRole('admin'))
-                            <li class="nav-item">
-                                <a class="nav-link {{ Route::currentRouteName() == 'admin.home' ? 'active' : '' }}" href="{{ route('admin.home') }}">
-                                    <i class="ni ni-tv-2 text-primary"></i> Dashboard
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link {{ Route::currentRouteName() == 'admin.payments.index' ? 'active' : '' }}" href="{{ route('admin.payments.index') }}">
-                                    <i class="fas fa-receipt text-danger"></i> Payments
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link {{ Route::currentRouteName() == 'admin.incomes.index' ? 'active' : '' }}" href="{{ route('admin.incomes.index') }}">
-                                    <i class="fas fa-euro-sign text-success"></i> Income
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link {{ Route::currentRouteName() == 'admin.bank-transactions.index' ? 'active' : '' }}" href="{{ route('admin.bank-transactions.index') }}">
-                                    <i class="fas fa-piggy-bank text-info"></i> Bank Transactions
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link {{ Route::currentRouteName() == 'admin.events.index' ? 'active' : '' }}" href="{{ route('admin.events.index') }}">
-                                    <i class="fas fa-map-signs text-default"></i> Events
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link {{ Route::currentRouteName() == 'admin.payments.toPayBack' ? 'active' : '' }}" href="{{ route('admin.payments.toPayBack') }}">
-                                    <i class="fas fa-users text-warning"></i> To Pay Back
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link {{ Route::currentRouteName() == 'admin.users' ? 'active' : '' }}" href="{{ route('admin.users') }}">
-                                <i class="fas fa-user-plus text-primary"></i> Approve Accounts
-                                </a>
-                            </li>
-                        @else
-                            <li class="nav-item">
-                                <a class="nav-link {{ Route::currentRouteName() == 'leader.home' ? 'active' : '' }}" href="{{ route('leader.home') }}">
-                                    <i class="ni ni-tv-2 text-primary"></i> Dashboard
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link {{ Route::currentRouteName() == 'leader.chatbot' ? 'active' : '' }}" href="{{ route('leader.chatbot') }}">
-                                    <i class="fas fa-receipt text-warning"></i> Chatbot
-                                </a>
-                            </li>
-                        @endif
-                    </ul>
                 </div>
-            </div>
-        </nav>
-        <!-- Side Navigation -->
+            </nav>
+            <!-- Side Navigation -->
+        @endif
         <main class="main-content">
             <!-- Navbar -->
             <nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
                 <div class="container-fluid">
-                    <!-- Brand -->
-                    <p class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">@yield('page-title')</p>
+                    @if (isset($show_sidebar) && !$show_sidebar)
+                        <a class="pt-0" href="{{ url('/home') }}">
+                            <img src="{{ asset('images/igg-logo.png') }}" class="navbar-brand-img" alt="IGG Logo" height="50" style="background-color: white;padding: 10px 20px;border-radius: 2rem;">
+                        </a>
+                    @else
+                        <!-- Brand -->
+                        <p class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">@yield('page-title')</p>
+                    @endif
                     <!-- User -->
                     <ul class="navbar-nav align-items-center d-none d-md-flex">
                         <li class="nav-item dropdown">
