@@ -29,40 +29,35 @@ class YearHomeController extends Controller
      */
     public function index($year)
     {   
-        $from = new DateTime(Carbon::now()->startOfYear());
-        $to = new DateTime(Carbon::now());
-        $payments = Payment::whereBetween('purchase_date', [$from, $to])->orderBy('id', 'DESC')->get();
+        $startYearDate = Carbon::createFromFormat('Y-m-d', "$year-01-01")->startOfDay();
+        $endYearDate = Carbon::createFromFormat('Y-m-d', "$year-12-31")->endOfDay();
+
+        $payments = Payment::whereBetween('purchase_date', [$startYearDate, $endYearDate])->orderBy('id', 'DESC')->get();
 
         // Total for year
         $total_year = 0;
         foreach ($payments as $payment) {
-            if(Carbon::now()->startOfYear() <= Carbon::parse($payment->purchase_date) && Carbon::now()->endOfYear() > Carbon::parse($payment->purchase_date) && $payment->approved === true) {
+            if($payment->approved === true) {
                 $total_year += $payment->amount;
             }
         }
 
         // Get total to pay back
-        $paymentsToPayBack  = Payment::where('paid_back', false)->get();
+        $paymentsToPayBack  = Payment::whereBetween('purchase_date', [$startYearDate, $endYearDate])->where('paid_back', false)->get();
         $total_to_pay_back = 0;
         foreach ($paymentsToPayBack as $payment) {
-            if(!$payment->paid_back) {
-                $total_to_pay_back += $payment->amount;
-            }
+            $total_to_pay_back += $payment->amount;
         }
 
         // Get number of expenses waiting on approval
-        $paymentsToApprove  = Payment::where('approved', false)->get();
+        $paymentsToApprove  = Payment::whereBetween('purchase_date', [$startYearDate, $endYearDate])->where('approved', false)->get();
         $num_waiting_approval = 0;
         foreach ($paymentsToApprove as $payment) {
-            if(!$payment->approved) {
-                $num_waiting_approval++;
-            }
+            $num_waiting_approval++;
         }
 
         // Income for current year
-        $incomeForYear = Income::whereBetween('date', [$from, $to])->where('approved', true)->get()->sum('amount');
-
-        $usersPendingApproval = User::whereNull('approved_at')->get();
+        $incomeForYear = Income::whereBetween('date', [$startYearDate, $endYearDate])->where('approved', true)->get()->sum('amount');
 
         return view('admin.yearHome')->with([
             'total_year' => number_format($total_year, 2),
@@ -70,7 +65,6 @@ class YearHomeController extends Controller
             'total_to_pay_back' => number_format($total_to_pay_back, 2), 
             'num_waiting_approval' => $num_waiting_approval,
             'show_sidebar' => true,
-            'users_pending_approval' => $usersPendingApproval,
             'year' => $year
         ]);
     }
