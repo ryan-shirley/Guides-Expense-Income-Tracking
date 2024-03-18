@@ -89,9 +89,7 @@ Route::middleware(['sentry.context'])->group(function () {
     ]);
     Route::post('/admin/{year}/incomes/{id}/approve', 'Admin\IncomeController@approve')->name('admin.incomes.account.approve'); // Approve income
     Route::get('/admin/{year}/incomes/export', 'Admin\IncomeController@export')->name('admin.incomes.export'); // Export incomes data in correct format for accounts
-    Route::get('/admin/users/', 'Admin\UsersController@index')->name('admin.users'); // Accounts that need approval
     Route::post('/admin/users/{id}', 'Admin\UsersController@approve')->name('admin.users.approve'); // Approve account
-    Route::get('/admin/users/', 'Admin\UsersController@index')->name('admin.users'); // Accounts that need approval
     Route::delete('/admin/users/{id}', 'Admin\UsersController@destroy')->name('admin.users.delete'); // Delete pending approval account
     Route::resource('/admin/{year}/bank-transactions', 'Admin\BankTransactionsController', [
         'as' => 'admin'

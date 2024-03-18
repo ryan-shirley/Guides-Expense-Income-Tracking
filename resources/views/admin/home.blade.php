@@ -109,18 +109,52 @@
             <div class="card-header bg-transparent">
                 <div class="row align-items-center">
                     <div class="col">
-                        <h6 class="text-uppercase text-light ls-1 mb-1">To Pay Back</h6>
-                        <h2 class="text-white mb-0">Blank</h2>
+                        <h6 class="text-uppercase text-light ls-1 mb-1">Pending Accounts</h6>
+                        <h2 class="text-white mb-0">Approve known leaders</h2>
                     </div>
                 </div>
             </div>
             <!-- /.Card Header -->
-            <div class="card-body">
-            </div>
-            <!-- /.Card Body -->
+
+            @if(count($users_pending_approval) === 0) 
+                <div class="card-body">
+                    <p>Well done you have no pending accounts!</p>
+                </div>
+            @else
+                <!-- Account List -->
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover" id="payment_table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($users_pending_approval as $user)
+                                <tr>
+                                    <th scope="row">{{ $user->name }}</th>
+                                    <td>
+                                        <form action="{{ action('Admin\UsersController@approve', $user->id )}}" class="account-approve" method="post" style="display: inline;">
+                                            @csrf
+                                            <button class="btn btn-success btn-sm" >Approve</button>
+                                        </form>
+                                        <form action="{{ action('Admin\UsersController@destroy', $user->id )}}" class="account-delete" method="post" style="display: inline;">
+                                            @csrf
+                                            <input name="_method" type="hidden" value="DELETE">
+                                            <button class="btn btn-danger btn-sm" ><i class="fas fa-times"></i></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.Account List -->
+            @endif
         </div>
     </div>
-    <!-- /.To pay back -->
+    <!-- /.Pending Accounts -->
 </div>
 <!-- /.Row -->
 @endsection

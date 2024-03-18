@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Payment;
 use App\Income;
 use App\BankAccount;
+use App\User;
 use Carbon\Carbon;
 use DB;
 use DateTime;
@@ -84,13 +85,16 @@ class HomeController extends Controller
         // Income for current year
         $incomeForYear = Income::whereBetween('date', [$from, $to])->where('approved', true)->get()->sum('amount');
 
+        $usersPendingApproval = User::whereNull('approved_at')->get();
+
         return view('admin.home')->with([
             'total_year' => number_format($total_year, 2),
             'incomeForYear' => number_format($incomeForYear, 2),
             'total_to_pay_back' => number_format($total_to_pay_back, 2), 
             'num_waiting_approval' => $num_waiting_approval,
             'show_sidebar' => false,
-            'years' => $uniqueYears
+            'years' => $uniqueYears,
+            'users_pending_approval' => $usersPendingApproval
         ]);
     }
 }
