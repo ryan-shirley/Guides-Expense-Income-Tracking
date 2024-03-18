@@ -70,7 +70,7 @@
                                     <button class="btn btn-danger btn-sm"><i class="fas fa-times"></i></button>
                                 </form>
                                 @if (!$i->approved)
-                                <form action="{{ action('Admin\IncomeController@approve', ['year' => $year, 'income' => $i->id] )}}" class="income-approve" method="post" style="display: inline;">
+                                <form action="{{ action('Admin\IncomeController@approve', ['year' => $year, 'id' => $i->id] )}}" class="income-approve" method="post" style="display: inline;">
                                     @csrf
                                     <button class="btn btn-success btn-sm">Approve</button>
                                 </form>
