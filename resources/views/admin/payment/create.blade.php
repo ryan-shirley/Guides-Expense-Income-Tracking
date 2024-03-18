@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <form method="POST" action="{{ route('admin.payments.store' )}}" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('admin.payments.store', $year )}}" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label for="user_id">Leader</label>

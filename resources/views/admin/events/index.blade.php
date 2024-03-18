@@ -13,8 +13,7 @@
                         <h2 class="mb-0">Events</h2>
                     </div>
                     <div class="col">
-                        <p class="text-right float-right"><a class="btn btn-primary" href="{{ route('admin.events.create') }}" role="button">Add Event</a></p>
-                        <!-- <p class="text-right float-right mr-3"><a class="btn btn-light" href="{{ route('admin.bank-transactions.export') }}" role="button">Export</a></p> -->
+                        <p class="text-right float-right"><a class="btn btn-primary" href="{{ route('admin.events.create', $year) }}" role="button">Add Event</a></p>
                     </div>
                 </div>
             </div>
@@ -32,12 +31,12 @@
                     <tbody>
                         @foreach ($events as $e)
                             <tr>
-                                <td><a href="{{ route('admin.events.show', $e->id) }}">{{ $e->title }}</a></td>
+                                <td><a href="{{ route('admin.events.show', ['year' => $year, 'event' => $e->id]) }}">{{ $e->title }}</a></td>
                                 <td>{{ date('Y-m-d', strtotime($e->start_date)) }}</td>
                                 <td>{{ date('Y-m-d', strtotime($e->end_date)) }}</td>
                                 <td>
-                                    <a class="btn btn-warning btn-sm" href="{{ route('admin.events.edit', $e->id) }}" role="button"><i class="far fa-edit"></i></a>
-                                    <form action="{{ action('Admin\EventController@destroy', $e->id )}}" method="post" style="display: inline;">
+                                    <a class="btn btn-warning btn-sm" href="{{ route('admin.events.edit', ['year' => $year, 'event' => $e->id]) }}" role="button"><i class="far fa-edit"></i></a>
+                                    <form action="{{ action('Admin\EventController@destroy', ['year' => $year, 'event' => $e->id] )}}" method="post" style="display: inline;">
                                         @csrf
                                         <input name="_method" type="hidden" value="DELETE">
                                         <button class="btn btn-danger btn-sm" ><i class="fas fa-times"></i></button>

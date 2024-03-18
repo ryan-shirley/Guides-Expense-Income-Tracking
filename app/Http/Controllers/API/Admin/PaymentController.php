@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Payment;
 use DateTime;
+use Carbon\Carbon;
 
 class PaymentController extends Controller
 {
@@ -29,18 +30,23 @@ class PaymentController extends Controller
     /**
      *  Loads payments
      */
-    public function index(Request $request)
+    public function index(Request $request, $year)
     {
         $request->validate([
             'limit' => 'required|integer|max:200|min:1',
         ]);
 
         $limit = $request->query('limit');
+        $startDate = Carbon::createFromFormat('Y-m-d', "$year-01-01")->startOfDay();
+        $endDate = Carbon::createFromFormat('Y-m-d', "$year-12-31")->endOfDay();
 
         // Get Payments
         $payments = Payment::with(['user' => function ($query) {
             $query->select('name');
-        }])->orderBy('purchase_date', 'DESC')->paginate(intval($limit));
+        }])
+        ->whereBetween('purchase_date', [$startDate, $endDate])
+        ->orderBy('purchase_date', 'DESC')
+        ->paginate(intval($limit));
 
         return $this->Enrich($payments);
     }

@@ -25,27 +25,30 @@ class EventController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($year)
     {
         $events = Event::all();
 
         return view('admin.events.index')->with([
-            'events' => $events
+            'events' => $events,
+            'year' => $year
         ]);
     }
 
     /**
      *  Return a view to create an event
      */
-    public function create()
+    public function create($year)
     {
-        return view('admin.events.create');
+        return view('admin.events.create')->with([
+            'year' => $year
+        ]);;
     }
 
     /**
      *  Return a view to show an individual event and incomes / expenses
      */
-    public function show($id)
+    public function show($year, $id)
     {
         $event = Event::findOrFail($id);
 
@@ -81,13 +84,14 @@ class EventController extends Controller
             'event' => $event,
             'incomes' => $incomes,
             'payments' => $payments,
+            'year' => $year
         ]);
     }
 
     /**
      *  Stores an event in the DB
      */
-    public function store(Request $request)
+    public function store(Request $request, $year)
     {
         $request->validate([
             'title' => 'required|string|max:65535',
@@ -103,25 +107,26 @@ class EventController extends Controller
         $e->save();
 
         $request->session()->flash('alert-success', $e->title . ' event has been added.');
-        return redirect()->route('admin.events.index');
+        return redirect()->route('admin.events.index', $year);
     }
 
     /**
      *  Return a view to edit an event
      */
-    public function edit($id)
+    public function edit($year, $id)
     {
         $event = Event::findOrFail($id);
 
         return view('admin.events.edit')->with([
-            'event' => $event
+            'event' => $event,
+            'year' => $year
         ]);
     }
 
     /**
      *  Updates an event in the DB
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $year, $id)
     {
         $request->validate([
             'title' => 'required|string|max:65535',
@@ -137,7 +142,7 @@ class EventController extends Controller
         $e->save();
 
         $request->session()->flash('alert-success', $e->title . ' event has been updated.');
-        return redirect()->route('admin.events.index');
+        return redirect()->route('admin.events.index', $year);
     }
 
     /**
@@ -146,7 +151,7 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id, Request $request)
+    public function destroy($year, $id, Request $request)
     {
         // Find event
         $event = Event::findOrFail($id);
@@ -156,11 +161,11 @@ class EventController extends Controller
             $event->delete();
             
             $request->session()->flash('alert-success', $event->title . ' event has been deleted');
-            return redirect()->route('admin.events.index');
+            return redirect()->route('admin.events.index', $year);
         }
         else {
             $request->session()->flash('alert-error', $event->title . ' has incomes/payments associated. Can not delete.');
-            return redirect()->route('admin.events.index');
+            return redirect()->route('admin.events.index', $year);
         }
     }
 }

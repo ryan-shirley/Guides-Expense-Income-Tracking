@@ -21,17 +21,6 @@ class UsersController extends Controller
     }
 
     /**
-     * Show all the incomming money.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $users = User::whereNull('approved_at')->get();
-
-        return view('admin.users.index', compact('users'));
-    }
-    /**
      * Remove the pending approval account from DB.
      *
      * @param  int  $id
@@ -43,7 +32,7 @@ class UsersController extends Controller
         DB::table('role_user')->delete($id);
         $user->delete();
         $request->session()->flash('alert-success', $user->name . ' account has been deleted');
-        return redirect()->route('admin.users');
+        return redirect()->route('admin.home');
     }
 
     /**
@@ -60,8 +49,6 @@ class UsersController extends Controller
         $user->save();
 
         $request->session()->flash('alert-success', $user->name . ' has been approved.');
-        return redirect()->route('admin.users');
+        return redirect()->route('admin.home');
     }
-
-    
 }

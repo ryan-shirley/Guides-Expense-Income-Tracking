@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <form method="POST" action="{{ route('admin.incomes.update', $income->id )}}">
+                <form method="POST" action="{{ route('admin.incomes.update', ['year' => $year, 'income' => $income->id])}}">
                     @method('PATCH')
                     @csrf
 
@@ -64,7 +64,7 @@
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="is_cash" id="is_cash2" value="0" {{ (old('is_cash', $income->is_cash) == '1') ? "checked" : "" }}>
+                            <input class="form-check-input" type="radio" name="is_cash" id="is_cash2" value="0" {{ (old('is_cash', $income->is_cash) == '0') ? "checked" : "" }}>
                             <label class="form-check-label" for="is_cash2">
                                 Online Payments
                             </label>

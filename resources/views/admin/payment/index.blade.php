@@ -18,13 +18,13 @@
 
                     </div>
                     <div class="col">
-                        <p class="text-right float-right"><a class="btn btn-primary" href="{{ route('admin.payments.create') }}" role="button">Add Payment</a></p>
-                        <p class="text-right float-right mr-3"><a class="btn btn-light" href="{{ route('admin.payments.export') }}" role="button">Export</a></p>
+                        <p class="text-right float-right"><a class="btn btn-primary" href="{{ route('admin.payments.create', $year) }}" role="button">Add Payment</a></p>
+                        <p class="text-right float-right mr-3"><a class="btn btn-light" href="{{ route('admin.payments.export', $year) }}" role="button">Export</a></p>
                     </div>
                 </div>
             </div>
 
-            <payments-component api_token="{{ $user->api_token }}" />
+            <payments-component api_token="{{ $user->api_token }}" year="{{ $year }}" />
         </div>
         <!-- /.Card -->
     </div>

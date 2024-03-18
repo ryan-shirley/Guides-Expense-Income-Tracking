@@ -8,6 +8,7 @@ use App\Income;
 use App\BankAccount;
 use App\Event;
 use Auth;
+use Carbon\Carbon;
 
 class IncomeController extends Controller
 {
@@ -27,9 +28,14 @@ class IncomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($year)
     {
-        $incomes  = Income::all()->sortByDesc("date");
+        $startDate = Carbon::createFromFormat('Y-m-d', "$year-01-01")->startOfDay();
+        $endDate = Carbon::createFromFormat('Y-m-d', "$year-12-31")->endOfDay();
+
+        $incomes  = Income::whereBetween('date', [$startDate, $endDate])
+        ->orderBy("date")
+        ->get();
 
         foreach ($incomes as $index => $income) {
             $incomes[$index]->keyID = "i_" . $income->ref_id;
@@ -44,26 +50,28 @@ class IncomeController extends Controller
         }
 
         return view('admin.income.index')->with([
-            'incomes' => $incomes
+            'incomes' => $incomes,
+            'year' => $year
         ]);
     }
 
     /**
      *  Return a view to create an income
      */
-    public function create()
+    public function create($year)
     {
         $events = Event::all();
 
         return view('admin.income.create')->with([
-            'events' => $events
+            'events' => $events,
+            'year' => $year
         ]);
     }
 
     /**
      *  Stores a income in the DB
      */
-    public function store(Request $request)
+    public function store(Request $request, $year)
     {
         $request->validate([
             'title' => 'required|string|max:65535',
@@ -92,27 +100,28 @@ class IncomeController extends Controller
         $i->save();
 
         $request->session()->flash('alert-success', $i->title . ' income has been added.');
-        return redirect()->route('admin.incomes.index');
+        return redirect()->route('admin.incomes.index', $year);
     }
 
     /**
      *  Return a view to edit an income
      */
-    public function edit($id)
+    public function edit($year, $id)
     {
         $income = Income::findOrFail($id);
         $events = Event::all();
 
         return view('admin.income.edit')->with([
             'income' => $income,
-            'events' => $events
+            'events' => $events,
+            'year' => $year
         ]);
     }
 
     /**
      *  Updates a income in the DB
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $year, $id)
     {
         $request->validate([
             'title' => 'required|string|max:65535',
@@ -140,7 +149,7 @@ class IncomeController extends Controller
         $i->save();
 
         $request->session()->flash('alert-success', $i->title . ' income has been updated.');
-        return redirect()->route('admin.incomes.index');
+        return redirect()->route('admin.incomes.index', $year);
     }
 
     /**
@@ -149,12 +158,12 @@ class IncomeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id, Request $request)
+    public function destroy($year, $id, Request $request)
     {
         $i = Income::find($id);
         $i->delete();
         $request->session()->flash('alert-success', $i->title . ' income has been deleted');
-        return redirect()->route('admin.incomes.index');
+        return redirect()->route('admin.incomes.index', $year);
     }
 
     /**
@@ -163,7 +172,7 @@ class IncomeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function approve(Request $request, $id)
+    public function approve(Request $request, $year, $id)
     {
         // Mark income approved
         $income = Income::findOrFail($id);
@@ -176,7 +185,7 @@ class IncomeController extends Controller
         $bankBalance->save();
 
         $request->session()->flash('alert-success', $income->title . ' income has been approved.');
-        return redirect()->route('admin.incomes.index');
+        return redirect()->route('admin.incomes.index', $year);
     }
 
     /**
@@ -184,7 +193,7 @@ class IncomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function export()
+    public function export($year)
     {
         $columns = array(
             array(
@@ -215,7 +224,8 @@ class IncomeController extends Controller
 
         return view('admin.income.export')->with([
             'user' => Auth::user(),
-            'columns' => json_encode($columns)
+            'columns' => json_encode($columns),
+            'year' => $year
         ]);
     }
     

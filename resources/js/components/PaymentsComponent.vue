@@ -17,7 +17,7 @@
 
         <div class="list-group list-group-flush">
             <div v-for="payment in payments.data">
-                <a :href="'/admin/payments/' + payment._id + '/edit'" class="list-group-item list-group-item-action clearfix py-2 border-bottom">
+                <a :href="'/admin/' + $attrs.year + '/payments/' + payment._id + '/edit'" class="list-group-item list-group-item-action clearfix py-2 border-bottom">
                     <div class="container">
                         <div class="row align-items-center row justify-content-start">
                             <div class="col col-lg-3">
@@ -224,7 +224,7 @@ export default {
         reloadData(){
             let app = this;
             axios
-                .get(`/api/payments?api_token=${app.$attrs.api_token}&limit=${app.limit}&page=${app.page}`)
+                .get(`/api/payments/${this.$attrs.year}?api_token=${app.$attrs.api_token}&limit=${app.limit}&page=${app.page}`)
                 .then(response => {
                     app.payments = response.data;
 

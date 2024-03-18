@@ -13,8 +13,8 @@
                         <h2 class="mb-0">Bank Transactions</h2>
                     </div>
                     <div class="col">
-                        <p class="text-right float-right"><a class="btn btn-primary" href="{{ route('admin.bank-transactions.create') }}" role="button">Add Transaction</a></p>
-                        <p class="text-right float-right mr-3"><a class="btn btn-light" href="{{ route('admin.bank-transactions.export') }}" role="button">Export</a></p>
+                        <p class="text-right float-right"><a class="btn btn-primary" href="{{ route('admin.bank-transactions.create', $year) }}" role="button">Add Transaction</a></p>
+                        <p class="text-right float-right mr-3"><a class="btn btn-light" href="{{ route('admin.bank-transactions.export', $year) }}" role="button">Export</a></p>
                     </div>
                 </div>
             </div>
@@ -42,8 +42,8 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <a class="btn btn-warning btn-sm" href="{{ route('admin.bank-transactions.edit', $t->id) }}" role="button"><i class="far fa-edit"></i></a>
-                                    <form action="{{ action('Admin\BankTransactionsController@destroy', $t->id )}}" method="post" style="display: inline;">
+                                    <a class="btn btn-warning btn-sm" href="{{ route('admin.bank-transactions.edit', ['year' => $year, 'bank_transaction' => $t->id]) }}" role="button"><i class="far fa-edit"></i></a>
+                                    <form action="{{ action('Admin\BankTransactionsController@destroy', ['year' => $year, 'bank_transaction' => $t->id] )}}" method="post" style="display: inline;">
                                         @csrf
                                         <input name="_method" type="hidden" value="DELETE">
                                         <button class="btn btn-danger btn-sm" ><i class="fas fa-times"></i></button>
