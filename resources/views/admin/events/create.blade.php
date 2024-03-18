@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <form method="POST" action="{{ route('admin.events.store' )}}">
+                <form method="POST" action="{{ route('admin.events.store', $year )}}">
                     @csrf
 
                     <div class="form-group">

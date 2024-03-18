@@ -14,10 +14,9 @@
                 </div>
             </div>
             <div class="card-body">
-                <form method="POST" action="{{ route('admin.events.update', $event->id )}}">
+                <form method="POST" action="{{ route('admin.events.update', ['year' => $year, 'event' => $event->id])}}">
                     @method('PATCH')
                     @csrf
-
 
                     <div class="form-group">
                         <label for="amount">Title</label>
