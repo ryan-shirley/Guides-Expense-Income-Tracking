@@ -14,12 +14,13 @@ class BankTransactionsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($year)
     {
         $transactions = BankTransaction::all()->sortByDesc("id");
 
         return view('admin.bank-transactions.index')->with([
-            'transactions' => $transactions
+            'transactions' => $transactions,
+            'year' => $year
         ]);
     }
 
@@ -119,7 +120,7 @@ class BankTransactionsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function export()
+    public function export($year)
     {
         $columns = array(
             array(
@@ -138,7 +139,8 @@ class BankTransactionsController extends Controller
 
         return view('admin.bank-transactions.export')->with([
             'user' => Auth::user(),
-            'columns' => json_encode($columns)
+            'columns' => json_encode($columns),
+            'year' => $year
         ]);
     }
 }
