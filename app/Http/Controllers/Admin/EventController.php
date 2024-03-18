@@ -25,12 +25,13 @@ class EventController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($year)
     {
         $events = Event::all();
 
         return view('admin.events.index')->with([
-            'events' => $events
+            'events' => $events,
+            'year' => $year
         ]);
     }
 
