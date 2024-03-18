@@ -2,15 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Payment;
-use App\Income;
-use App\BankAccount;
 use App\User;
-use Carbon\Carbon;
-use DB;
-use DateTime;
 
 class HomeController extends Controller
 {
@@ -51,47 +45,9 @@ class HomeController extends Controller
         // Sort the years in descending order
         rsort($uniqueYears);
 
-        
-        $from = new DateTime(Carbon::now()->startOfYear());
-        $to = new DateTime(Carbon::now());
-        $payments = Payment::whereBetween('purchase_date', [$from, $to])->orderBy('id', 'DESC')->get();
-
-        // Total for year
-        $total_year = 0;
-        foreach ($payments as $payment) {
-            if(Carbon::now()->startOfYear() <= Carbon::parse($payment->purchase_date) && Carbon::now()->endOfYear() > Carbon::parse($payment->purchase_date) && $payment->approved === true) {
-                $total_year += $payment->amount;
-            }
-        }
-
-        // Get total to pay back
-        $paymentsToPayBack  = Payment::where('paid_back', false)->get();
-        $total_to_pay_back = 0;
-        foreach ($paymentsToPayBack as $payment) {
-            if(!$payment->paid_back) {
-                $total_to_pay_back += $payment->amount;
-            }
-        }
-
-        // Get number of expenses waiting on approval
-        $paymentsToApprove  = Payment::where('approved', false)->get();
-        $num_waiting_approval = 0;
-        foreach ($paymentsToApprove as $payment) {
-            if(!$payment->approved) {
-                $num_waiting_approval++;
-            }
-        }
-
-        // Income for current year
-        $incomeForYear = Income::whereBetween('date', [$from, $to])->where('approved', true)->get()->sum('amount');
-
         $usersPendingApproval = User::whereNull('approved_at')->get();
 
         return view('admin.home')->with([
-            'total_year' => number_format($total_year, 2),
-            'incomeForYear' => number_format($incomeForYear, 2),
-            'total_to_pay_back' => number_format($total_to_pay_back, 2), 
-            'num_waiting_approval' => $num_waiting_approval,
             'show_sidebar' => false,
             'years' => $uniqueYears,
             'users_pending_approval' => $usersPendingApproval

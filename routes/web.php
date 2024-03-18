@@ -72,6 +72,7 @@ Route::middleware(['sentry.context'])->group(function () {
 
     // Admin
     Route::get('/admin/home', 'Admin\HomeController@index')->name('admin.home');
+    Route::get('/admin/{year}/home', 'Admin\YearHomeController@index')->name('admin.year.home');
     Route::resource('/admin/{year}/payments', 'Admin\PaymentController', [
         'as' => 'admin'
     ])->except([
