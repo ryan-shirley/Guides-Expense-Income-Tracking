@@ -294,7 +294,7 @@ class PaymentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function export()
+    public function export($year)
     {
         $columns = array(
             array(
@@ -325,7 +325,8 @@ class PaymentController extends Controller
 
         return view('admin.payment.export')->with([
             'user' => Auth::user(),
-            'columns' => json_encode($columns)
+            'columns' => json_encode($columns),
+            'year' => $year
         ]);
     }
 
