@@ -99,11 +99,6 @@
                                         <i class="fas fa-map-signs text-default"></i> Events
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link {{ Route::currentRouteName() == 'admin.payments.toPayBack' ? 'active' : '' }}" href="{{ route('admin.payments.toPayBack', $year) }}">
-                                        <i class="fas fa-users text-warning"></i> To Pay Back
-                                    </a>
-                                </li>
                             @else
                                 <li class="nav-item">
                                     <a class="nav-link {{ Route::currentRouteName() == 'leader.home' ? 'active' : '' }}" href="{{ route('leader.home') }}">
