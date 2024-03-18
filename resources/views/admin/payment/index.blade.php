@@ -24,7 +24,7 @@
                 </div>
             </div>
 
-            <payments-component api_token="{{ $user->api_token }}" />
+            <payments-component api_token="{{ $user->api_token }}" year="{{ $year }}" />
         </div>
         <!-- /.Card -->
     </div>
