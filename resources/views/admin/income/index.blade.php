@@ -13,8 +13,8 @@
                         <h2 class="mb-0">Incoming Money</h2>
                     </div>
                     <div class="col">
-                        <p class="text-right float-right"><a class="btn btn-primary" href="{{ route('admin.incomes.create') }}" role="button">Add Income</a></p>
-                        <p class="text-right float-right mr-3"><a class="btn btn-light" href="{{ route('admin.incomes.export') }}" role="button">Export</a></p>
+                        <p class="text-right float-right"><a class="btn btn-primary" href="{{ route('admin.incomes.create', $year) }}" role="button">Add Income</a></p>
+                        <p class="text-right float-right mr-3"><a class="btn btn-light" href="{{ route('admin.incomes.export', $year) }}" role="button">Export</a></p>
                     </div>
                 </div>
             </div>
@@ -63,14 +63,14 @@
                                 @endif
                             </td>
                             <td>
-                                <a class="btn btn-warning btn-sm" href="{{ route('admin.incomes.edit', $i->id) }}" role="button"><i class="far fa-edit"></i></a>
-                                <form action="{{ action('Admin\IncomeController@destroy', $i->id )}}" method="post" style="display: inline;">
+                                <a class="btn btn-warning btn-sm" href="{{ route('admin.incomes.edit', ['year' => $year, 'income' => $i->id]) }}" role="button"><i class="far fa-edit"></i></a>
+                                <form action="{{ action('Admin\IncomeController@destroy', ['year' => $year, 'income' => $i->id] )}}" method="post" style="display: inline;">
                                     @csrf
                                     <input name="_method" type="hidden" value="DELETE">
                                     <button class="btn btn-danger btn-sm"><i class="fas fa-times"></i></button>
                                 </form>
                                 @if (!$i->approved)
-                                <form action="{{ action('Admin\IncomeController@approve', $i->id )}}" class="income-approve" method="post" style="display: inline;">
+                                <form action="{{ action('Admin\IncomeController@approve', ['year' => $year, 'income' => $i->id] )}}" class="income-approve" method="post" style="display: inline;">
                                     @csrf
                                     <button class="btn btn-success btn-sm">Approve</button>
                                 </form>

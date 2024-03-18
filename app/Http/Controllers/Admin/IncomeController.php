@@ -8,6 +8,7 @@ use App\Income;
 use App\BankAccount;
 use App\Event;
 use Auth;
+use Carbon\Carbon;
 
 class IncomeController extends Controller
 {
@@ -27,9 +28,14 @@ class IncomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($year)
     {
-        $incomes  = Income::all()->sortByDesc("date");
+        $startDate = Carbon::createFromFormat('Y-m-d', "$year-01-01")->startOfDay();
+        $endDate = Carbon::createFromFormat('Y-m-d', "$year-12-31")->endOfDay();
+
+        $incomes  = Income::whereBetween('purchase_date', [$startDate, $endDate])
+        ->orderBy("date")
+        ->get();
 
         foreach ($incomes as $index => $income) {
             $incomes[$index]->keyID = "i_" . $income->ref_id;
@@ -44,7 +50,8 @@ class IncomeController extends Controller
         }
 
         return view('admin.income.index')->with([
-            'incomes' => $incomes
+            'incomes' => $incomes,
+            'year' => $year
         ]);
     }
 
@@ -98,7 +105,7 @@ class IncomeController extends Controller
     /**
      *  Return a view to edit an income
      */
-    public function edit($id)
+    public function edit($year, $id)
     {
         $income = Income::findOrFail($id);
         $events = Event::all();
@@ -184,7 +191,7 @@ class IncomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function export()
+    public function export($year)
     {
         $columns = array(
             array(
@@ -215,7 +222,8 @@ class IncomeController extends Controller
 
         return view('admin.income.export')->with([
             'user' => Auth::user(),
-            'columns' => json_encode($columns)
+            'columns' => json_encode($columns),
+            'year' => $year
         ]);
     }
     
