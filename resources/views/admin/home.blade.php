@@ -83,12 +83,33 @@
 
 @section('content')
 <div class="row justify-content-center">
-    <div class="col-md-12">
+    <div class="col-md-6">
+        @foreach ($years as $year)
+            <a href="{{ route('admin.payments.index', $year) }}" role="button">
+                <div class="card card-stats mb-2">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <p class="card-title text-uppercase text-muted mb-0 font-weight-bold h1">{{ $year }}</p>
+                            </div>
+                            <div class="col-auto">
+                                <div class="icon icon-shape bg-success text-white rounded-circle shadow">
+                                    <i class="fas fa-calendar"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        @endforeach
+    </div>
+    <!-- /.Years -->
+    <div class="col-md-6">
         <div class="card bg-gradient-default shadow mb-3">
             <div class="card-header bg-transparent">
                 <div class="row align-items-center">
                     <div class="col">
-                        <h6 class="text-uppercase text-light ls-1 mb-1">Blank</h6>
+                        <h6 class="text-uppercase text-light ls-1 mb-1">To Pay Back</h6>
                         <h2 class="text-white mb-0">Blank</h2>
                     </div>
                 </div>
@@ -99,7 +120,7 @@
             <!-- /.Card Body -->
         </div>
     </div>
-    <!-- /.Column Bank History -->
+    <!-- /.To pay back -->
 </div>
 <!-- /.Row -->
 @endsection

@@ -72,34 +72,34 @@ Route::middleware(['sentry.context'])->group(function () {
 
     // Admin
     Route::get('/admin/home', 'Admin\HomeController@index')->name('admin.home');
-    Route::resource('/admin/payments', 'Admin\PaymentController', [
+    Route::resource('/admin/{year}/payments', 'Admin\PaymentController', [
         'as' => 'admin'
     ])->except([
         'show'
     ]);
-    Route::post('/admin/payments/{id}', 'Admin\PaymentController@paidBack')->name('admin.payments.status.change'); // Change wether paid or not
-    Route::post('/admin/payments/{id}/accounts', 'Admin\PaymentController@approve')->name('admin.payments.account.approve'); // Approve payment
-    Route::post('/admin/payments/{id}/received-receipt', 'Admin\PaymentController@receivedReceipt')->name('admin.payments.receivedReceipt'); // Mark as received receipt
-    Route::get('/admin/payments/to-pay-back', 'Admin\PaymentController@toPayBack')->name('admin.payments.toPayBack'); // To Pay Back
-    Route::get('/admin/payments/export', 'Admin\PaymentController@export')->name('admin.payments.export'); // Export payments data in correct format for accounts
-    Route::resource('/admin/incomes', 'Admin\IncomeController', [
+    Route::post('/admin/{year}/payments/{id}', 'Admin\PaymentController@paidBack')->name('admin.payments.status.change'); // Change wether paid or not
+    Route::post('/admin/{year}/payments/{id}/accounts', 'Admin\PaymentController@approve')->name('admin.payments.account.approve'); // Approve payment
+    Route::post('/admin/{year}/payments/{id}/received-receipt', 'Admin\PaymentController@receivedReceipt')->name('admin.payments.receivedReceipt'); // Mark as received receipt
+    Route::get('/admin/{year}/payments/to-pay-back', 'Admin\PaymentController@toPayBack')->name('admin.payments.toPayBack'); // To Pay Back
+    Route::get('/admin/{year}/payments/export', 'Admin\PaymentController@export')->name('admin.payments.export'); // Export payments data in correct format for accounts
+    Route::resource('/admin/{year}/incomes', 'Admin\IncomeController', [
         'as' => 'admin'
     ])->except([
         'show'
     ]);
-    Route::post('/admin/incomes/{id}/approve', 'Admin\IncomeController@approve')->name('admin.incomes.account.approve'); // Approve income
-    Route::get('/admin/incomes/export', 'Admin\IncomeController@export')->name('admin.incomes.export'); // Export incomes data in correct format for accounts
+    Route::post('/admin/{year}/incomes/{id}/approve', 'Admin\IncomeController@approve')->name('admin.incomes.account.approve'); // Approve income
+    Route::get('/admin/{year}/incomes/export', 'Admin\IncomeController@export')->name('admin.incomes.export'); // Export incomes data in correct format for accounts
     Route::get('/admin/users/', 'Admin\UsersController@index')->name('admin.users'); // Accounts that need approval
     Route::post('/admin/users/{id}', 'Admin\UsersController@approve')->name('admin.users.approve'); // Approve account
     Route::get('/admin/users/', 'Admin\UsersController@index')->name('admin.users'); // Accounts that need approval
     Route::delete('/admin/users/{id}', 'Admin\UsersController@destroy')->name('admin.users.delete'); // Delete pending approval account
-    Route::resource('/admin/bank-transactions', 'Admin\BankTransactionsController', [
+    Route::resource('/admin/{year}/bank-transactions', 'Admin\BankTransactionsController', [
         'as' => 'admin'
     ])->except([
         'show'
     ]);
-    Route::get('/admin/bank-transactions/export', 'Admin\BankTransactionsController@export')->name('admin.bank-transactions.export'); // Export payments data in correct format for accounts
-    Route::resource('/admin/events', 'Admin\EventController', [
+    Route::get('/admin/{year}/bank-transactions/export', 'Admin\BankTransactionsController@export')->name('admin.bank-transactions.export'); // Export payments data in correct format for accounts
+    Route::resource('/admin/{year}/events', 'Admin\EventController', [
         'as' => 'admin'
     ]);
 

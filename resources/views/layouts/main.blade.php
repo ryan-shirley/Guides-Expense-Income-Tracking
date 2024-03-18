@@ -80,27 +80,27 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link {{ Route::currentRouteName() == 'admin.payments.index' ? 'active' : '' }}" href="{{ route('admin.payments.index') }}">
+                                    <a class="nav-link {{ Route::currentRouteName() == 'admin.payments.index' ? 'active' : '' }}" href="{{ route('admin.payments.index', $year) }}">
                                         <i class="fas fa-receipt text-danger"></i> Payments
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link {{ Route::currentRouteName() == 'admin.incomes.index' ? 'active' : '' }}" href="{{ route('admin.incomes.index') }}">
+                                    <a class="nav-link {{ Route::currentRouteName() == 'admin.incomes.index' ? 'active' : '' }}" href="{{ route('admin.incomes.index', $year) }}">
                                         <i class="fas fa-euro-sign text-success"></i> Income
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link {{ Route::currentRouteName() == 'admin.bank-transactions.index' ? 'active' : '' }}" href="{{ route('admin.bank-transactions.index') }}">
+                                    <a class="nav-link {{ Route::currentRouteName() == 'admin.bank-transactions.index' ? 'active' : '' }}" href="{{ route('admin.bank-transactions.index', $year) }}">
                                         <i class="fas fa-piggy-bank text-info"></i> Bank Transactions
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link {{ Route::currentRouteName() == 'admin.events.index' ? 'active' : '' }}" href="{{ route('admin.events.index') }}">
+                                    <a class="nav-link {{ Route::currentRouteName() == 'admin.events.index' ? 'active' : '' }}" href="{{ route('admin.events.index', $year) }}">
                                         <i class="fas fa-map-signs text-default"></i> Events
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link {{ Route::currentRouteName() == 'admin.payments.toPayBack' ? 'active' : '' }}" href="{{ route('admin.payments.toPayBack') }}">
+                                    <a class="nav-link {{ Route::currentRouteName() == 'admin.payments.toPayBack' ? 'active' : '' }}" href="{{ route('admin.payments.toPayBack', $year) }}">
                                         <i class="fas fa-users text-warning"></i> To Pay Back
                                     </a>
                                 </li>

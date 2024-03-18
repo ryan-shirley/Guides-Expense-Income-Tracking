@@ -33,10 +33,11 @@ class PaymentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($year)
     {
         return view('admin.payment.index')->with([
             'user' => Auth::user(),
+            'year' => $year
         ]);
     }
 
