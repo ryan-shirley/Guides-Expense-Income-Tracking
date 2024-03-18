@@ -44,7 +44,7 @@ class PaymentController extends Controller
     /**
      *  Return a view to create a payment
      */
-    public function create()
+    public function create($year)
     {
         $role_leader = Role::where('name', 'leader')->first();
         $events = Event::all();
@@ -54,14 +54,15 @@ class PaymentController extends Controller
 
         return view('admin.payment.create')->with([
             'leaders' => $users,
-            'events' => $events
+            'events' => $events,
+            'year' => $year
         ]);
     }
 
     /**
      *  Stores a payment in the DB
      */
-    public function store(Request $request)
+    public function store(Request $request, $year)
     {
         $request->validate([
             'title' => 'required|string|max:65535',
@@ -107,13 +108,13 @@ class PaymentController extends Controller
         $this->SaveReceipt($request->receipt_image, $p->ref_id, $paymentId);
 
         $request->session()->flash('alert-success', $p->title . ' payment has been added.');
-        return redirect()->route('admin.payments.index');
+        return redirect()->route('admin.payments.index', $year);
     }
 
     /**
      *  Return a view to edit a payment
      */
-    public function edit($id)
+    public function edit($year, $id)
     {
         $role_leader = Role::where('name', 'leader')->first();
         $payment = Payment::findOrFail($id);
@@ -123,14 +124,15 @@ class PaymentController extends Controller
         return view('admin.payment.edit')->with([
             'payment' => $payment,
             'leaders' => $role_leader->users,
-            'events' => $events
+            'events' => $events,
+            'year' => $year
         ]);
     }
 
     /**
      *  Updates a payment in the DB
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $year, $id)
     {
         $request->validate([
             'title' => 'required|string|max:65535',
@@ -174,7 +176,7 @@ class PaymentController extends Controller
         $this->SaveReceipt($request->receipt_image, $p->ref_id, $paymentId);
 
         $request->session()->flash('alert-success', $p->title . ' payment has been updated.');
-        return redirect()->route('admin.payments.index');
+        return redirect()->route('admin.payments.index', $year);
     }
 
     /**
@@ -183,12 +185,12 @@ class PaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id, Request $request)
+    public function destroy($id, $year, Request $request)
     {
         $p = Payment::find($id);
         $p->delete();
         $request->session()->flash('alert-success', $p->title . ' payment has been deleted');
-        return redirect()->route('admin.payments.index');
+        return redirect()->route('admin.payments.index', $year);
     }
 
     /**
@@ -197,7 +199,7 @@ class PaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function paidBack(Request $request, $id)
+    public function paidBack(Request $request, $year, $id)
     {
         // Get User
         $user = Auth::user();
@@ -208,7 +210,7 @@ class PaymentController extends Controller
         $payment->save();
 
         $request->session()->flash('alert-success', $payment->title . ' payment has been marked as paid.');
-        return redirect()->route('admin.payments.index');
+        return redirect()->route('admin.payments.index', $year);
     }
 
     /**
@@ -217,7 +219,7 @@ class PaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function approve(Request $request, $id)
+    public function approve(Request $request, $year, $id)
     {
         // Mark Approved
         $payment = Payment::findOrFail($id);
@@ -230,7 +232,7 @@ class PaymentController extends Controller
         $bankBalance->save();
 
         $request->session()->flash('alert-success', $payment->title . ' payment has been approved!');
-        return redirect()->route('admin.payments.index');
+        return redirect()->route('admin.payments.index', $year);
     }
 
     /**
@@ -239,7 +241,7 @@ class PaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function receivedReceipt(Request $request, $id)
+    public function receivedReceipt(Request $request, $year, $id)
     {
         // Get User
         $user = Auth::user();
@@ -252,7 +254,7 @@ class PaymentController extends Controller
         $payment->save();
 
         $request->session()->flash('alert-success', $payment->title . ' payment has been marked as received receipt.');
-        return redirect()->route('admin.payments.index');
+        return redirect()->route('admin.payments.index', $year);
     }
 
     /**
@@ -295,6 +297,4 @@ class PaymentController extends Controller
             'year' => $year
         ]);
     }
-
-
 }

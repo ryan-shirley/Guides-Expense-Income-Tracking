@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <form method="POST" action="{{ route('admin.payments.update', $payment->id )}}" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('admin.payments.update', ['year' => $year, 'payment' => $payment->id] )}}" enctype="multipart/form-data">
                     @method('PATCH')
                     @csrf
                     <div class="form-group">

@@ -17,7 +17,7 @@
 
         <div class="list-group list-group-flush">
             <div v-for="payment in payments.data">
-                <a :href="'/admin/payments/' + payment._id + '/edit'" class="list-group-item list-group-item-action clearfix py-2 border-bottom">
+                <a :href="'/admin/' + $attrs.year + '/payments/' + payment._id + '/edit'" class="list-group-item list-group-item-action clearfix py-2 border-bottom">
                     <div class="container">
                         <div class="row align-items-center row justify-content-start">
                             <div class="col col-lg-3">
