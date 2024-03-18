@@ -256,40 +256,6 @@ class PaymentController extends Controller
     }
 
     /**
-     * List of people that need to be paid back
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function toPayBack()
-    {
-        $paymentsToBePaidBack = Payment::where('paid_back', false)->get();
-        $leadersToPayBack = $this->groupAndSumPayments($paymentsToBePaidBack);
-
-        return view('admin.payment.toBePaidBack')->with([
-            'leadersToPayBack' => $leadersToPayBack
-        ]);
-    }
-
-    private function groupAndSumPayments($array) {
-        // Group
-        $groups = array();
-        foreach ( $array as $value ) {
-            $groups[$value['user_id']][] = $value;
-        }
-
-        // Sum
-        $groupSum = array();
-        foreach ( $groups as $group ) {
-            $userSum = array_sum(array_column($group, 'amount'));
-            $userId = $group[0]->user_id;
-
-            $groupSum[$userId] = $userSum;
-        }
-
-        return $groupSum;
-    }
-
-    /**
      * Show payments exporter.
      *
      * @return \Illuminate\Http\Response

@@ -30,6 +30,45 @@
             <div class="card-header bg-transparent">
                 <div class="row align-items-center">
                     <div class="col">
+                        <h6 class="text-uppercase text-light ls-1 mb-1">Leaders</h6>
+                        <h2 class="text-white mb-0">Who needs paying back</h2>
+                    </div>
+                </div>
+            </div>
+            <!-- /.Card Header -->
+
+            @if(count($leadersToPayBack) === 0) 
+                <div class="card-body">
+                    <p>Well done you have paid back everyone back!</p>
+                </div>
+            @else
+                <!-- Leaders List -->
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover" id="payment_table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Leader</th>
+                                <th scope="col">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($leadersToPayBack as $id => $amount)
+                                <tr>
+                                    <th scope="row">{{ \App\User::find($id)->name }}</th>
+                                    <td>€{{ $amount }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.Leaders List -->
+            @endif
+        </div>
+        <!-- /.To pay back -->
+        <div class="card bg-gradient-default shadow mb-3">
+            <div class="card-header bg-transparent">
+                <div class="row align-items-center">
+                    <div class="col">
                         <h6 class="text-uppercase text-light ls-1 mb-1">Pending Accounts</h6>
                         <h2 class="text-white mb-0">Approve known leaders</h2>
                     </div>
@@ -74,8 +113,8 @@
                 <!-- /.Account List -->
             @endif
         </div>
+        <!-- /.Pending Accounts -->
     </div>
-    <!-- /.Pending Accounts -->
 </div>
 <!-- /.Row -->
 @endsection

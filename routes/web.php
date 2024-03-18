@@ -81,7 +81,6 @@ Route::middleware(['sentry.context'])->group(function () {
     Route::post('/admin/{year}/payments/{id}', 'Admin\PaymentController@paidBack')->name('admin.payments.status.change'); // Change wether paid or not
     Route::post('/admin/{year}/payments/{id}/accounts', 'Admin\PaymentController@approve')->name('admin.payments.account.approve'); // Approve payment
     Route::post('/admin/{year}/payments/{id}/received-receipt', 'Admin\PaymentController@receivedReceipt')->name('admin.payments.receivedReceipt'); // Mark as received receipt
-    Route::get('/admin/{year}/payments/to-pay-back', 'Admin\PaymentController@toPayBack')->name('admin.payments.toPayBack'); // To Pay Back
     Route::get('/admin/{year}/payments/export', 'Admin\PaymentController@export')->name('admin.payments.export'); // Export payments data in correct format for accounts
     Route::resource('/admin/{year}/incomes', 'Admin\IncomeController', [
         'as' => 'admin'

@@ -47,10 +47,33 @@ class HomeController extends Controller
 
         $usersPendingApproval = User::whereNull('approved_at')->get();
 
+        $paymentsToBePaidBack = Payment::where('paid_back', false)->get();
+        $leadersToPayBack = $this->groupAndSumPayments($paymentsToBePaidBack);
+
         return view('admin.home')->with([
             'show_sidebar' => false,
             'years' => $uniqueYears,
-            'users_pending_approval' => $usersPendingApproval
+            'users_pending_approval' => $usersPendingApproval,
+            'leadersToPayBack' => $leadersToPayBack
         ]);
+    }
+
+    private function groupAndSumPayments($array) {
+        // Group
+        $groups = array();
+        foreach ( $array as $value ) {
+            $groups[$value['user_id']][] = $value;
+        }
+
+        // Sum
+        $groupSum = array();
+        foreach ( $groups as $group ) {
+            $userSum = array_sum(array_column($group, 'amount'));
+            $userId = $group[0]->user_id;
+
+            $groupSum[$userId] = $userSum;
+        }
+
+        return $groupSum;
     }
 }
