@@ -33,7 +33,7 @@ class IncomeController extends Controller
         $startDate = Carbon::createFromFormat('Y-m-d', "$year-01-01")->startOfDay();
         $endDate = Carbon::createFromFormat('Y-m-d', "$year-12-31")->endOfDay();
 
-        $incomes  = Income::whereBetween('purchase_date', [$startDate, $endDate])
+        $incomes  = Income::whereBetween('date', [$startDate, $endDate])
         ->orderBy("date")
         ->get();
 
