@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <form method="POST" action="{{ route('admin.bank-transactions.update', $transaction->id )}}">
+                <form method="POST" action="{{ route('admin.bank-transactions.update', ['year' => $year, 'bank_transaction' => $transaction->id] )}}">
                     @method('PATCH')
                     @csrf
 

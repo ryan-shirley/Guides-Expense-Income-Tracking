@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\BankTransaction;
 use Auth;
+use Carbon\Carbon;
 
 class BankTransactionsController extends Controller
 {
@@ -16,7 +17,9 @@ class BankTransactionsController extends Controller
      */
     public function index($year)
     {
-        $transactions = BankTransaction::all()->sortByDesc("id");
+        $startDate = Carbon::createFromFormat('Y-m-d', "$year-01-01")->startOfDay();
+        $endDate = Carbon::createFromFormat('Y-m-d', "$year-12-31")->endOfDay();
+        $transactions = BankTransaction::whereBetween('date', [$startDate, $endDate])->orderBy("id")->get();
 
         return view('admin.bank-transactions.index')->with([
             'transactions' => $transactions,
@@ -29,9 +32,11 @@ class BankTransactionsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($year)
     {
-        return view('admin.bank-transactions.create');
+        return view('admin.bank-transactions.create')->with([
+            'year' => $year
+        ]);;
     }
 
     /**
@@ -40,7 +45,7 @@ class BankTransactionsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $year)
     {
         $request->validate([
             'amount' => 'required|regex:/^\d*(\.\d{1,2})?$/',
@@ -56,7 +61,7 @@ class BankTransactionsController extends Controller
         $tx->save();
 
         $request->session()->flash('alert-success', 'Transaction has been added.');
-        return redirect()->route('admin.bank-transactions.index');
+        return redirect()->route('admin.bank-transactions.index', $year);
     }
 
     /**
@@ -65,12 +70,13 @@ class BankTransactionsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($year, $id)
     {
         $tx = BankTransaction::findOrFail($id);
 
         return view('admin.bank-transactions.edit')->with([
             'transaction' => $tx,
+            'year' => $year
         ]);
     }
 
@@ -81,7 +87,7 @@ class BankTransactionsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $year, $id)
     {
         $request->validate([
             'amount' => 'required|regex:/^\d*(\.\d{1,2})?$/',
@@ -97,7 +103,7 @@ class BankTransactionsController extends Controller
         $tx->save();
 
         $request->session()->flash('alert-success', 'Transaction has been updated.');
-        return redirect()->route('admin.bank-transactions.index');
+        return redirect()->route('admin.bank-transactions.index', $year);
     }
 
     /**
@@ -106,13 +112,13 @@ class BankTransactionsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id, Request $request)
+    public function destroy($year, $id, Request $request)
     {
         $tx = BankTransaction::find($id);
         $tx->delete();
 
         $request->session()->flash('alert-success', 'Transaction has been deleted');
-        return redirect()->route('admin.bank-transactions.index');
+        return redirect()->route('admin.bank-transactions.index', $year);
     }
 
     /**
