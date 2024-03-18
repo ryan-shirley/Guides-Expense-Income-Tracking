@@ -51,14 +51,11 @@
 <script>
 export default {
     mounted() {
-        var today = new Date();
-        var dd = String(today.getDate()).padStart(2, "0");
-        var mm = String(today.getMonth() + 1).padStart(2, "0"); // January is 0!
-        var yyyy = today.getFullYear();
+        const year = this.$attrs.year;
 
         // Format Date Range
-        this.endDate = yyyy + "-" + mm + "-" + dd;
-        this.startDate = yyyy + "-01-01";
+        this.endDate = year + "-12-31";
+        this.startDate = year + "-01-01";
 
         // Get Columns
         this.tableColumns = JSON.parse(this.$props.columns);
