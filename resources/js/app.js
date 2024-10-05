@@ -56,14 +56,20 @@ const guideMoney = "#guide_money1";
 const personalMoney = "#guide_money2";
 const cashPayment = "#is_cash1";
 const bankPayment = "#is_cash2";
+const paidBack = "#paid_back1";
+const notPaidBack = "#paid_back2";
+
 $(guideMoney).click(function() {
+    $(paidBack).prop('checked', true);
     TogglePaymentTypeInput(false)
+    TogglePaidBackInput(true)
 });
 
 // Personal | Disable input and force cash checked
 $(personalMoney).click(function() {
     $(cashPayment).prop('checked', true);
     TogglePaymentTypeInput(true)
+    TogglePaidBackInput(false)
 });
 
 function TogglePaymentTypeInput(disable) {
@@ -76,4 +82,16 @@ function TogglePaymentTypeInput(disable) {
 
     $(cashPayment).removeAttr("disabled");
     $(bankPayment).removeAttr("disabled");
+}
+
+function TogglePaidBackInput(disable) {
+    if(disable) {
+        $(paidBack).attr("disabled", true);
+        $(notPaidBack).attr("disabled", true);
+
+        return;
+    }
+
+    $(paidBack).removeAttr("disabled");
+    $(notPaidBack).removeAttr("disabled");
 }

@@ -70,7 +70,7 @@ class PaymentController extends Controller
             'amount' => 'required|regex:/^\d*(\.\d{1,2})?$/',
             'purchase_date' => 'required|date',
             'guide_money' => 'required|boolean',
-            'paid_back' => 'required|boolean',
+            'paid_back' => 'boolean',
             'user_id' => 'required|exists:users,_id',
             'code' => 'string|max:65535',
             'is_cash' => 'boolean',
@@ -90,7 +90,11 @@ class PaymentController extends Controller
         } else {
             $p->is_cash = boolval($request->input('is_cash'));
         }
-        $p->paid_back = boolval($request->input('paid_back'));
+        if($p->guide_money === true) {
+            $p->paid_back = true;
+        } else {
+            $p->paid_back = boolval($request->input('paid_back'));
+        }
         $p->approved = false;
         $p->user_id = $request->input('user_id');
         $p->code = $request->input('code');
@@ -160,7 +164,11 @@ class PaymentController extends Controller
         } else {
             $p->is_cash = boolval($request->input('is_cash'));
         }
-        $p->paid_back = boolval($request->input('paid_back'));
+        if($p->guide_money === true) {
+            $p->paid_back = true;
+        } else {
+            $p->paid_back = boolval($request->input('paid_back'));
+        }
         $p->user_id = $request->input('user_id');
         $p->code = $request->input('code');
 
