@@ -14,7 +14,7 @@ RUN apk add --update \
 
 RUN apk add --no-cache nginx wget \
     ${PHPIZE_DEPS} \
-    && pecl install mongodb \
+    && pecl install mongodb-1.17.2 \
     && docker-php-ext-enable \
     mongodb \
     && apk del \
