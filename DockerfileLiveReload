@@ -20,7 +20,7 @@ RUN apk add --no-cache \
 
 RUN apk add --no-cache nginx wget \
     ${PHPIZE_DEPS} \
-    && pecl install mongodb \
+    && pecl install mongodb-1.17.2 \
     && docker-php-ext-enable \
     mongodb \
     && apk del \
@@ -41,11 +41,13 @@ WORKDIR /var/www
 # Copy application files
 COPY . /var/www
 
+# Install Node.js dependencies
+RUN npm install -g npm@9.6.5
+RUN npm install
+RUN npm run dev
+
 # Install PHP dependencies
 RUN composer install --no-dev
-
-# Install Node.js dependencies
-RUN npm install
 
 # Change ownership of application files
 RUN chown -R www-data:www-data /var/www
