@@ -10,3 +10,10 @@ services:
     ports:
       - "8000:8000"
     command: sh -c "cd /var/www && find . -name '*.php' | entr -r -n php artisan serve --host=0.0.0.0 --port=8000"
+
+  scss-watcher:
+    image: node:14
+    volumes:
+      - .:/var/www
+    working_dir: /var/www
+    command: sh -c "npm run watch"
