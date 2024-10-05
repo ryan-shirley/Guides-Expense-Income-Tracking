@@ -214,6 +214,25 @@ class PaymentController extends Controller
     }
 
     /**
+     * Mark all payments for a user as paid back
+     *
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function payBackForUser(Request $request, $id)
+    {
+        $payments = Payment::where('user_id', $id)->get();
+
+        foreach ($payments as $payment) {
+            $payment->paid_back = true;
+            $payment->save();
+        }
+
+        $request->session()->flash('alert-success', 'User successfully paid back.');
+        return redirect()->route('admin.home');
+    }
+
+    /**
      * Change account status.
      *
      * @param  int  $id

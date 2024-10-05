@@ -78,6 +78,7 @@ Route::middleware(['sentry.context'])->group(function () {
     ])->except([
         'show'
     ]);
+    Route::post('/admin/user/${id}/payments', 'Admin\PaymentController@payBackForUser')->name('admin.users.paymenys.payback'); // Mark payments for user as paid back
     Route::post('/admin/{year}/payments/{id}', 'Admin\PaymentController@paidBack')->name('admin.payments.status.change'); // Change wether paid or not
     Route::post('/admin/{year}/payments/{id}/accounts', 'Admin\PaymentController@approve')->name('admin.payments.account.approve'); // Approve payment
     Route::post('/admin/{year}/payments/{id}/received-receipt', 'Admin\PaymentController@receivedReceipt')->name('admin.payments.receivedReceipt'); // Mark as received receipt

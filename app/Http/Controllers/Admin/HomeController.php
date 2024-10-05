@@ -71,7 +71,8 @@ class HomeController extends Controller
             $userSum = array_sum(array_column($group, 'amount'));
             $userId = $group[0]->user_id;
 
-            $groupSum[$userId] = $userSum;
+            $groupSum[$userId]['sum'] = $userSum;
+            $groupSum[$userId]['payments'] = $group;
         }
 
         return $groupSum;

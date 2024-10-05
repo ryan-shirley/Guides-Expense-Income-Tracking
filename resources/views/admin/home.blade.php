@@ -49,13 +49,27 @@
                             <tr>
                                 <th scope="col">Leader</th>
                                 <th scope="col">Amount</th>
+                                <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($leadersToPayBack as $id => $amount)
+                            @foreach ($leadersToPayBack as $id => $paymentGroup)
                                 <tr>
-                                    <th scope="row">{{ \App\User::find($id)->name }}</th>
-                                    <td>€{{ $amount }}</td>
+                                    <th scope="row">
+                                        {{ \App\User::find($id)->name }}<br /><br />
+                                        <ul>
+                                            @foreach ($paymentGroup['payments'] as $payment)
+                                                <li>€{{ $payment['amount'] }} - {{ $payment['title'] }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </th>
+                                    <td>€{{ $paymentGroup['sum'] }}</td>
+                                    <td>
+                                        <form action="{{ action('Admin\PaymentController@payBackForUser', $id )}}" method="post" style="display: inline;">
+                                            @csrf
+                                            <button class="btn btn-success btn-sm" >Pay back all</button>
+                                        </form>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
