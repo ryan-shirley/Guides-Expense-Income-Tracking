@@ -11,6 +11,7 @@ use App\Role;
 use App\BankAccount;
 use App\Event;
 use Auth;
+use Carbon\Carbon;
 
 class PaymentController extends Controller
 {
@@ -47,7 +48,12 @@ class PaymentController extends Controller
     public function create($year)
     {
         $role_leader = Role::where('name', 'leader')->first();
-        $events = Event::all();
+        $startDate = Carbon::createFromFormat('Y-m-d', "$year-01-01")->startOfDay();
+        $endDate = Carbon::createFromFormat('Y-m-d', "$year-12-31")->endOfDay();
+
+        // Get events for year
+        $events = Event::whereBetween('start_date', [$startDate, $endDate])
+        ->orderBy('start_date', 'DESC')->get();
         $users = $role_leader->users->sortBy(function ($user) {
             return $user->name === 'Emily' ? -1 : 1;
         });
@@ -123,7 +129,12 @@ class PaymentController extends Controller
         $role_leader = Role::where('name', 'leader')->first();
         $payment = Payment::findOrFail($id);
         $payment->receipt_url = $this->GetReceiptUrl($payment->ref_id, $payment->_id);
-        $events = Event::all();
+        $startDate = Carbon::createFromFormat('Y-m-d', "$year-01-01")->startOfDay();
+        $endDate = Carbon::createFromFormat('Y-m-d', "$year-12-31")->endOfDay();
+
+        // Get events for year
+        $events = Event::whereBetween('start_date', [$startDate, $endDate])
+        ->orderBy('start_date', 'DESC')->get();
 
         return view('admin.payment.edit')->with([
             'payment' => $payment,

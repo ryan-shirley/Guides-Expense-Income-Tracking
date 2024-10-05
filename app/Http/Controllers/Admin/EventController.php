@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Event;
 use Auth;
+use Carbon\Carbon;
 
 class EventController extends Controller
 {
@@ -27,7 +28,11 @@ class EventController extends Controller
      */
     public function index($year)
     {
-        $events = Event::all();
+        // Get events for year
+        $startDate = Carbon::createFromFormat('Y-m-d', "$year-01-01")->startOfDay();
+        $endDate = Carbon::createFromFormat('Y-m-d', "$year-12-31")->endOfDay();
+        $events = Event::whereBetween('start_date', [$startDate, $endDate])
+        ->orderBy('start_date', 'DESC')->get();
 
         return view('admin.events.index')->with([
             'events' => $events,

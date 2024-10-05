@@ -2,6 +2,13 @@
 
 @section('page-title', 'Add Event')
 
+@php
+    // Extract the year from the URL
+    $year = request()->segment(2); // Adjust the segment index based on your URL structure
+    // Get the current date with the extracted year
+    $defaultDate = date('Y-m-d', strtotime($year . '-01-01'));
+@endphp
+
 @section('content')
 <div class="row justify-content-center">
     <div class="col-md-8">
@@ -27,7 +34,7 @@
 
                     <div class="form-group">
                         <label for="date">Start Date</label>
-                        <input type="date" class="form-control" name="start_date" value="{{ old( 'start_date') }}">
+                        <input type="date" class="form-control" name="start_date" value="{{ old( 'start_date', $defaultDate) }}">
                         <small class="form-text text-muted">The start date for this event.</small>
                         <div class="text-danger">{{ $errors->first('start_date') }}</div>
                     </div>
@@ -35,7 +42,7 @@
 
                     <div class="form-group">
                         <label for="date">End Date</label>
-                        <input type="date" class="form-control" name="end_date" value="{{ old( 'end_date') }}">
+                        <input type="date" class="form-control" name="end_date" value="{{ old( 'end_date', $defaultDate) }}">
                         <small class="form-text text-muted">The end date for this event.</small>
                         <div class="text-danger">{{ $errors->first('end_date') }}</div>
                     </div>

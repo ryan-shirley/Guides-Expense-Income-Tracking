@@ -2,6 +2,13 @@
 
 @section('page-title', 'Add Transaction')
 
+@php
+    // Extract the year from the URL
+    $year = request()->segment(2); // Adjust the segment index based on your URL structure
+    // Get the current date with the extracted year
+    $defaultDate = date('Y-m-d', strtotime($year . '-01-01'));
+@endphp
+
 @section('content')
 <div class="row justify-content-center">
     <div class="col-md-8">
@@ -27,7 +34,7 @@
 
                     <div class="form-group">
                         <label for="date">Date</label>
-                        <input type="date" class="form-control" name="date" value="{{ old( 'date') }}">
+                        <input type="date" class="form-control" name="date" value="{{ old( 'date', $defaultDate) }}">
                         <small class="form-text text-muted">The date for this transaction.</small>
                         <div class="text-danger">{{ $errors->first('date') }}</div>
                     </div>
