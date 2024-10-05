@@ -27,7 +27,7 @@ COPY docker/nginx.conf /etc/nginx/nginx.conf
 RUN mkdir -p /app
 COPY . /app
 
-# setup npm fir Vue.js
+# setup npm for Vue.js
 RUN npm install -g npm@9.6.5
 RUN cd /app && \
     npm install

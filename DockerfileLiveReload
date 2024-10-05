@@ -1,0 +1,57 @@
+# Use the official PHP image with FPM and Alpine
+FROM php:7.4-fpm-alpine
+
+# Install system dependencies
+RUN apk add --no-cache \
+    libressl-dev \
+    pkgconfig \
+    nodejs \
+    npm \
+    freetype-dev \
+    libjpeg-turbo-dev \
+    libpng-dev \
+    libxml2-dev \
+    libzip-dev \
+    nginx \
+    wget \
+    $PHPIZE_DEPS \
+    && docker-php-ext-configure gd --with-jpeg --with-freetype \
+    && docker-php-ext-install gd pdo pdo_mysql zip
+
+RUN apk add --no-cache nginx wget \
+    ${PHPIZE_DEPS} \
+    && pecl install mongodb \
+    && docker-php-ext-enable \
+    mongodb \
+    && apk del \
+    ${PHPIZE_DEPS}
+
+
+# Install Composer
+RUN wget https://getcomposer.org/composer.phar && \
+    chmod +x composer.phar && \
+    mv composer.phar /usr/local/bin/composer
+
+# Install entr for live reloading
+RUN apk add --no-cache entr
+
+# Set working directory
+WORKDIR /var/www
+
+# Copy application files
+COPY . /var/www
+
+# Install PHP dependencies
+RUN composer install --no-dev
+
+# Install Node.js dependencies
+RUN npm install
+
+# Change ownership of application files
+RUN chown -R www-data:www-data /var/www
+
+# Expose port 8000
+EXPOSE 8000
+
+# Command to run the application with live reloading
+CMD sh -c "cd /var/www && find . -name '*.php' | entr -r -n php artisan serve --host=0.0.0.0 --port=8000"
