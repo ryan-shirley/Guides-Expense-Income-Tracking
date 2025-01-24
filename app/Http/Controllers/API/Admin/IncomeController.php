@@ -32,7 +32,9 @@ class IncomeController extends Controller
             $from = new DateTime($startDate);
             $to = new DateTime($endDate);
 
-            $incomes = Income::whereBetween('date', [$from, $to])->orderBy('date', 'ASC')->get();
+            $incomes = Income::whereBetween('date', [$from, $to])
+                ->orderByRaw('CAST(date as DATETIME) ASC')
+                ->get();
         } else {
             $incomes = null;
         }
