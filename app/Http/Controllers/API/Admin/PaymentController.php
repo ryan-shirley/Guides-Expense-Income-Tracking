@@ -104,9 +104,7 @@ class PaymentController extends Controller
             $from = new DateTime($startDate);
             $to = new DateTime($endDate);
 
-            $payments = Payment::whereBetween('purchase_date', [$from, $to])
-                ->orderByRaw('CAST(purchase_date as DATETIME) ASC')
-                ->get();
+            $payments = Payment::whereBetween('purchase_date', [$from, $to])->orderBy('purchase_date', 'ASC')->get();
         } else {
             $payments = null;
         }
