@@ -1,44 +1,64 @@
+FROM php:7.4-fpm-alpine as builder
+
+# Install build dependencies
+RUN apk add --no-cache \
+    libressl-dev \
+    pkgconfig \
+    nodejs \
+    npm \
+    $PHPIZE_DEPS \
+    freetype-dev \
+    libjpeg-turbo-dev \
+    libpng-dev \
+    libxml2-dev \
+    libzip-dev
+
+# Configure and install PHP extensions
+RUN docker-php-ext-configure gd --with-jpeg --with-freetype \
+    && docker-php-ext-install gd \
+    && pecl install mongodb-1.17.2 \
+    && docker-php-ext-enable mongodb
+
+# Install composer
+COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
+
+# Copy only package files first to leverage cache
+COPY package*.json composer.* /app/
+WORKDIR /app
+
+# Install JS dependencies
+RUN npm install -g npm@9.6.5 && \
+    npm install
+
+# Install PHP dependencies
+RUN composer install --no-dev --optimize-autoloader
+
+# Copy the rest of the application
+COPY . /app
+RUN npm run dev
+
+# Final stage
 FROM php:7.4-fpm-alpine
 
-RUN apk add libressl-dev pkgconfig nodejs npm
-
-RUN apk add --update \
-		$PHPIZE_DEPS \
-		freetype-dev \
-		libjpeg-turbo-dev \
-		libpng-dev \
-		libxml2-dev \
-		libzip-dev \
-	&& docker-php-ext-configure gd --with-jpeg --with-freetype \
-	&& docker-php-ext-install gd
-
-RUN apk add --no-cache nginx wget \
-    ${PHPIZE_DEPS} \
+# Install runtime dependencies
+RUN apk add --no-cache \
+    nginx \
+    freetype \
+    libjpeg-turbo \
+    libpng \
+    libzip \
+    && docker-php-ext-configure gd --with-jpeg --with-freetype \
+    && docker-php-ext-install gd \
     && pecl install mongodb-1.17.2 \
-    && docker-php-ext-enable \
-    mongodb \
-    && apk del \
-    ${PHPIZE_DEPS}
+    && docker-php-ext-enable mongodb
 
+# Setup nginx
 RUN mkdir -p /run/nginx
-
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 
-RUN mkdir -p /app
-COPY . /app
-
-# setup npm for Vue.js
-RUN npm install -g npm@9.6.5
-RUN cd /app && \
-    npm install
-RUN cd /app && \
-    npm run dev
-
-
-RUN sh -c "wget http://getcomposer.org/composer.phar && chmod a+x composer.phar && mv composer.phar /usr/local/bin/composer"
-RUN cd /app && \
-    /usr/local/bin/composer install --no-dev
-
+# Copy application from builder
+COPY --from=builder /app /app
 RUN chown -R www-data: /app
 
+WORKDIR /app
 CMD sh /app/docker/startup.sh
