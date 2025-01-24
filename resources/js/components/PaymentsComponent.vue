@@ -11,7 +11,38 @@
                     </select>
                     <label class="col-md-auto col-form-label">entries</label>
                 </div>
-                <!-- /.Start Date -->
+            </div>
+            <!-- Add search field -->
+            <div class="col-4">
+                <div class="form-group row align-items-center">
+                    <label for="search" class="col-md-auto col-form-label">Search:</label>
+                    <div class="col">
+                        <input type="text" 
+                               class="form-control form-control-sm" 
+                               v-model="search" 
+                               @input="handleSearch"
+                               placeholder="Search payments...">
+                    </div>
+                </div>
+            </div>
+            <!-- Add date range -->
+            <div class="col-5">
+                <div class="form-group row align-items-center">
+                    <label class="col-auto col-form-label">Date:</label>
+                    <div class="col">
+                        <input type="date" 
+                               class="form-control form-control-sm" 
+                               v-model="dateFrom"
+                               @change="handleDateChange">
+                    </div>
+                    <label class="col-auto col-form-label">to</label>
+                    <div class="col">
+                        <input type="date" 
+                               class="form-control form-control-sm" 
+                               v-model="dateTo"
+                               @change="handleDateChange">
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -86,12 +117,17 @@
 export default {
     name: "PaymentsComponent",
     data () {
+        const currentYear = this.$attrs.year;
         return {
             payments: null,
             processingActionRequest: false,
             limit: 25,
             page: 1,
-            pageNumbers: [1]
+            pageNumbers: [1],
+            search: '',
+            searchTimeout: null,
+            dateFrom: `${currentYear}-01-01`,
+            dateTo: `${currentYear}-12-31`,
         }
     },
     mounted () {
@@ -221,10 +257,31 @@ export default {
                 timerProgressBar: true,
             })
         },
+        handleSearch() {
+            clearTimeout(this.searchTimeout);
+            this.searchTimeout = setTimeout(() => {
+                this.page = 1; // Reset to first page when searching
+                this.reloadData();
+            }, 300); // Debounce for 300ms
+        },
+        handleDateChange() {
+            this.page = 1; // Reset to first page when changing dates
+            this.reloadData();
+        },
         reloadData(){
             let app = this;
+            let params = {
+                api_token: app.$attrs.api_token,
+                limit: app.limit,
+                page: app.page,
+                search: app.search
+            };
+            
+            if (app.dateFrom) params.date_from = app.dateFrom;
+            if (app.dateTo) params.date_to = app.dateTo;
+
             axios
-                .get(`/api/payments/${this.$attrs.year}?api_token=${app.$attrs.api_token}&limit=${app.limit}&page=${app.page}`)
+                .get(`/api/payments/${this.$attrs.year}`, { params })
                 .then(response => {
                     app.payments = response.data;
 

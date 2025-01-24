@@ -34,19 +34,59 @@ class PaymentController extends Controller
     {
         $request->validate([
             'limit' => 'required|integer|max:200|min:1',
+            'search' => 'nullable|string',
+            'date_from' => 'nullable|date',
+            'date_to' => 'nullable|date',
         ]);
 
         $limit = $request->query('limit');
-        $startDate = Carbon::createFromFormat('Y-m-d', "$year-01-01")->startOfDay();
-        $endDate = Carbon::createFromFormat('Y-m-d', "$year-12-31")->endOfDay();
+        $search = $request->query('search');
+        $dateFrom = $request->query('date_from');
+        $dateTo = $request->query('date_to');
+
+        // Set default date range for the current year
+        $currentYear = date('Y');
+        $startDate = $dateFrom ? 
+            Carbon::parse($dateFrom)->startOfDay() : 
+            Carbon::createFromFormat('Y-m-d', "$currentYear-01-01")->startOfDay();
+        
+        $endDate = $dateTo ? 
+            Carbon::parse($dateTo)->endOfDay() : 
+            Carbon::createFromFormat('Y-m-d', "$currentYear-12-31")->endOfDay();
 
         // Get Payments
         $payments = Payment::with(['user' => function ($query) {
-            $query->select('name');
+            $query->select('id', 'name');
         }])
-        ->whereBetween('purchase_date', [$startDate, $endDate])
-        ->orderBy('purchase_date', 'DESC')
-        ->paginate(intval($limit));
+        ->whereBetween('purchase_date', [$startDate, $endDate]);
+
+        // Apply search if provided
+        if ($search) {
+            $payments->where(function($query) use ($search) {
+                $query->where('title', 'like', "%{$search}%")
+                      ->orWhere('code_name', 'like', "%{$search}%")
+                      ->orWhereHas('user', function($q) use ($search) {
+                          $q->where('name', 'like', "%{$search}%");
+                      })
+                      ->orWhere(function($q) use ($search) {
+                          // Search for payment type (cash/other)
+                          if (stripos('cash', $search) !== false) {
+                              $q->where('is_cash', true);
+                          } elseif (stripos('other', $search) !== false) {
+                              $q->where('is_cash', false);
+                          }
+                          // Search for guide/personal money
+                          if (stripos('guide', $search) !== false) {
+                              $q->where('guide_money', true);
+                          } elseif (stripos('personal', $search) !== false) {
+                              $q->where('guide_money', false);
+                          }
+                      });
+            });
+        }
+
+        $payments = $payments->orderBy('purchase_date', 'DESC')
+                            ->paginate(intval($limit));
 
         return $this->Enrich($payments);
     }
