@@ -99,6 +99,16 @@ export default {
             let app = this;
 
             $(document).ready(function() {
+                // Add custom date sorting
+                $.fn.dataTable.ext.type.order['date-euro-pre'] = function(date) {
+                    if (date === null || date === '') {
+                        return -Infinity;
+                    }
+                    // Convert from DD-MM-YYYY to YYYY-MM-DD for proper sorting
+                    const parts = date.split('-');
+                    return parts[2] + parts[1] + parts[0];
+                };
+
                 let table = $(`#export_table`).dataTable({
                     language: {
                         paginate: {
@@ -126,7 +136,16 @@ export default {
                             }
                         ]
                     },
-                    columns: app.tableColumns,
+                    columns: app.tableColumns.map(col => {
+                        // Find the date column and add the custom sorting
+                        if (col.title === "Date") {
+                            return {
+                                ...col,
+                                type: 'date-euro'
+                            };
+                        }
+                        return col;
+                    }),
                     ajax: {
                         url: `${app.$attrs.url}?startDate=${
                             app.startDate
@@ -137,7 +156,6 @@ export default {
                         dataSrc: json => json.data.map(d => {
                             const property = app.tableColumns.find(col => col.title == "Date").data
                             d[property] = app.formatDate(d[property]);
-
                             return d;
                         })
                     }
