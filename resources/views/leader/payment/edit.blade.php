@@ -70,6 +70,44 @@
                     <!-- /.Guide Money -->
 
                     <div class="form-group">
+                        <label for="paid_back">Paid Back</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="paid_back" id="paid_back1" value="1" {{ (old('paid_back', $payment->paid_back) == '1') ? "checked" : "" }}>
+                            <label class="form-check-label" for="paid_back1">
+                            Yes
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="paid_back" id="paid_back2" value="0" {{ (old('paid_back', $payment->paid_back) == '0') ? "checked" : "" }}>
+                            <label class="form-check-label" for="paid_back2">
+                            No
+                            </label>
+                        </div>
+                        <small class="form-text text-muted">Please pick if this expense has been paid back or not.</small>
+                        <div class="text-danger">{{ $errors->first('paid_back') }}</div>
+                    </div>
+                    <!-- /.Paid Back -->
+
+                    <div class="form-group">
+                        <label for="is_cash">Payment Type</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="is_cash" id="is_cash1" value="1" {{ (old('is_cash', $payment->is_cash) == '1') ? "checked" : "" }}>
+                            <label class="form-check-label" for="is_cash1">
+                                Cash
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="is_cash" id="is_cash2" value="0" {{ (old('is_cash', $payment->is_cash) == '0') ? "checked" : "" }}>
+                            <label class="form-check-label" for="is_cash2">
+                            All other (Cheques, cards, online payments)
+                            </label>
+                        </div>
+                        <small class="form-text text-muted">Please pick the type of payment that was used.</small>
+                        <div class="text-danger">{{ $errors->first('is_cash') }}</div>
+                    </div>
+                    <!-- /.Is Cash -->
+
+                    <div class="form-group">
                         <label for="title">Receipt Image</label>
                         <img src="{{ $payment->receipt_url  }}" onerror="this.src='https://placehold.co/600x200?text=No+Receipt'" class="img-thumbnail mb-2" />
                         <input type="file" class="form-control" name="receipt_image" placeholder="Receipt image" value="{{ old( 'receipt_image') }}">

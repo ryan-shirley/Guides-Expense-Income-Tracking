@@ -53,13 +53,15 @@ class PaymentController extends Controller
         $p->amount = $request->input('amount');
         $p->purchase_date = $request->input('purchase_date');
         $p->guide_money = boolval($request->input('guide_money'));
-
-        // Check type of money used to determin if needs to be paid back.
-        if($p->guide_money) {
-            $p->paid_back = true;
+        if($p->guide_money === false) {
+            $p->is_cash = true;
+        } else {
+            $p->is_cash = boolval($request->input('is_cash'));
         }
-        else {
-            $p->paid_back = false;
+        if($p->guide_money === true) {
+            $p->paid_back = true;
+        } else {
+            $p->paid_back = boolval($request->input('paid_back'));
         }
 
         $p->approved = false;
